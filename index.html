@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arena Evolution Survival</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="gameRoot" aria-label="Arena Evolution Survival">
+    <svg id="gameSvg" viewBox="0 0 1280 720" role="img" aria-label="Top-down arena">
+      <defs id="svgDefs"></defs>
+      <g id="arenaLayer"></g>
+      <g id="xpLayer"></g>
+      <g id="projectileLayer"></g>
+      <g id="enemyLayer"></g>
+      <g id="particleLayer"></g>
+      <g id="playerLayer"></g>
+      <g id="effectLayer"></g>
+    </svg>
+
+    <section id="hud" class="hud" aria-label="Game status">
+      <div class="hud-panel">
+        <div class="meter-row">
+          <span>HP</span>
+          <div class="meter"><div id="hpFill" class="meter-fill hp-fill"></div></div>
+          <strong id="hpText">100</strong>
+        </div>
+        <div class="meter-row">
+          <span>XP</span>
+          <div class="meter"><div id="xpFill" class="meter-fill xp-fill"></div></div>
+          <strong id="xpText">0%</strong>
+        </div>
+      </div>
+      <div class="hud-panel compact">
+        <span>LVL <strong id="levelText">1</strong></span>
+        <span id="classText">Basic</span>
+        <span id="mapText">Normal Arena</span>
+        <span id="timeText">00:00</span>
+        <span id="fpsText" class="fps-counter hidden">60 FPS</span>
+      </div>
+    </section>
+
+    <button id="playerMenuButton" type="button" class="player-menu-button" aria-label="Open map selection" onclick="window.Arena.game.openMapChooser()">MAP</button>
+
+    <section id="statsPanel" class="stats-panel" aria-label="Player stat upgrades">
+      <div class="stats-heading">
+        <span>Stats</span>
+        <strong id="upgradePointsText">0</strong>
+      </div>
+      <div id="statBars" class="stat-bars"></div>
+    </section>
+
+    <section id="menuOverlay" class="overlay menu-overlay">
+      <div class="menu-panel">
+        <svg class="title-mark" viewBox="0 0 240 120" aria-hidden="true">
+          <path d="M18 75 C54 16 187 16 222 75" fill="none" stroke="#55f0d0" stroke-width="9" stroke-linecap="round"/>
+          <circle cx="120" cy="62" r="34" fill="#182a3a" stroke="#f6c75e" stroke-width="7"/>
+          <path d="M120 19 L132 62 L120 105 L108 62 Z" fill="#f6c75e"/>
+          <path d="M74 70 L120 57 L166 70" fill="none" stroke="#f5f7fb" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+        <h1>Arena Evolution Survival</h1>
+        <p>WASD to move. Aim with the mouse. Your weapon fires automatically. Level up to become a new combat class.</p>
+        <div class="menu-buttons">
+          <button id="startButton" type="button" class="primary-button">Start Run</button>
+          <button id="settingsButton" type="button" class="secondary-button">Settings</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="levelOverlay" class="overlay level-overlay hidden" aria-live="polite">
+      <div class="level-header">
+        <span>Evolution Available</span>
+        <h2>Choose One Class</h2>
+      </div>
+      <div id="levelChoices" class="choice-grid"></div>
+    </section>
+
+    <section id="mapOverlay" class="overlay map-overlay hidden" aria-live="polite">
+      <div class="map-panel">
+        <div class="level-header">
+          <span>Arena Control</span>
+          <h2>Select Map</h2>
+        </div>
+        <div id="mapChoices" class="map-grid"></div>
+      </div>
+    </section>
+
+    <section id="settingsOverlay" class="overlay settings-overlay hidden" aria-live="polite">
+      <div class="settings-panel">
+        <div class="level-header">
+          <span>Configuration</span>
+          <h2>Settings</h2>
+        </div>
+        <div class="settings-grid">
+          <label class="setting-row">
+            <span class="setting-name">Sound</span>
+            <button type="button" class="toggle-switch" data-setting="sound" aria-pressed="true">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">On</span>
+            </button>
+          </label>
+          <label class="setting-row">
+            <span class="setting-name">Screen Shake</span>
+            <button type="button" class="toggle-switch" data-setting="screenShake" aria-pressed="true">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">On</span>
+            </button>
+          </label>
+          <label class="setting-row">
+            <span class="setting-name">Performance Mode</span>
+            <button type="button" class="toggle-switch" data-setting="performanceMode" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">Off</span>
+            </button>
+          </label>
+          <label class="setting-row">
+            <span class="setting-name">FPS Counter</span>
+            <button type="button" class="toggle-switch" data-setting="fpsCounter" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">Off</span>
+            </button>
+          </label>
+        </div>
+        <button id="settingsCloseButton" type="button" class="primary-button settings-close">Close</button>
+      </div>
+    </section>
+
+    <section id="gameOverOverlay" class="overlay game-over hidden">
+      <div class="menu-panel">
+        <h2>Run Ended</h2>
+        <p id="finalStats">You survived 00:00 and reached level 1.</p>
+        <button id="restartButton" type="button" class="primary-button">Restart</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/utils.js" defer></script>
+  <script src="js/classes.js" defer></script>
+  <script src="js/stats.js" defer></script>
+  <script src="js/maps.js" defer></script>
+  <script src="js/projectiles.js" defer></script>
+  <script src="js/input.js" defer></script>
+  <script src="js/player.js" defer></script>
+  <script src="js/enemies.js" defer></script>
+  <script src="js/xp.js" defer></script>
+  <script src="js/renderer.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/game.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
