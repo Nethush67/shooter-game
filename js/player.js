@@ -1,9 +1,9 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
+import * as U from './utils.js';
+import { ClassesAPI as Classes } from './classes.js';
 
-  class Player {
+class Player {
     constructor(arena) {
       this.reset(arena);
     }
@@ -19,7 +19,7 @@
       this.hp = this.maxHp;
       this.invuln = 0;
       this.classId = "basic";
-      this.classDef = Arena.Classes.get(this.classId);
+      this.classDef = Classes.get(this.classId);
       this.fireCooldown = 0;
       this.aimAngle = 0;
       this.weaponPhase = 0;
@@ -29,7 +29,7 @@
 
     setClass(classId) {
       this.classId = classId;
-      this.classDef = Arena.Classes.get(classId);
+      this.classDef = Classes.get(classId);
       this.fireCooldown = Math.min(this.fireCooldown, 0.12);
       this.flash = 0.28;
     }
@@ -83,5 +83,4 @@
     return 1;
   }
 
-  Arena.Player = Player;
-})(window.Arena = window.Arena || {});
+export { Player };

@@ -1,7 +1,6 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
+import * as U from './utils.js';
   const DEG = Math.PI / 180;
 
   const ProjectileTypes = {
@@ -364,12 +363,11 @@
     }
   }
 
-  Arena.Projectiles = {
-    types: ProjectileTypes,
-    createPool,
-    spawn,
-    fireWeapon,
-    update,
-    onHit
-  };
-})(window.Arena = window.Arena || {});
+export const Projectiles = {
+  types: ProjectileTypes,
+  createPool,
+  spawn,
+  fireWeapon,
+  update,
+  onHit
+};

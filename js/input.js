@@ -1,7 +1,8 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  class Input {
+import * as U from './utils.js';
+
+class Input {
     constructor(target) {
       this.keys = new Set();
       this.mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, down: false };
@@ -39,9 +40,8 @@
       if (this.keys.has("d") || this.keys.has("arrowright")) x += 1;
       if (this.keys.has("w") || this.keys.has("arrowup")) y -= 1;
       if (this.keys.has("s") || this.keys.has("arrowdown")) y += 1;
-      return Arena.Utils.normalize(x, y);
+      return U.normalize(x, y);
     }
   }
 
-  Arena.Input = Input;
-})(window.Arena = window.Arena || {});
+export { Input };

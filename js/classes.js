@@ -1,7 +1,6 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  function salvo(type, options) {
+function salvo(type, options) {
     return Object.assign({
       type,
       count: 1,
@@ -1039,10 +1038,12 @@
     return `<svg viewBox="0 0 240 160" aria-hidden="true"><rect x="8" y="8" width="224" height="144" fill="rgba(255,255,255,0.04)" stroke="${color}" stroke-width="2"/><g>${parts[icon] || parts.shot}</g></svg>`;
   }
 
-  Arena.Classes = {
-    all: Classes,
-    get: (id) => Classes[id] || Classes.basic,
-    getChoices,
-    cardIcon
-  };
-})(window.Arena = window.Arena || {});
+const get = (id) => Classes[id] || Classes.basic;
+
+export { Classes, get, getChoices, cardIcon };
+export const ClassesAPI = {
+  all: Classes,
+  get,
+  getChoices,
+  cardIcon
+};

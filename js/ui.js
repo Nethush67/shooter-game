@@ -1,7 +1,10 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  class UI {
+import * as U from './utils.js';
+import { Maps } from './maps.js';
+import { ClassesAPI as Classes } from './classes.js';
+
+class UI {
     constructor() {
       this.hpFill = document.getElementById("hpFill");
       this.hpText = document.getElementById("hpText");
@@ -88,7 +91,7 @@
       this.levelText.textContent = game.level;
       this.classText.textContent = game.player.classDef.name;
       this.mapText.textContent = game.currentMap.name;
-      this.timeText.textContent = Arena.Utils.secondsToClock(game.elapsed);
+      this.timeText.textContent = U.secondsToClock(game.elapsed);
       this.upgradePointsText.textContent = game.stats.points;
       this.updateStats(game);
       this.updateFPS(now);
@@ -165,14 +168,14 @@
 
     buildMaps(game) {
       this.mapChoices.innerHTML = "";
-      Arena.Maps.list().forEach((map) => {
+      Maps.list().forEach((map) => {
         const card = document.createElement("button");
         card.type = "button";
         card.className = "map-card";
         card.dataset.map = map.id;
         card.setAttribute("onclick", `window.Arena.game.selectMap('${map.id}')`);
         card.innerHTML = `
-          ${Arena.Maps.icon(map)}
+          ${Maps.icon(map)}
           <h3>${map.name}</h3>
           <p>${map.shortDesc}</p>
         `;
@@ -205,7 +208,7 @@
         console.error("[UI] Invalid choices count:", validChoices.length, "- using fallback");
         // FALLBACK: Always provide the 4 core classes
         const fallbackIds = ["velocity", "titan", "swarm", "orbit"];
-        choices = fallbackIds.map(id => Arena.Classes.get(id)).filter(Boolean);
+        choices = fallbackIds.map(id => Classes.get(id)).filter(Boolean);
       } else {
         choices = validChoices;
       }
@@ -222,7 +225,7 @@
         card.style.animationDelay = `${index * 60}ms`;
         card.dataset.classId = choice.id;
         card.innerHTML = `
-          ${Arena.Classes.cardIcon(choice)}
+          ${Classes.cardIcon(choice)}
           <h3>${choice.name}</h3>
           <p>${choice.description}</p>
         `;
@@ -277,10 +280,9 @@
     }
 
     showGameOver(game) {
-      this.finalStats.textContent = `You survived ${Arena.Utils.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
+      this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
       this.gameOverOverlay.classList.remove("hidden");
     }
   }
 
-  Arena.UI = UI;
-})(window.Arena = window.Arena || {});
+export { UI };

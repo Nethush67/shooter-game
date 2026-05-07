@@ -1,9 +1,9 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
+import * as U from './utils.js';
+import { Maps } from './maps.js';
 
-  class Renderer {
+class Renderer {
     constructor(svg, arena) {
       this.svg = svg;
       this.arena = arena;
@@ -20,7 +20,7 @@
       this.view = { x: 0, y: 0, w: 1280, h: 720 };
       this.playerEl = null;
       this.playerClassId = "";
-      this.buildArena(Arena.Maps.get("standard"));
+      this.buildArena(Maps.get("standard"));
       window.addEventListener("resize", () => this.resize());
       this.resize();
     }
@@ -258,5 +258,4 @@
     return `<circle data-projectile-body r="${p.radius}" fill="${p.config.fill}" stroke="${p.config.stroke}" stroke-width="2"/>`;
   }
 
-  Arena.Renderer = Renderer;
-})(window.Arena = window.Arena || {});
+export { Renderer };

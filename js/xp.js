@@ -1,7 +1,6 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
+import * as U from './utils.js';
 
   function createPool(size) {
     return new U.Pool(size, (index) => ({
@@ -67,10 +66,9 @@
     return Math.round(72 * Math.pow(level, 1.35));
   }
 
-  Arena.XP = {
-    createPool,
-    drop,
-    update,
-    requiredForLevel
-  };
-})(window.Arena = window.Arena || {});
+export const XP = {
+  createPool,
+  drop,
+  update,
+  requiredForLevel
+};

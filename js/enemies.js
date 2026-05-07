@@ -1,9 +1,9 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
+import * as U from './utils.js';
+import { Maps } from './maps.js';
 
-  const EnemyTypes = {
+const EnemyTypes = {
     chaser: {
       name: "Chaser",
       fill: "#ff6777",
@@ -246,7 +246,7 @@
 
   function spawn(game, type) {
     const elapsed = game.elapsed;
-    const map = game.currentMap || Arena.Maps.get("normal");
+    const map = game.currentMap || Maps.get("standard");
     const phase = Math.min(1, elapsed / 240);
     const hpScale = Math.min(3.4, (1 + Math.pow(elapsed / 95, 1.35) * 0.34) * map.hpScale);
     const speedScale = (1 + Math.min(0.32, phase * 0.32)) * map.speedScale;
@@ -267,7 +267,7 @@
 
   function pickType(game) {
     const elapsed = game.elapsed;
-    const map = game.currentMap || Arena.Maps.get("normal");
+    const map = game.currentMap || Maps.get("standard");
     const available = Object.keys(EnemyTypes)
       .map((id) => Object.assign({ id }, EnemyTypes[id]))
       .filter((def) => elapsed >= def.unlock)
@@ -295,7 +295,7 @@
     game.spawnTimer -= dt;
     if (game.spawnTimer > 0) return;
 
-    const map = game.currentMap || Arena.Maps.get("normal");
+    const map = game.currentMap || Maps.get("standard");
     const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 210), 1.3) * 1.6;
     const interval = Math.max(0.35, (1.8 / pressure) / map.spawnRate);
     game.spawnTimer = interval;
@@ -364,13 +364,12 @@
     }
   }
 
-  Arena.Enemies = {
-    types: EnemyTypes,
-    createPool,
-    spawn,
-    pickType,
-    updateDirector,
-    update,
-    damage
-  };
-})(window.Arena = window.Arena || {});
+export const Enemies = {
+  types: EnemyTypes,
+  createPool,
+  spawn,
+  pickType,
+  updateDirector,
+  update,
+  damage
+};

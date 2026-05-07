@@ -1,30 +1,40 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const U = Arena.Utils;
-  const State = U.State;
+import * as U from './utils.js';
+import { Input } from './input.js';
+import { Renderer } from './renderer.js';
+import { UI } from './ui.js';
+import { Player } from './player.js';
+import { Projectiles } from './projectiles.js';
+import { Enemies } from './enemies.js';
+import { XP } from './xp.js';
+import { Maps } from './maps.js';
+import { ClassesAPI as Classes } from './classes.js';
+import { Stats } from './stats.js';
+
+const State = U.State;
 
   class Game {
     constructor() {
       this.arena = { width: 2800, height: 2800 };
       this.svg = document.getElementById("gameSvg");
-      this.input = new Arena.Input(this.svg);
-      this.renderer = new Arena.Renderer(this.svg, this.arena);
-      this.ui = new Arena.UI();
-      this.player = new Arena.Player(this.arena);
-      this.projectilePool = Arena.Projectiles.createPool(700);
-      this.enemyPool = Arena.Enemies.createPool(180);
-      this.xpPool = Arena.XP.createPool(260);
+      this.input = new Input(this.svg);
+      this.renderer = new Renderer(this.svg, this.arena);
+      this.ui = new UI();
+      this.player = new Player(this.arena);
+      this.projectilePool = Projectiles.createPool(700);
+      this.enemyPool = Enemies.createPool(180);
+      this.xpPool = XP.createPool(260);
       this.particlePool = createParticlePool(520);
       this.state = State.MENU;
       this.previousState = State.MENU;
-      this.currentMap = Arena.Maps.get("standard");
-      this.stats = Arena.Stats.createState();
-      this.statEffects = Arena.Stats.effects(this.stats);
+      this.currentMap = Maps.get("standard");
+      this.stats = Stats.createState();
+      this.statEffects = Stats.effects(this.stats);
       this.elapsed = 0;
       this.level = 1;
       this.xp = 0;
-      this.xpRequired = Arena.XP.requiredForLevel(this.level);
+      this.xpRequired = XP.requiredForLevel(this.level);
       this.spawnTimer = 0;
       this.shake = 0;
       this.lastTime = performance.now();
@@ -66,17 +76,17 @@
 
     startRun(mapId) {
       if (mapId) {
-        this.currentMap = Arena.Maps.get(mapId);
+        this.currentMap = Maps.get(mapId);
       }
       this.state = State.PLAYING;
       this.elapsed = 0;
       this.level = 1;
       this.xp = 0;
-      this.xpRequired = Arena.XP.requiredForLevel(this.level);
+      this.xpRequired = XP.requiredForLevel(this.level);
       this.spawnTimer = 0;
       this.shake = 0;
-      this.stats = Arena.Stats.createState();
-      this.statEffects = Arena.Stats.effects(this.stats);
+      this.stats = Stats.createState();
+      this.statEffects = Stats.effects(this.stats);
       this.player.reset(this.arena);
       clearPool(this.projectilePool);
       clearPool(this.enemyPool);
@@ -87,7 +97,7 @@
       this.ui.hideMapChooser();
       this.renderer.buildArena(this.currentMap);
       for (let i = 0; i < 4; i += 1) {
-        Arena.Enemies.spawn(this, "chaser");
+        Enemies.spawn(this, "chaser");
       }
       this.ui.update(this);
     }
@@ -110,15 +120,15 @@
     step(dt) {
       this.elapsed += dt;
       this.shake = Math.max(0, this.shake - dt * 18);
-      this.statEffects = Arena.Stats.effects(this.stats);
+      this.statEffects = Stats.effects(this.stats);
 
       this.player.update(this, dt);
-      Arena.Enemies.updateDirector(this, dt);
-      Arena.Enemies.update(this, dt);
-      Arena.Projectiles.update(this, dt);
+      Enemies.updateDirector(this, dt);
+      Enemies.update(this, dt);
+      Projectiles.update(this, dt);
       this.updateEnemySeparation(dt);
       this.resolveCollisions();
-      Arena.XP.update(this, dt);
+      XP.update(this, dt);
       updateParticles(this.particlePool, dt);
 
       if (this.player.hp <= 0) {
@@ -134,7 +144,7 @@
         this.xp -= this.xpRequired;
         this.level += 1;
         this.stats.points += 1;
-        this.xpRequired = Arena.XP.requiredForLevel(this.level);
+        this.xpRequired = XP.requiredForLevel(this.level);
         this.pauseForLevelUp();
       }
     }
@@ -149,7 +159,7 @@
       this.state = State.LEVEL_UP_PAUSED;
       
       // Get choices and validate
-      let choices = Arena.Classes.getChoices(this.player.classId, this.level);
+      let choices = Classes.getChoices(this.player.classId, this.level);
       
       // Validate we have exactly 4 valid choices
       const validChoices = (choices || []).filter(c => c && c.id && c.name);
@@ -157,7 +167,7 @@
       if (validChoices.length !== 4) {
         console.error("[Game] Invalid choices from getChoices:", validChoices.length, "- forcing fallback");
         // Force fallback to 4 core classes
-        choices = ["velocity", "titan", "swarm", "orbit"].map(id => Arena.Classes.get(id));
+        choices = ["velocity", "titan", "swarm", "orbit"].map(id => Classes.get(id));
       }
       
       // Only show UI if we have valid choices
@@ -178,7 +188,7 @@
       }
       
       // Validate the class exists
-      const classDef = Arena.Classes.get(classId);
+      const classDef = Classes.get(classId);
       if (!classDef || !classDef.id) {
         console.error("[Game] Class not found:", classId, "- using fallback");
         classId = "velocity";
@@ -218,8 +228,8 @@
         const radius = enemy.radius + projectile.radius;
         if (U.dist2(enemy, projectile) > radius * radius) return;
         projectile.hits.add(enemy.id);
-        Arena.Enemies.damage(enemy, projectile.damage, projectile.type);
-        Arena.Projectiles.onHit(this, projectile, projectile.x, projectile.y);
+        Enemies.damage(enemy, projectile.damage, projectile.type);
+        Projectiles.onHit(this, projectile, projectile.x, projectile.y);
         this.shake = Math.max(this.shake, projectile.config.hitShake || 2);
         this.createBurst(enemy.x, enemy.y, enemy.radius * 0.8, projectile.config.fill, 5);
         if (enemy.hp <= 0) this.killEnemy(enemy);
@@ -239,7 +249,7 @@
     killEnemy(enemy) {
       if (!enemy.active) return;
       enemy.active = false;
-      Arena.XP.drop(this, enemy.x, enemy.y, enemy.xp);
+      XP.drop(this, enemy.x, enemy.y, enemy.xp);
       this.createBurst(enemy.x, enemy.y, enemy.radius * 2, enemy.config.fill, 14);
     }
 
@@ -311,8 +321,8 @@
     }
 
     spendStat(id) {
-      if (Arena.Stats.spend(this.stats, id)) {
-        this.statEffects = Arena.Stats.effects(this.stats);
+      if (Stats.spend(this.stats, id)) {
+        this.statEffects = Stats.effects(this.stats);
         this.player.applyStats(this, 0);
         this.createBurst(this.player.x, this.player.y, 44, this.player.classDef.accent, 10);
       }
@@ -326,7 +336,7 @@
     }
 
     selectMap(mapId) {
-      this.currentMap = Arena.Maps.get(mapId);
+      this.currentMap = Maps.get(mapId);
       this.ui.hideMapChooser();
       this.startRun(mapId);
     }
@@ -384,5 +394,4 @@
     });
   }
 
-  Arena.Game = Game;
-})(window.Arena = window.Arena || {});
+export { Game };

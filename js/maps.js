@@ -1,7 +1,6 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  // 10-MAP SYSTEM - Locked at game start, NEVER changes mid-game
+// 10-MAP SYSTEM - Locked at game start, NEVER changes mid-game
   // Each map has unique identity, gameplay modifiers, enemy weighting, and visuals
 
   const maps = {
@@ -324,14 +323,13 @@
     return `<svg viewBox="0 0 220 130" aria-hidden="true"><rect width="220" height="130" fill="${b}"/><path d="M55 105 V50 L75 60 L95 50 L115 60 L135 50 L155 60 L175 50 V105 Z" fill="none" stroke="${c}" stroke-width="4" stroke-linejoin="round"/><path d="M75 105 V80 H95 V105 M125 105 V80 H145 V105" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><rect x="100" y="70" width="20" height="15" fill="none" stroke="${c}" stroke-width="2"/></svg>`;
   }
 
-  // Map selection is locked at game start - no mid-game switching
-  // This is enforced by the game logic, not the map system
-  Arena.Maps = {
-    list,
-    get,
-    getAllIds,
-    isValid,
-    icon,
-    FALLBACK_ID
-  };
-})(window.Arena = window.Arena || {});
+// Map selection is locked at game start - no mid-game switching
+// This is enforced by the game logic, not the map system
+export const Maps = {
+  list,
+  get,
+  getAllIds,
+  isValid,
+  icon,
+  FALLBACK_ID
+};

@@ -1,7 +1,6 @@
-(function (Arena) {
-  "use strict";
+"use strict";
 
-  const cap = 10;
+const cap = 10;
 
   const definitions = {
     health: {
@@ -87,10 +86,9 @@
     };
   }
 
-  Arena.Stats = {
-    definitions,
-    createState,
-    spend,
-    effects
-  };
-})(window.Arena = window.Arena || {});
+export const Stats = {
+  definitions,
+  createState,
+  spend,
+  effects
+};
