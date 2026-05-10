@@ -69,6 +69,7 @@ import * as U from './utils.js';
 
   function resetProjectile(p, cfg) {
     const typeConfig = ProjectileTypes[cfg.type] || ProjectileTypes.standard;
+    const config = Object.assign({}, typeConfig, cfg);
     const sizeMultiplier = cfg.sizeMultiplier || 1;
     p.x = cfg.x;
     p.y = cfg.y;
@@ -82,10 +83,10 @@ import * as U from './utils.js';
     p.age = 0;
     p.owner = cfg.owner || "player";
     p.type = cfg.type || "standard";
-    p.config = typeConfig;
-    p.pierceLeft = cfg.pierce !== undefined ? cfg.pierce : typeConfig.pierce;
+    p.config = config;
+    p.pierceLeft = cfg.pierce !== undefined ? cfg.pierce : config.pierce;
     p.orbitAngle = cfg.orbitAngle || cfg.angle;
-    p.orbitDistance = cfg.orbitDistance || typeConfig.orbitDistance || 80;
+    p.orbitDistance = cfg.orbitDistance || config.orbitDistance || config.radius || 80;
     p.hits.clear();
   }
 
@@ -104,20 +105,10 @@ import * as U from './utils.js';
       // Build list of bullets to fire based on pattern
       const bullets = buildBulletList(shot, aim);
 
-      // DEBUG: Log what we're about to fire
       const pattern = shot.pattern || inferPattern(shot);
-      console.log(`[FIRE] ${classDef.id} salvo#${salvoIndex} type=${shot.type} pattern=${pattern} bullets=${bullets.length}`);
-
-      // Validate bullet count
       const expected = getExpectedBulletCount(shot);
-      if (bullets.length !== expected) {
+      if (bullets.length !== expected && game.settings?.debugMode) {
         console.error(`[FIRE ERROR] ${classDef.id}: Expected ${expected} bullets, got ${bullets.length}`);
-      }
-
-      // Log angles for debugging
-      if (bullets.length > 0) {
-        const angles = bullets.map(b => Math.round(b.angle * 180 / Math.PI));
-        console.log(`[FIRE] ${classDef.id} angles: [${angles.join(", ")}]°`);
       }
 
       // Fire with burst timing
@@ -151,7 +142,7 @@ import * as U from './utils.js';
     switch (pattern) {
       case "cone": {
         // Evenly spread bullets across spread angle
-        const count = shot.count || 1;
+        const count = shot.radial || shot.count || 1;
         const spread = (shot.spread || 0) * DEG;
         for (let i = 0; i < count; i += 1) {
           const t = count === 1 ? 0 : i / (count - 1);
@@ -222,7 +213,7 @@ import * as U from './utils.js';
 
     switch (pattern) {
       case "cone": return shot.count || 1;
-      case "radial": return shot.count || 1;
+      case "radial": return shot.radial || shot.count || 1;
       case "side": return 2;
       case "cross": return 4;
       case "barrels": return (shot.barrels || [{ side: 0, forward: 35 }]).length;
@@ -246,11 +237,20 @@ import * as U from './utils.js';
       angle,
       speed: shot.speed,
       damage: shot.damage * game.statEffects.damageMultiplier,
-      radius: shot.radius,
+      radius: shot.type === "orbit" ? (shot.projectileRadius || 9) : shot.radius,
       life: shot.life || 1.1,
-      pierce: (Arena.Projectiles.types[shot.type] || Arena.Projectiles.types.standard).pierce + game.statEffects.extraPierce,
+      pierce: ((ProjectileTypes[shot.type] || ProjectileTypes.standard).pierce || 0) + game.statEffects.extraPierce,
       sizeMultiplier: game.statEffects.projectileSizeMultiplier,
-      orbitAngle: angle + seed * 0.8
+      orbitAngle: angle + seed * 0.8,
+      orbitDistance: shot.orbitDistance || (shot.type === "orbit" ? shot.radius : undefined),
+      explodeRadius: shot.explodeRadius,
+      knockback: shot.knockback,
+      cluster: shot.cluster,
+      miniCount: shot.miniCount,
+      miniRadius: shot.miniRadius,
+      miniDamage: shot.miniDamage,
+      fireZone: shot.fireZone,
+      zoneRadius: shot.zoneRadius
     });
   }
 

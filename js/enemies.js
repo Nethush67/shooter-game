@@ -2,6 +2,7 @@
 
 import * as U from './utils.js';
 import { Maps } from './maps.js';
+import { Projectiles } from './projectiles.js';
 
 const EnemyTypes = {
     chaser: {
@@ -342,7 +343,7 @@ const EnemyTypes = {
     enemy.attackCooldown -= dt;
     if (distance > enemy.config.range || enemy.attackCooldown > 0) return;
     enemy.attackCooldown = enemy.config.cadence * U.rand(0.84, 1.16);
-    Arena.Projectiles.spawn(game.projectilePool, {
+    Projectiles.spawn(game.projectilePool, {
       owner: "enemy",
       type: "enemyBolt",
       x: enemy.x + Math.cos(angle) * (enemy.radius + 12),

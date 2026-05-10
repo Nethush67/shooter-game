@@ -44,6 +44,19 @@ button {
     linear-gradient(135deg, #071018 0%, #0d1621 54%, #121522 100%);
 }
 
+#gameRoot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at 50% 50%, black, transparent 78%);
+  z-index: 1;
+}
+
 #gameSvg {
   display: block;
   width: 100%;
@@ -310,6 +323,31 @@ button {
   background: linear-gradient(145deg, rgba(14, 25, 39, 0.94), rgba(6, 11, 19, 0.9));
   box-shadow: 0 22px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.07);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.compact-panel {
+  width: min(500px, 92vw);
+}
+
+.wide-panel {
+  width: min(900px, 94vw);
+}
+
+.title-bg {
+  position: absolute;
+  inset: -30%;
+  background:
+    conic-gradient(from 0deg, transparent, rgba(85,240,208,0.16), transparent, rgba(246,199,94,0.12), transparent);
+  animation: title-spin 16s linear infinite;
+  opacity: 0.65;
+}
+
+.menu-panel > *:not(.title-bg) {
+  position: relative;
+}
 }
 
 .title-mark {
@@ -382,6 +420,12 @@ h2 {
   font-size: 14px;
   cursor: pointer;
   transition: all 120ms ease;
+  border-radius: 6px;
+}
+
+.secondary-button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
 }
 
 .secondary-button:hover {
@@ -433,6 +477,11 @@ h2 {
   display: grid;
   gap: 14px;
   margin: 24px 0;
+}
+
+input[type="range"] {
+  width: 150px;
+  accent-color: var(--cyan);
 }
 
 .setting-row {
@@ -502,6 +551,35 @@ h2 {
 .settings-close {
   width: 100%;
   margin-top: 8px;
+}
+
+.keybind-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0 18px;
+}
+
+.keybind-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.keybind-button strong {
+  color: var(--ink);
+}
+
+.keybind-button.listening {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .choice-grid {
@@ -606,6 +684,132 @@ h2 {
 
 .game-over {
   z-index: 5;
+}
+
+.loading-overlay {
+  z-index: 12;
+}
+
+.loader-ring {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  border: 3px solid rgba(255,255,255,0.12);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: title-spin 900ms linear infinite;
+}
+
+.achievement-toast {
+  position: absolute;
+  right: 18px;
+  top: 92px;
+  z-index: 20;
+  display: grid;
+  gap: 4px;
+  width: min(330px, calc(100vw - 36px));
+  padding: 14px 16px;
+  border: 1px solid rgba(246,199,94,0.7);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(20, 24, 28, 0.95), rgba(8, 14, 23, 0.92));
+  box-shadow: 0 22px 60px rgba(0,0,0,0.35), 0 0 32px rgba(246,199,94,0.16);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.achievement-toast strong {
+  color: var(--gold);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.achievement-toast span {
+  color: var(--ink);
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+  text-align: left;
+}
+
+.achievement-card {
+  display: grid;
+  gap: 6px;
+  min-height: 92px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+}
+
+.achievement-card.unlocked {
+  border-color: rgba(85,240,208,0.58);
+  box-shadow: inset 0 0 26px rgba(85,240,208,0.08);
+}
+
+.achievement-card strong {
+  color: var(--ink);
+}
+
+.achievement-card span {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+
+.summary-grid span {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+}
+
+.summary-grid strong {
+  color: var(--ink);
+  font-size: 18px;
+}
+
+@keyframes title-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes map-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes level-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.level-card-anim {
+  animation: level-card-in 260ms ease backwards;
 }
 
 @media (max-width: 760px) {

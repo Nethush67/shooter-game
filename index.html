@@ -42,7 +42,7 @@
       </div>
     </section>
 
-    <button id="playerMenuButton" type="button" class="player-menu-button" aria-label="Open map selection" onclick="window.Arena.game.openMapChooser()">MAP</button>
+    <button id="playerMenuButton" type="button" class="player-menu-button" aria-label="Open map selection">MAP</button>
 
     <section id="statsPanel" class="stats-panel" aria-label="Player stat upgrades">
       <div class="stats-heading">
@@ -52,8 +52,30 @@
       <div id="statBars" class="stat-bars"></div>
     </section>
 
+    <div id="achievementToast" class="achievement-toast hidden" role="status" aria-live="polite"></div>
+
+    <section id="loadingOverlay" class="overlay loading-overlay hidden" aria-live="polite">
+      <div class="menu-panel compact-panel">
+        <div class="loader-ring" aria-hidden="true"></div>
+        <h2>Booting Arena</h2>
+        <p>Synchronizing weapons, saves, and combat telemetry.</p>
+      </div>
+    </section>
+
+    <section id="tutorialOverlay" class="overlay tutorial-overlay hidden" aria-live="polite">
+      <div class="menu-panel compact-panel">
+        <div class="level-header">
+          <span>First Deployment</span>
+          <h2>Survive, Evolve, Extract</h2>
+        </div>
+        <p>Move with WASD or arrows. Aim with the mouse. Your weapon fires automatically. Press Esc to pause, spend stat points from the lower-left panel, and evolve whenever the class screen appears.</p>
+        <button id="tutorialCloseButton" type="button" class="primary-button">Ready</button>
+      </div>
+    </section>
+
     <section id="menuOverlay" class="overlay menu-overlay">
       <div class="menu-panel">
+        <div class="title-bg" aria-hidden="true"></div>
         <svg class="title-mark" viewBox="0 0 240 120" aria-hidden="true">
           <path d="M18 75 C54 16 187 16 222 75" fill="none" stroke="#55f0d0" stroke-width="9" stroke-linecap="round"/>
           <circle cx="120" cy="62" r="34" fill="#182a3a" stroke="#f6c75e" stroke-width="7"/>
@@ -61,10 +83,13 @@
           <path d="M74 70 L120 57 L166 70" fill="none" stroke="#f5f7fb" stroke-width="8" stroke-linecap="round"/>
         </svg>
         <h1>Arena Evolution Survival</h1>
-        <p>WASD to move. Aim with the mouse. Your weapon fires automatically. Level up to become a new combat class.</p>
+        <p>A class-evolution arena shooter about pressure, precision, and one more impossible run.</p>
         <div class="menu-buttons">
-          <button id="startButton" type="button" class="primary-button">Start Run</button>
+          <button id="startButton" type="button" class="primary-button">Play</button>
+          <button id="continueButton" type="button" class="secondary-button">Continue Run</button>
+          <button id="achievementsButton" type="button" class="secondary-button">Achievements</button>
           <button id="settingsButton" type="button" class="secondary-button">Settings</button>
+          <button id="creditsButton" type="button" class="secondary-button">Credits</button>
         </div>
       </div>
     </section>
@@ -95,11 +120,12 @@
         </div>
         <div class="settings-grid">
           <label class="setting-row">
-            <span class="setting-name">Sound</span>
-            <button type="button" class="toggle-switch" data-setting="sound" aria-pressed="true">
-              <span class="toggle-track"><span class="toggle-thumb"></span></span>
-              <span class="toggle-label">On</span>
-            </button>
+            <span class="setting-name">Music Volume</span>
+            <input type="range" min="0" max="100" step="1" data-range-setting="musicVolume" aria-label="Music volume">
+          </label>
+          <label class="setting-row">
+            <span class="setting-name">Sound Effects</span>
+            <input type="range" min="0" max="100" step="1" data-range-setting="sfxVolume" aria-label="Sound effects volume">
           </label>
           <label class="setting-row">
             <span class="setting-name">Screen Shake</span>
@@ -122,16 +148,74 @@
               <span class="toggle-label">Off</span>
             </button>
           </label>
+          <label class="setting-row">
+            <span class="setting-name">Fullscreen</span>
+            <button type="button" class="toggle-switch" data-setting="fullscreen" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">Off</span>
+            </button>
+          </label>
+        </div>
+        <div class="keybind-grid" aria-label="Key bindings">
+          <button type="button" class="keybind-button" data-bind="up">Up <strong>W</strong></button>
+          <button type="button" class="keybind-button" data-bind="left">Left <strong>A</strong></button>
+          <button type="button" class="keybind-button" data-bind="down">Down <strong>S</strong></button>
+          <button type="button" class="keybind-button" data-bind="right">Right <strong>D</strong></button>
+          <button type="button" class="keybind-button" data-bind="pause">Pause <strong>Esc</strong></button>
         </div>
         <button id="settingsCloseButton" type="button" class="primary-button settings-close">Close</button>
       </div>
     </section>
 
+    <section id="pauseOverlay" class="overlay pause-overlay hidden" aria-live="polite">
+      <div class="menu-panel compact-panel">
+        <div class="level-header">
+          <span>Run Paused</span>
+          <h2>Tactical Hold</h2>
+        </div>
+        <p id="pauseStats">Level 1, 00:00 survived.</p>
+        <div class="menu-buttons">
+          <button id="resumeButton" type="button" class="primary-button">Resume</button>
+          <button id="pauseSettingsButton" type="button" class="secondary-button">Settings</button>
+          <button id="saveQuitButton" type="button" class="secondary-button">Save & Quit</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="achievementsOverlay" class="overlay achievements-overlay hidden" aria-live="polite">
+      <div class="menu-panel wide-panel">
+        <div class="level-header">
+          <span>Career Records</span>
+          <h2>Achievements</h2>
+        </div>
+        <div id="achievementsList" class="achievement-grid"></div>
+        <button id="achievementsCloseButton" type="button" class="primary-button settings-close">Back</button>
+      </div>
+    </section>
+
+    <section id="creditsOverlay" class="overlay credits-overlay hidden" aria-live="polite">
+      <div class="menu-panel compact-panel">
+        <div class="level-header">
+          <span>Credits</span>
+          <h2>Small Studio Mode</h2>
+        </div>
+        <p>Design, code, combat systems, and UI polish for this browser release demo.</p>
+        <button id="creditsCloseButton" type="button" class="primary-button settings-close">Back</button>
+      </div>
+    </section>
+
     <section id="gameOverOverlay" class="overlay game-over hidden">
       <div class="menu-panel">
-        <h2>Run Ended</h2>
+        <div class="level-header">
+          <span id="summaryEyebrow">Run Ended</span>
+          <h2 id="summaryTitle">Extraction Failed</h2>
+        </div>
         <p id="finalStats">You survived 00:00 and reached level 1.</p>
-        <button id="restartButton" type="button" class="primary-button">Restart</button>
+        <div id="summaryDetails" class="summary-grid"></div>
+        <div class="menu-buttons">
+          <button id="restartButton" type="button" class="primary-button">Restart</button>
+          <button id="summaryMenuButton" type="button" class="secondary-button">Main Menu</button>
+        </div>
       </div>
     </section>
   </main>

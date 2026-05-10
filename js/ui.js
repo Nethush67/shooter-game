@@ -3,286 +3,358 @@
 import * as U from './utils.js';
 import { Maps } from './maps.js';
 import { ClassesAPI as Classes } from './classes.js';
+import { Stats } from './stats.js';
 
 class UI {
-    constructor() {
-      this.hpFill = document.getElementById("hpFill");
-      this.hpText = document.getElementById("hpText");
-      this.xpFill = document.getElementById("xpFill");
-      this.xpText = document.getElementById("xpText");
-      this.levelText = document.getElementById("levelText");
-      this.classText = document.getElementById("classText");
-      this.mapText = document.getElementById("mapText");
-      this.timeText = document.getElementById("timeText");
-      this.fpsText = document.getElementById("fpsText");
-      this.playerMenuButton = document.getElementById("playerMenuButton");
-      this.upgradePointsText = document.getElementById("upgradePointsText");
-      this.statBars = document.getElementById("statBars");
-      this.menuOverlay = document.getElementById("menuOverlay");
-      this.levelOverlay = document.getElementById("levelOverlay");
-      this.choiceGrid = document.getElementById("levelChoices");
-      this.mapOverlay = document.getElementById("mapOverlay");
-      this.mapChoices = document.getElementById("mapChoices");
-      this.settingsOverlay = document.getElementById("settingsOverlay");
-      this.settingsButton = document.getElementById("settingsButton");
-      this.settingsCloseButton = document.getElementById("settingsCloseButton");
-      this.gameOverOverlay = document.getElementById("gameOverOverlay");
-      this.finalStats = document.getElementById("finalStats");
-      this.startButton = document.getElementById("startButton");
-      this.restartButton = document.getElementById("restartButton");
-      this.lastFpsUpdate = 0;
-      this.frameCount = 0;
-    }
+  constructor() {
+    this.hpFill = this.el("hpFill");
+    this.hpText = this.el("hpText");
+    this.xpFill = this.el("xpFill");
+    this.xpText = this.el("xpText");
+    this.levelText = this.el("levelText");
+    this.classText = this.el("classText");
+    this.mapText = this.el("mapText");
+    this.timeText = this.el("timeText");
+    this.fpsText = this.el("fpsText");
+    this.playerMenuButton = this.el("playerMenuButton");
+    this.upgradePointsText = this.el("upgradePointsText");
+    this.statBars = this.el("statBars");
+    this.loadingOverlay = this.el("loadingOverlay");
+    this.menuOverlay = this.el("menuOverlay");
+    this.tutorialOverlay = this.el("tutorialOverlay");
+    this.levelOverlay = this.el("levelOverlay");
+    this.choiceGrid = this.el("levelChoices");
+    this.mapOverlay = this.el("mapOverlay");
+    this.mapChoices = this.el("mapChoices");
+    this.settingsOverlay = this.el("settingsOverlay");
+    this.pauseOverlay = this.el("pauseOverlay");
+    this.achievementsOverlay = this.el("achievementsOverlay");
+    this.creditsOverlay = this.el("creditsOverlay");
+    this.gameOverOverlay = this.el("gameOverOverlay");
+    this.finalStats = this.el("finalStats");
+    this.summaryDetails = this.el("summaryDetails");
+    this.summaryEyebrow = this.el("summaryEyebrow");
+    this.summaryTitle = this.el("summaryTitle");
+    this.pauseStats = this.el("pauseStats");
+    this.achievementToast = this.el("achievementToast");
+    this.lastFpsUpdate = 0;
+    this.frameCount = 0;
+    this.previousOverlay = "menu";
+    this._levelUpTimer = null;
+  }
 
-    bind(game) {
-      this.startButton.addEventListener("click", () => game.openMapChooser());
-      this.restartButton.addEventListener("click", () => game.startRun());
-      this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
-      this.settingsButton.addEventListener("click", () => this.showSettings(game));
-      this.settingsCloseButton.addEventListener("click", () => this.hideSettings());
-      this.buildStats(game);
-      this.buildMaps(game);
-      this.bindSettings(game);
-    }
+  el(id) {
+    return document.getElementById(id);
+  }
 
-    bindSettings(game) {
-      this.settingsOverlay.querySelectorAll(".toggle-switch").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const setting = btn.dataset.setting;
-          const current = btn.getAttribute("aria-pressed") === "true";
-          const next = !current;
-          btn.setAttribute("aria-pressed", next);
-          btn.querySelector(".toggle-label").textContent = next ? "On" : "Off";
-          game.settings[setting] = next;
-          game.saveSettings();
-          if (setting === "fpsCounter") {
-            this.fpsText.classList.toggle("hidden", !next);
-          }
-        });
-      });
-    }
+  bind(game) {
+    this.el("startButton").addEventListener("click", () => game.openMapChooser());
+    this.el("continueButton").addEventListener("click", () => game.continueRun());
+    this.el("achievementsButton").addEventListener("click", () => game.openAchievements());
+    this.el("settingsButton").addEventListener("click", () => game.openSettings("menu"));
+    this.el("creditsButton").addEventListener("click", () => game.openCredits());
+    this.el("restartButton").addEventListener("click", () => game.startRun());
+    this.el("summaryMenuButton").addEventListener("click", () => game.returnToMenu());
+    this.el("resumeButton").addEventListener("click", () => game.resume());
+    this.el("pauseSettingsButton").addEventListener("click", () => game.openSettings("pause"));
+    this.el("saveQuitButton").addEventListener("click", () => game.saveAndQuit());
+    this.el("settingsCloseButton").addEventListener("click", () => game.closeSettings());
+    this.el("achievementsCloseButton").addEventListener("click", () => game.closeAchievements());
+    this.el("creditsCloseButton").addEventListener("click", () => game.closeCredits());
+    this.el("tutorialCloseButton").addEventListener("click", () => game.closeTutorial());
+    this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
+    this.buildStats(game);
+    this.buildMaps(game);
+    this.bindSettings(game);
+  }
 
-    updateSettingsUI(settings) {
-      this.settingsOverlay.querySelectorAll(".toggle-switch").forEach((btn) => {
+  bindSettings(game) {
+    this.settingsOverlay.querySelectorAll(".toggle-switch").forEach((btn) => {
+      btn.addEventListener("click", () => {
         const setting = btn.dataset.setting;
-        const value = settings[setting];
-        btn.setAttribute("aria-pressed", value);
-        btn.querySelector(".toggle-label").textContent = value ? "On" : "Off";
+        const next = btn.getAttribute("aria-pressed") !== "true";
+        game.updateSetting(setting, next);
       });
-      this.fpsText.classList.toggle("hidden", !settings.fpsCounter);
-    }
+    });
 
-    showSettings(game) {
-      this.updateSettingsUI(game.settings);
-      this.settingsOverlay.classList.remove("hidden");
-    }
-
-    hideSettings() {
-      this.settingsOverlay.classList.add("hidden");
-    }
-
-    update(game, now) {
-      const hpPercent = Math.max(0, game.player.hp / game.player.maxHp) * 100;
-      const xpPercent = Math.max(0, game.xp / game.xpRequired) * 100;
-      this.hpFill.style.width = `${hpPercent}%`;
-      this.hpText.textContent = `${Math.ceil(game.player.hp)}`;
-      this.xpFill.style.width = `${Math.min(100, xpPercent)}%`;
-      this.xpText.textContent = `${Math.floor(Math.min(100, xpPercent))}%`;
-      this.levelText.textContent = game.level;
-      this.classText.textContent = game.player.classDef.name;
-      this.mapText.textContent = game.currentMap.name;
-      this.timeText.textContent = U.secondsToClock(game.elapsed);
-      this.upgradePointsText.textContent = game.stats.points;
-      this.updateStats(game);
-      this.updateFPS(now);
-    }
-
-    updateFPS(now) {
-      this.frameCount++;
-      if (now - this.lastFpsUpdate >= 1000) {
-        const fps = Math.round(this.frameCount * 1000 / (now - this.lastFpsUpdate));
-        this.fpsText.textContent = `${fps} FPS`;
-        this.frameCount = 0;
-        this.lastFpsUpdate = now;
-      }
-    }
-
-    showMenu() {
-      this.menuOverlay.classList.remove("hidden");
-      this.levelOverlay.classList.add("hidden");
-      this.mapOverlay.classList.add("hidden");
-      this.gameOverOverlay.classList.add("hidden");
-    }
-
-    hideMenu() {
-      this.menuOverlay.classList.add("hidden");
-      this.gameOverOverlay.classList.add("hidden");
-    }
-
-    buildStats(game) {
-      this.statBars.innerHTML = "";
-      Object.keys(Arena.Stats.definitions).forEach((id) => {
-        const def = Arena.Stats.definitions[id];
-        const row = document.createElement("div");
-        row.className = "stat-row";
-        row.dataset.stat = id;
-        row.innerHTML = `
-          <span class="stat-name">${def.label}</span>
-          <span class="stat-track"><span class="stat-fill"></span></span>
-          <span class="stat-level">0/${def.cap}</span>
-          <button type="button" class="stat-upgrade-btn" data-stat-btn="${id}" aria-label="Upgrade ${def.label}">
-            <svg viewBox="0 0 12 12"><path d="M6 2 L6 10 M2 6 L10 6"/></svg>
-          </button>
-          <span class="stat-tooltip">${def.description}: ${def.value(1)}</span>
-        `;
-        const btn = row.querySelector(".stat-upgrade-btn");
-        btn.addEventListener("click", () => game.spendStat(id));
-        this.statBars.appendChild(row);
+    this.settingsOverlay.querySelectorAll("[data-range-setting]").forEach((range) => {
+      range.addEventListener("input", () => {
+        game.updateSetting(range.dataset.rangeSetting, Number(range.value) / 100);
       });
-    }
+    });
 
-    updateStats(game) {
-      const canUpgrade = game.stats.points > 0;
-      Object.keys(Arena.Stats.definitions).forEach((id) => {
-        const def = Arena.Stats.definitions[id];
-        const level = game.stats.levels[id];
-        const row = this.statBars.querySelector(`[data-stat="${id}"]`);
-        if (!row) return;
-        const fill = row.querySelector(".stat-fill");
-        const levelText = row.querySelector(".stat-level");
-        const btn = row.querySelector(".stat-upgrade-btn");
-        const tooltip = row.querySelector(".stat-tooltip");
-
-        const newWidth = `${(level / def.cap) * 100}%`;
-        if (fill.style.width !== newWidth) {
-          fill.style.width = newWidth;
-          fill.classList.add("stat-fill-anim");
-          setTimeout(() => fill.classList.remove("stat-fill-anim"), 150);
-        }
-        levelText.textContent = `${level}/${def.cap}`;
-        tooltip.textContent = `${def.description}: ${def.value(level)}`;
-        const btnEnabled = canUpgrade && level < def.cap;
-        btn.disabled = !btnEnabled;
-      });
-    }
-
-    buildMaps(game) {
-      this.mapChoices.innerHTML = "";
-      Maps.list().forEach((map) => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "map-card";
-        card.dataset.map = map.id;
-        card.setAttribute("onclick", `window.Arena.game.selectMap('${map.id}')`);
-        card.innerHTML = `
-          ${Maps.icon(map)}
-          <h3>${map.name}</h3>
-          <p>${map.shortDesc}</p>
-        `;
-        const choose = () => game.selectMap(map.id);
-        card.addEventListener("click", choose);
-        card.addEventListener("pointerup", choose);
-        this.mapChoices.appendChild(card);
-      });
-    }
-
-    showMapChooser(game) {
-      this.mapChoices.querySelectorAll(".map-card").forEach((card, index) => {
-        card.classList.toggle("active-map", card.dataset.map === game.currentMap.id);
-        card.style.animation = "none";
-        card.offsetHeight;
-        card.style.animation = `map-fade-in 300ms ease ${index * 60}ms backwards`;
-      });
-      this.mapOverlay.classList.remove("hidden");
-    }
-
-    hideMapChooser() {
-      this.mapOverlay.classList.add("hidden");
-    }
-
-    showLevelUp(choices, onChoose) {
-      // SAFETY: Validate choices - must be exactly 4 valid options
-      const validChoices = (choices || []).filter(c => c && c.id && c.name);
-      
-      if (validChoices.length !== 4) {
-        console.error("[UI] Invalid choices count:", validChoices.length, "- using fallback");
-        // FALLBACK: Always provide the 4 core classes
-        const fallbackIds = ["velocity", "titan", "swarm", "orbit"];
-        choices = fallbackIds.map(id => Classes.get(id)).filter(Boolean);
-      } else {
-        choices = validChoices;
-      }
-
-      // Clear and render
-      this.choiceGrid.innerHTML = "";
-      
-      // Render all 4 cards BEFORE showing headers
-      const cards = [];
-      choices.slice(0, 4).forEach((choice, index) => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "choice-card level-card-anim";
-        card.style.animationDelay = `${index * 60}ms`;
-        card.dataset.classId = choice.id;
-        card.innerHTML = `
-          ${Classes.cardIcon(choice)}
-          <h3>${choice.name}</h3>
-          <p>${choice.description}</p>
-        `;
-        card.addEventListener("click", () => {
-          if (this._levelUpTimer) {
-            clearTimeout(this._levelUpTimer);
-            this._levelUpTimer = null;
-          }
-          card.classList.add("selecting");
-          window.setTimeout(() => onChoose(choice.id), 120);
+    this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.dataset.bind;
+        btn.classList.add("listening");
+        btn.querySelector("strong").textContent = "...";
+        game.waitForRebind(action, (key) => {
+          btn.classList.remove("listening");
+          btn.querySelector("strong").textContent = keyLabel(key);
+          this.showToast("Key Bound", `${actionLabel(action)} set to ${keyLabel(key)}`);
         });
-        this.choiceGrid.appendChild(card);
-        cards.push(card);
       });
+    });
+  }
 
-      // Only show overlay if we successfully rendered 4 cards
-      if (cards.length !== 4) {
-        console.error("[UI] Failed to render 4 cards, aborting level up");
-        this.choiceGrid.innerHTML = "";
-        onChoose("velocity"); // Emergency fallback
-        return;
-      }
+  updateSettingsUI(settings, bindings) {
+    this.settingsOverlay.querySelectorAll(".toggle-switch").forEach((btn) => {
+      const setting = btn.dataset.setting;
+      const value = Boolean(settings[setting]);
+      btn.setAttribute("aria-pressed", String(value));
+      btn.querySelector(".toggle-label").textContent = value ? "On" : "Off";
+    });
+    this.settingsOverlay.querySelectorAll("[data-range-setting]").forEach((range) => {
+      range.value = Math.round((settings[range.dataset.rangeSetting] || 0) * 100);
+    });
+    this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
+      const key = bindings[btn.dataset.bind];
+      btn.querySelector("strong").textContent = keyLabel(key);
+    });
+    this.fpsText.classList.toggle("hidden", !settings.fpsCounter);
+  }
 
-      // Show the UI
-      this.levelOverlay.classList.remove("hidden");
+  update(game, now) {
+    const hpPercent = Math.max(0, game.player.hp / game.player.maxHp) * 100;
+    const xpPercent = Math.max(0, game.xp / game.xpRequired) * 100;
+    this.hpFill.style.width = `${hpPercent}%`;
+    this.hpText.textContent = `${Math.ceil(game.player.hp)}`;
+    this.xpFill.style.width = `${Math.min(100, xpPercent)}%`;
+    this.xpText.textContent = `${Math.floor(Math.min(100, xpPercent))}%`;
+    this.levelText.textContent = game.level;
+    this.classText.textContent = game.player.classDef.name;
+    this.mapText.textContent = game.currentMap.name;
+    this.timeText.textContent = U.secondsToClock(game.elapsed);
+    this.upgradePointsText.textContent = game.stats.points;
+    this.updateStats(game);
+    if (game.settings.fpsCounter) this.updateFPS(now);
+  }
 
-      // AUTO-SELECT: 5 second timeout to prevent softlock
-      this._levelUpTimer = setTimeout(() => {
-        console.warn("[UI] Auto-selecting Velocity Core after timeout");
-        onChoose("velocity");
-      }, 5000);
-
-      // ANTI-SOFTLOCK GUARD: Check after 1 second if UI is responsive
-      setTimeout(() => {
-        if (!this.levelOverlay.classList.contains("hidden")) {
-          const clickableCards = this.choiceGrid.querySelectorAll("button.choice-card");
-          if (clickableCards.length === 0) {
-            console.error("[UI] No clickable cards detected, emergency resume");
-            this.hideLevelUp();
-            onChoose("velocity");
-          }
-        }
-      }, 1000);
-    }
-
-    hideLevelUp() {
-      if (this._levelUpTimer) {
-        clearTimeout(this._levelUpTimer);
-        this._levelUpTimer = null;
-      }
-      this.levelOverlay.classList.add("hidden");
-    }
-
-    showGameOver(game) {
-      this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
-      this.gameOverOverlay.classList.remove("hidden");
+  updateFPS(now) {
+    this.frameCount += 1;
+    if (now - this.lastFpsUpdate >= 1000) {
+      this.fpsText.textContent = `${Math.round(this.frameCount * 1000 / (now - this.lastFpsUpdate))} FPS`;
+      this.frameCount = 0;
+      this.lastFpsUpdate = now;
     }
   }
+
+  hideAllOverlays() {
+    [
+      this.loadingOverlay,
+      this.menuOverlay,
+      this.tutorialOverlay,
+      this.levelOverlay,
+      this.mapOverlay,
+      this.settingsOverlay,
+      this.pauseOverlay,
+      this.achievementsOverlay,
+      this.creditsOverlay,
+      this.gameOverOverlay
+    ].forEach((overlay) => overlay?.classList.add("hidden"));
+  }
+
+  showLoading() {
+    this.hideAllOverlays();
+    this.loadingOverlay.classList.remove("hidden");
+  }
+
+  showMenu(canContinue) {
+    this.hideAllOverlays();
+    this.menuOverlay.classList.remove("hidden");
+    this.el("continueButton").disabled = !canContinue;
+  }
+
+  showTutorial() {
+    this.tutorialOverlay.classList.remove("hidden");
+  }
+
+  hideTutorial() {
+    this.tutorialOverlay.classList.add("hidden");
+  }
+
+  hideMenu() {
+    this.menuOverlay.classList.add("hidden");
+    this.gameOverOverlay.classList.add("hidden");
+  }
+
+  showSettings(game, source) {
+    this.previousOverlay = source || "menu";
+    this.updateSettingsUI(game.settings, game.input.bindings);
+    this.settingsOverlay.classList.remove("hidden");
+  }
+
+  hideSettings() {
+    this.settingsOverlay.classList.add("hidden");
+  }
+
+  showPause(game) {
+    this.pauseStats.textContent = `${game.player.classDef.name}, level ${game.level}, ${U.secondsToClock(game.elapsed)} survived.`;
+    this.pauseOverlay.classList.remove("hidden");
+  }
+
+  hidePause() {
+    this.pauseOverlay.classList.add("hidden");
+  }
+
+  buildStats(game) {
+    this.statBars.innerHTML = "";
+    Object.keys(Stats.definitions).forEach((id) => {
+      const def = Stats.definitions[id];
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.dataset.stat = id;
+      row.innerHTML = `
+        <span class="stat-name">${def.label}</span>
+        <span class="stat-track"><span class="stat-fill"></span></span>
+        <span class="stat-level">0/${def.cap}</span>
+        <button type="button" class="stat-upgrade-btn" data-stat-btn="${id}" aria-label="Upgrade ${def.label}">
+          <svg viewBox="0 0 12 12"><path d="M6 2 L6 10 M2 6 L10 6"/></svg>
+        </button>
+        <span class="stat-tooltip">${def.description}: ${def.value(1)}</span>
+      `;
+      row.querySelector(".stat-upgrade-btn").addEventListener("click", () => game.spendStat(id));
+      this.statBars.appendChild(row);
+    });
+  }
+
+  updateStats(game) {
+    const canUpgrade = game.stats.points > 0;
+    Object.keys(Stats.definitions).forEach((id) => {
+      const def = Stats.definitions[id];
+      const level = game.stats.levels[id] || 0;
+      const row = this.statBars.querySelector(`[data-stat="${id}"]`);
+      if (!row) return;
+      row.querySelector(".stat-fill").style.width = `${(level / def.cap) * 100}%`;
+      row.querySelector(".stat-level").textContent = `${level}/${def.cap}`;
+      row.querySelector(".stat-tooltip").textContent = `${def.description}: ${def.value(level)}`;
+      row.querySelector(".stat-upgrade-btn").disabled = !(canUpgrade && level < def.cap);
+    });
+  }
+
+  buildMaps(game) {
+    this.mapChoices.innerHTML = "";
+    Maps.list().forEach((map) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "map-card";
+      card.dataset.map = map.id;
+      card.innerHTML = `
+        ${Maps.icon(map)}
+        <h3>${map.name}</h3>
+        <p>${map.shortDesc}</p>
+      `;
+      card.addEventListener("click", () => game.selectMap(map.id));
+      this.mapChoices.appendChild(card);
+    });
+  }
+
+  showMapChooser(game) {
+    this.mapChoices.querySelectorAll(".map-card").forEach((card, index) => {
+      card.classList.toggle("active-map", card.dataset.map === game.currentMap.id);
+      card.style.animation = "none";
+      card.offsetHeight;
+      card.style.animation = `map-fade-in 300ms ease ${index * 45}ms backwards`;
+    });
+    this.mapOverlay.classList.remove("hidden");
+  }
+
+  hideMapChooser() {
+    this.mapOverlay.classList.add("hidden");
+  }
+
+  showLevelUp(choices, onChoose) {
+    const validChoices = (choices || []).filter((c) => c && c.id && c.name);
+    const fallbackIds = ["velocity", "titan", "swarm", "orbit"];
+    const renderChoices = (validChoices.length ? validChoices : fallbackIds.map((id) => Classes.get(id))).slice(0, 4);
+    while (renderChoices.length < 4) renderChoices.push(Classes.get(fallbackIds[renderChoices.length]));
+    this.choiceGrid.innerHTML = "";
+
+    renderChoices.forEach((choice, index) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "choice-card level-card-anim";
+      card.style.animationDelay = `${index * 60}ms`;
+      card.dataset.classId = choice.id;
+      card.innerHTML = `
+        ${Classes.cardIcon(choice)}
+        <h3>${choice.name}</h3>
+        <p>${choice.description}</p>
+      `;
+      card.addEventListener("click", () => {
+        clearTimeout(this._levelUpTimer);
+        card.classList.add("selecting");
+        window.setTimeout(() => onChoose(choice.id), 120);
+      });
+      this.choiceGrid.appendChild(card);
+    });
+
+    this.levelOverlay.classList.remove("hidden");
+    this._levelUpTimer = setTimeout(() => onChoose(renderChoices[0].id), 15000);
+  }
+
+  hideLevelUp() {
+    clearTimeout(this._levelUpTimer);
+    this.levelOverlay.classList.add("hidden");
+  }
+
+  showAchievements(game) {
+    const list = this.el("achievementsList");
+    list.innerHTML = "";
+    game.achievementList.forEach((achievement) => {
+      const unlocked = game.saveData.achievements.includes(achievement.id);
+      const item = document.createElement("article");
+      item.className = `achievement-card ${unlocked ? "unlocked" : ""}`;
+      item.innerHTML = `
+        <strong>${achievement.name}</strong>
+        <span>${unlocked ? achievement.description : "Locked"}</span>
+      `;
+      list.appendChild(item);
+    });
+    this.achievementsOverlay.classList.remove("hidden");
+  }
+
+  hideAchievements() {
+    this.achievementsOverlay.classList.add("hidden");
+  }
+
+  showCredits() {
+    this.creditsOverlay.classList.remove("hidden");
+  }
+
+  hideCredits() {
+    this.creditsOverlay.classList.add("hidden");
+  }
+
+  showGameOver(game, victory) {
+    this.summaryEyebrow.textContent = victory ? "Victory" : "Run Ended";
+    this.summaryTitle.textContent = victory ? "Extraction Complete" : "Extraction Failed";
+    this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
+    this.summaryDetails.innerHTML = `
+      <span><strong>${game.kills}</strong>Kills</span>
+      <span><strong>${game.bestClassName}</strong>Final Class</span>
+      <span><strong>${game.currentMap.name}</strong>Map</span>
+    `;
+    this.gameOverOverlay.classList.remove("hidden");
+  }
+
+  showToast(title, body) {
+    this.achievementToast.innerHTML = `<strong>${title}</strong><span>${body}</span>`;
+    this.achievementToast.classList.remove("hidden");
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.achievementToast.classList.add("hidden"), 3200);
+  }
+}
+
+function keyLabel(key) {
+  if (!key) return "-";
+  if (key === " ") return "Space";
+  if (key === "escape") return "Esc";
+  return key.length === 1 ? key.toUpperCase() : key.replace(/^arrow/, "Arrow ");
+}
+
+function actionLabel(action) {
+  return ({ up: "Up", down: "Down", left: "Left", right: "Right", pause: "Pause" })[action] || action;
+}
 
 export { UI };

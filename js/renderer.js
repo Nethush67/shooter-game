@@ -33,7 +33,7 @@ class Renderer {
     }
 
     buildArena(map) {
-      const theme = (map || Arena.Maps.get("normal")).theme;
+      const theme = (map || Maps.get("standard")).theme;
       this.layers.arena.innerHTML = "";
       this.layers.arena.appendChild(U.createSvg("rect", {
         x: 0,

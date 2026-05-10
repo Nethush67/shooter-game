@@ -2,6 +2,7 @@
 
 import * as U from './utils.js';
 import { ClassesAPI as Classes } from './classes.js';
+import { Projectiles } from './projectiles.js';
 
 class Player {
     constructor(arena) {
@@ -46,7 +47,7 @@ class Player {
 
       this.fireCooldown -= dt;
       if (this.fireCooldown <= 0) {
-        Arena.Projectiles.fireWeapon(game, this, this.classDef);
+        Projectiles.fireWeapon(game, this, this.classDef);
         this.fireCooldown += this.classDef.weapon.cadence * game.statEffects.cooldownMultiplier;
       }
 

@@ -3,11 +3,18 @@
 export const SVG_NS = "http://www.w3.org/2000/svg";
 
 export const State = {
+  BOOT: "BOOT",
+  LOADING: "LOADING",
   MENU: "MENU",
   PLAYING: "PLAYING",
+  PAUSED: "PAUSED",
+  SETTINGS: "SETTINGS",
+  ACHIEVEMENTS: "ACHIEVEMENTS",
+  CREDITS: "CREDITS",
   MAP_PAUSED: "MAP_PAUSED",
   LEVEL_UP_PAUSED: "LEVEL_UP_PAUSED",
-  GAME_OVER: "GAME_OVER"
+  GAME_OVER: "GAME_OVER",
+  VICTORY: "VICTORY"
 };
 
 export class Pool {
