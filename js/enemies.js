@@ -248,9 +248,15 @@ const EnemyTypes = {
   function spawn(game, type) {
     const elapsed = game.elapsed;
     const map = game.currentMap || Maps.get("standard");
+    const difficulty = game.settings?.difficulty || "normal";
+    const difficultyScale = difficulty === "easy"
+      ? { hp: 0.82, speed: 0.92, damage: 0.75, xp: 1.1 }
+      : difficulty === "hard"
+        ? { hp: 1.22, speed: 1.08, damage: 1.28, xp: 1.18 }
+        : { hp: 1, speed: 1, damage: 1, xp: 1 };
     const phase = Math.min(1, elapsed / 240);
-    const hpScale = Math.min(3.4, (1 + Math.pow(elapsed / 95, 1.35) * 0.34) * map.hpScale);
-    const speedScale = (1 + Math.min(0.32, phase * 0.32)) * map.speedScale;
+    const hpScale = Math.min(3.4, (1 + Math.pow(elapsed / 95, 1.35) * 0.34) * map.hpScale * difficultyScale.hp);
+    const speedScale = (1 + Math.min(0.32, phase * 0.32)) * map.speedScale * difficultyScale.speed;
     const angle = U.rand(0, Math.PI * 2);
     const distance = U.rand(720, 980);
     const x = U.clamp(game.player.x + Math.cos(angle) * distance, 40, game.arena.width - 40);
@@ -261,8 +267,8 @@ const EnemyTypes = {
       y,
       hpScale,
       speedScale,
-      damageScale: (1 + Math.min(0.55, elapsed * 0.0028)) * map.damageScale,
-      xpScale: map.xpScale
+      damageScale: (1 + Math.min(0.55, elapsed * 0.0028)) * map.damageScale * difficultyScale.damage,
+      xpScale: map.xpScale * difficultyScale.xp
     });
   }
 
@@ -297,8 +303,10 @@ const EnemyTypes = {
     if (game.spawnTimer > 0) return;
 
     const map = game.currentMap || Maps.get("standard");
+    const difficulty = game.settings?.difficulty || "normal";
+    const difficultyRate = difficulty === "easy" ? 0.82 : difficulty === "hard" ? 1.18 : 1;
     const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 210), 1.3) * 1.6;
-    const interval = Math.max(0.35, (1.8 / pressure) / map.spawnRate);
+    const interval = Math.max(0.35, (1.8 / pressure) / (map.spawnRate * difficultyRate));
     game.spawnTimer = interval;
 
     const activeEnemies = game.enemyPool.items.filter((e) => e.active).length;

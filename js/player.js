@@ -43,6 +43,10 @@ class Player {
 
       const aimWorld = game.renderer.screenToWorld(game.input.mouse.x, game.input.mouse.y);
       this.aimAngle = Math.atan2(aimWorld.y - this.y, aimWorld.x - this.x);
+      if (game.settings.autoAimAssist) {
+        const assisted = nearestEnemyAngle(game, this, 520);
+        if (assisted !== null) this.aimAngle = U.lerpAngle ? U.lerpAngle(this.aimAngle, assisted, 0.22) : blendAngle(this.aimAngle, assisted, 0.22);
+      }
       this.weaponPhase += (this.classDef.weapon.spin || 0) * dt;
 
       this.fireCooldown -= dt;
@@ -82,6 +86,27 @@ class Player {
     if (weapon.salvos.some((shot) => shot.type === "explosive" || shot.type === "rail")) return 0.94;
     if (weapon.salvos.some((shot) => shot.type === "sniper")) return 0.97;
     return 1;
+  }
+
+  function nearestEnemyAngle(game, player, range) {
+    let target = null;
+    let best = range * range;
+    game.enemyPool.items.forEach((enemy) => {
+      if (!enemy.active) return;
+      const d = U.dist2(player, enemy);
+      if (d < best) {
+        best = d;
+        target = enemy;
+      }
+    });
+    return target ? U.angleTo(player, target) : null;
+  }
+
+  function blendAngle(from, to, t) {
+    let delta = to - from;
+    while (delta > Math.PI) delta -= Math.PI * 2;
+    while (delta < -Math.PI) delta += Math.PI * 2;
+    return from + delta * t;
   }
 
 export { Player };

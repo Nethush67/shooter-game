@@ -30,6 +30,7 @@ class UI {
     this.pauseOverlay = this.el("pauseOverlay");
     this.achievementsOverlay = this.el("achievementsOverlay");
     this.creditsOverlay = this.el("creditsOverlay");
+    this.confirmOverlay = this.el("confirmOverlay");
     this.gameOverOverlay = this.el("gameOverOverlay");
     this.finalStats = this.el("finalStats");
     this.summaryDetails = this.el("summaryDetails");
@@ -53,6 +54,7 @@ class UI {
     this.el("achievementsButton").addEventListener("click", () => game.openAchievements());
     this.el("settingsButton").addEventListener("click", () => game.openSettings("menu"));
     this.el("creditsButton").addEventListener("click", () => game.openCredits());
+    this.el("quitButton").addEventListener("click", () => this.showToast("Browser Build", "Quit is disabled for the web version."));
     this.el("restartButton").addEventListener("click", () => game.startRun());
     this.el("summaryMenuButton").addEventListener("click", () => game.returnToMenu());
     this.el("resumeButton").addEventListener("click", () => game.resume());
@@ -62,6 +64,11 @@ class UI {
     this.el("achievementsCloseButton").addEventListener("click", () => game.closeAchievements());
     this.el("creditsCloseButton").addEventListener("click", () => game.closeCredits());
     this.el("tutorialCloseButton").addEventListener("click", () => game.closeTutorial());
+    this.el("exportSaveButton").addEventListener("click", () => game.exportSave());
+    this.el("importSaveInput").addEventListener("change", (event) => game.importSave(event.target.files?.[0]));
+    this.el("resetSaveButton").addEventListener("click", () => game.confirmResetSave());
+    this.el("clearCacheButton").addEventListener("click", () => game.confirmClearCache());
+    this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
     this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
     this.buildStats(game);
     this.buildMaps(game);
@@ -79,8 +86,17 @@ class UI {
 
     this.settingsOverlay.querySelectorAll("[data-range-setting]").forEach((range) => {
       range.addEventListener("input", () => {
-        game.updateSetting(range.dataset.rangeSetting, Number(range.value) / 100);
+        const divisor = range.dataset.rangeSetting === "mouseSensitivity" ? 100 : 100;
+        game.updateSetting(range.dataset.rangeSetting, Number(range.value) / divisor);
       });
+    });
+
+    this.settingsOverlay.querySelectorAll("[data-select-setting]").forEach((select) => {
+      select.addEventListener("change", () => game.updateSetting(select.dataset.selectSetting, select.value));
+    });
+
+    this.settingsOverlay.querySelectorAll("[data-settings-tab]").forEach((tab) => {
+      tab.addEventListener("click", () => this.showSettingsTab(tab.dataset.settingsTab));
     });
 
     this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
@@ -106,6 +122,9 @@ class UI {
     });
     this.settingsOverlay.querySelectorAll("[data-range-setting]").forEach((range) => {
       range.value = Math.round((settings[range.dataset.rangeSetting] || 0) * 100);
+    });
+    this.settingsOverlay.querySelectorAll("[data-select-setting]").forEach((select) => {
+      select.value = settings[select.dataset.selectSetting] || "normal";
     });
     this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
       const key = bindings[btn.dataset.bind];
@@ -150,6 +169,7 @@ class UI {
       this.pauseOverlay,
       this.achievementsOverlay,
       this.creditsOverlay,
+      this.confirmOverlay,
       this.gameOverOverlay
     ].forEach((overlay) => overlay?.classList.add("hidden"));
   }
@@ -181,6 +201,7 @@ class UI {
   showSettings(game, source) {
     this.previousOverlay = source || "menu";
     this.updateSettingsUI(game.settings, game.input.bindings);
+    this.showSettingsTab("audio");
     this.settingsOverlay.classList.remove("hidden");
   }
 
@@ -343,6 +364,29 @@ class UI {
     this.achievementToast.classList.remove("hidden");
     clearTimeout(this._toastTimer);
     this._toastTimer = setTimeout(() => this.achievementToast.classList.add("hidden"), 3200);
+  }
+
+  showSettingsTab(id) {
+    this.settingsOverlay.querySelectorAll("[data-settings-tab]").forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.settingsTab === id);
+    });
+    this.settingsOverlay.querySelectorAll("[data-settings-page]").forEach((page) => {
+      page.classList.toggle("active", page.dataset.settingsPage === id);
+    });
+  }
+
+  showConfirm(title, text, onAccept) {
+    this.el("confirmTitle").textContent = title;
+    this.el("confirmText").textContent = text;
+    const accept = this.el("confirmAcceptButton");
+    accept.replaceWith(accept.cloneNode(true));
+    const nextAccept = this.el("confirmAcceptButton");
+    nextAccept.addEventListener("click", onAccept);
+    this.confirmOverlay.classList.remove("hidden");
+  }
+
+  hideConfirm() {
+    this.confirmOverlay.classList.add("hidden");
   }
 }
 

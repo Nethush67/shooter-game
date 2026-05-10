@@ -44,8 +44,9 @@ import * as U from './utils.js';
       if (!orb.active) return;
       orb.pulse += dt * 5;
       const distance = Math.hypot(game.player.x - orb.x, game.player.y - orb.y);
-      if (distance < 210) {
-        const pull = (1 - distance / 210) * 780;
+      const pickupRadius = game.settings?.autoPickup === false ? 115 : 210;
+      if (distance < pickupRadius) {
+        const pull = (1 - distance / pickupRadius) * 780;
         orb.vx += ((game.player.x - orb.x) / Math.max(distance, 1)) * pull * dt;
         orb.vy += ((game.player.y - orb.y) / Math.max(distance, 1)) * pull * dt;
       }

@@ -77,9 +77,10 @@ class Renderer {
       this.renderXp(game.xpPool.items);
       this.renderProjectiles(game.projectilePool.items);
       this.renderEnemies(game.enemyPool.items);
-      this.renderParticles(game.particlePool.items);
       this.renderPlayer(game.player);
       this.renderFog(game);
+      this.renderParticles(game.particlePool.items);
+      this.renderFloaters(game.floaters || []);
     }
 
     screenToWorld(clientX, clientY) {
@@ -193,6 +194,29 @@ class Renderer {
           r: Math.max(0.5, p.radius * (p.life / p.maxLife)),
           fill: p.color,
           opacity: U.clamp(p.life / p.maxLife, 0, 1)
+        });
+      });
+    }
+
+    renderFloaters(floaters) {
+      floaters.forEach((floater) => {
+        if (!floater.el || !floater.el.isConnected) {
+          floater.el = U.createSvg("text", {
+            "text-anchor": "middle",
+            "font-size": 22,
+            "font-weight": 900,
+            "paint-order": "stroke",
+            stroke: "rgba(0,0,0,0.72)",
+            "stroke-width": 5
+          });
+          floater.el.textContent = floater.value;
+          this.layers.effects.appendChild(floater.el);
+        }
+        U.setAttrs(floater.el, {
+          x: floater.x,
+          y: floater.y,
+          fill: floater.color,
+          opacity: U.clamp(floater.life / floater.maxLife, 0, 1)
         });
       });
     }

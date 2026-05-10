@@ -53,6 +53,7 @@ class Game {
     this.lastTime = performance.now();
     this.pendingMapId = null;
     this.kills = 0;
+    this.floaters = [];
     this.bestClassName = this.player.classDef.name;
     this.achievementList = ACHIEVEMENTS;
     this.saveData = this.loadSave();
@@ -71,18 +72,29 @@ class Game {
     window.setTimeout(() => {
       this.state = State.MENU;
       this.ui.showMenu(Boolean(this.saveData.currentRun));
+      this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
     }, 320);
   }
 
   loadSettings() {
     const defaults = {
+      masterVolume: 0.85,
       musicVolume: 0.38,
       sfxVolume: 0.7,
+      muteAll: false,
+      menuMusic: true,
       screenShake: true,
       performanceMode: false,
       fpsCounter: false,
       fullscreen: false,
+      resolutionScale: 1,
+      mouseSensitivity: 1,
+      autoAimAssist: false,
+      difficulty: "normal",
+      damageNumbers: true,
+      autoPickup: true,
+      screenFlash: true,
       debugMode: false
     };
     return Object.assign(defaults, readJson(SETTINGS_KEY, {}));
@@ -109,6 +121,7 @@ class Game {
     writeJson(SETTINGS_KEY, this.settings);
     writeJson(BINDINGS_KEY, this.input.bindings);
     this.audio.applySettings(this.settings);
+    if (this.state === State.MENU) this.audio.startMusic();
   }
 
   persistSave() {
@@ -118,6 +131,7 @@ class Game {
   updateSetting(setting, value) {
     this.settings[setting] = value;
     if (setting === "fullscreen") this.setFullscreen(Boolean(value));
+    if (setting === "resolutionScale") document.documentElement.style.setProperty("--resolution-scale", String(value || 1));
     this.persistSettings();
     this.ui.updateSettingsUI(this.settings, this.input.bindings);
     this.audio.play("ui");
@@ -188,6 +202,72 @@ class Game {
     this.audio.play("ui");
   }
 
+  exportSave() {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      save: this.saveData,
+      settings: this.settings,
+      bindings: this.input.bindings
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "arena-evolution-save.json";
+    link.click();
+    URL.revokeObjectURL(url);
+    this.ui.showToast("Save Exported", "Your save JSON was downloaded.");
+    this.audio.play("ui");
+  }
+
+  importSave(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(String(reader.result || "{}"));
+        if (payload.save) this.saveData = Object.assign(this.loadSave(), payload.save);
+        if (payload.settings) this.settings = Object.assign(this.loadSettings(), payload.settings);
+        if (payload.bindings) this.input.bindings = Object.assign({}, DEFAULT_BINDINGS, payload.bindings);
+        this.persistSave();
+        this.persistSettings();
+        this.ui.updateSettingsUI(this.settings, this.input.bindings);
+        this.ui.showToast("Save Imported", "Settings and progress restored.");
+      } catch (error) {
+        this.ui.showToast("Import Failed", "That file was not a valid save export.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  confirmResetSave() {
+    this.ui.showConfirm("Reset Save", "Delete progression, achievements, unlocks, and the current run?", () => {
+      localStorage.removeItem(SAVE_KEY);
+      this.saveData = this.loadSave();
+      this.ui.hideConfirm();
+      this.ui.showMenu(false);
+      this.ui.showToast("Save Reset", "Progression data has been cleared.");
+    });
+  }
+
+  confirmClearCache() {
+    this.ui.showConfirm("Reset Game", "Clear save data, settings, keybinds, and cached game preferences?", () => {
+      [SAVE_KEY, SETTINGS_KEY, BINDINGS_KEY].forEach((key) => localStorage.removeItem(key));
+      this.settings = this.loadSettings();
+      this.input.bindings = this.loadBindings();
+      this.saveData = this.loadSave();
+      this.persistSettings();
+      this.ui.hideConfirm();
+      this.ui.showMenu(false);
+      this.ui.showToast("Game Reset", "Local data has been restored to defaults.");
+    });
+  }
+
+  closeConfirm() {
+    this.ui.hideConfirm();
+    this.audio.play("close");
+  }
+
   openMapChooser() {
     if (![State.PLAYING, State.MENU, State.GAME_OVER, State.VICTORY].includes(this.state)) return;
     this.previousState = this.state;
@@ -205,6 +285,7 @@ class Game {
   startRun(mapId) {
     if (mapId) this.currentMap = Maps.get(mapId);
     this.state = State.PLAYING;
+    this.audio.stopMusic();
     this.elapsed = 0;
     this.level = 1;
     this.xp = 0;
@@ -271,6 +352,7 @@ class Game {
   returnToMenu() {
     this.state = State.MENU;
     this.ui.showMenu(Boolean(this.saveData.currentRun));
+    this.audio.startMusic();
     this.audio.play("close");
   }
 
@@ -326,6 +408,7 @@ class Game {
     this.resolveCollisions();
     XP.update(this, dt);
     updateParticles(this.particlePool, dt);
+    updateFloaters(this.floaters, dt);
 
     if (this.elapsed >= VICTORY_TIME) this.finishRun(true);
     if (this.player.hp <= 0) this.finishRun(false);
@@ -392,6 +475,7 @@ class Game {
       if (U.dist2(enemy, projectile) > radius * radius) return;
       projectile.hits.add(enemy.id);
       Enemies.damage(enemy, projectile.damage, projectile.type);
+      if (this.settings.damageNumbers) this.floaters.push({ x: enemy.x, y: enemy.y - enemy.radius, value: Math.round(projectile.damage), color: projectile.config.fill, life: 0.65, maxLife: 0.65, el: null });
       Projectiles.onHit(this, projectile, projectile.x, projectile.y);
       this.shake = Math.max(this.shake, projectile.config.hitShake || 2);
       this.createBurst(enemy.x, enemy.y, enemy.radius * 0.8, projectile.config.fill, 5);
@@ -566,6 +650,18 @@ function clearPool(pool) {
   });
 }
 
+function updateFloaters(floaters, dt) {
+  for (let i = floaters.length - 1; i >= 0; i -= 1) {
+    const floater = floaters[i];
+    floater.life -= dt;
+    floater.y -= 38 * dt;
+    if (floater.life <= 0) {
+      if (floater.el) floater.el.remove();
+      floaters.splice(i, 1);
+    }
+  }
+}
+
 function readJson(key, fallback) {
   try {
     return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -586,14 +682,63 @@ class AudioBus {
   constructor(settings) {
     this.settings = settings;
     this.ctx = null;
+    this.music = null;
   }
 
   applySettings(settings) {
     this.settings = settings;
+    if (this.music?.gain) {
+      this.music.gain.gain.value = this.musicVolume();
+    }
+    if (!settings.menuMusic || settings.muteAll || this.musicVolume() <= 0) this.stopMusic();
+  }
+
+  musicVolume() {
+    if (this.settings.muteAll) return 0;
+    return Number(this.settings.masterVolume || 0) * Number(this.settings.musicVolume || 0) * 0.035;
+  }
+
+  sfxVolume() {
+    if (this.settings.muteAll) return 0;
+    return Number(this.settings.masterVolume || 0) * Number(this.settings.sfxVolume || 0);
+  }
+
+  startMusic() {
+    if (!this.settings.menuMusic || this.music || this.musicVolume() <= 0) return;
+    try {
+      this.ctx = this.ctx || new AudioContext();
+      const osc = this.ctx.createOscillator();
+      const lfo = this.ctx.createOscillator();
+      const lfoGain = this.ctx.createGain();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 110;
+      lfo.frequency.value = 0.08;
+      lfoGain.gain.value = 18;
+      gain.gain.value = this.musicVolume();
+      lfo.connect(lfoGain).connect(osc.frequency);
+      osc.connect(gain).connect(this.ctx.destination);
+      osc.start();
+      lfo.start();
+      this.music = { osc, lfo, gain };
+    } catch (error) {
+      this.music = null;
+    }
+  }
+
+  stopMusic() {
+    if (!this.music) return;
+    try {
+      this.music.osc.stop();
+      this.music.lfo.stop();
+    } catch (error) {
+      // Already stopped.
+    }
+    this.music = null;
   }
 
   play(kind) {
-    const volume = Number(this.settings.sfxVolume || 0);
+    const volume = this.sfxVolume();
     if (volume <= 0) return;
     try {
       this.ctx = this.ctx || new AudioContext();

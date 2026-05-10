@@ -466,7 +466,7 @@ h2 {
 }
 
 .settings-panel {
-  width: min(420px, 92vw);
+  width: min(760px, 94vw);
   padding: 28px 32px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: linear-gradient(145deg, rgba(14, 25, 39, 0.96), rgba(6, 11, 19, 0.92));
@@ -479,9 +479,61 @@ h2 {
   margin: 24px 0;
 }
 
+.settings-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 22px 0 18px;
+}
+
+.settings-tab {
+  min-height: 40px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.settings-tab:hover,
+.settings-tab.active {
+  color: var(--ink);
+  border-color: rgba(85,240,208,0.58);
+  background: rgba(85,240,208,0.12);
+  transform: translateY(-1px);
+}
+
+.settings-pages {
+  min-height: 330px;
+}
+
+.settings-page {
+  display: none;
+  animation: menu-page-in 180ms ease both;
+}
+
+.settings-page.active {
+  display: grid;
+  gap: 12px;
+}
+
 input[type="range"] {
   width: 150px;
   accent-color: var(--cyan);
+}
+
+select {
+  min-width: 150px;
+  min-height: 36px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 6px;
+  background: rgba(8,14,23,0.95);
+  color: var(--ink);
+  padding: 0 10px;
 }
 
 .setting-row {
@@ -558,6 +610,34 @@ input[type="range"] {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   margin: 10px 0 18px;
+}
+
+.system-button {
+  min-height: 46px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-weight: 750;
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.system-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(85,240,208,0.55);
+  background: rgba(85,240,208,0.1);
+}
+
+.system-button.danger:hover {
+  border-color: rgba(255,103,119,0.7);
+  background: rgba(255,103,119,0.1);
+}
+
+.file-button input {
+  display: none;
 }
 
 .keybind-button {
@@ -808,6 +888,17 @@ input[type="range"] {
   }
 }
 
+@keyframes menu-page-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .level-card-anim {
   animation: level-card-in 260ms ease backwards;
 }
@@ -864,6 +955,22 @@ input[type="range"] {
 
   .settings-panel {
     padding: 22px 20px;
+  }
+
+  .settings-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings-pages {
+    min-height: 0;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .achievement-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
   }
 }
 
