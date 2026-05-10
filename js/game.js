@@ -805,4 +805,4 @@ class AudioBus {
   }
 }
 
-export { Game };
+export { Game, ACHIEVEMENTS };

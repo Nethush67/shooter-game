@@ -322,15 +322,18 @@ class UI {
   showAchievements(game) {
     const list = this.el("achievementsList");
     const countText = this.el("achievementCountText");
-    countText.textContent = `${game.saveData.achievements.length} / ${game.achievementList.length} unlocked`;
+    const unlockedIds = new Set(game.saveData.achievements);
+    const unlockedCount = game.achievementList.filter((achievement) => unlockedIds.has(achievement.id)).length;
+    countText.textContent = `${unlockedCount} / ${game.achievementList.length} unlocked`;
     list.innerHTML = "";
-    game.achievementList.forEach((achievement) => {
-      const unlocked = game.saveData.achievements.includes(achievement.id);
+    game.achievementList.forEach((achievement, index) => {
+      const unlocked = unlockedIds.has(achievement.id);
       const item = document.createElement("article");
       item.className = `achievement-card ${unlocked ? "unlocked" : ""}`;
       item.innerHTML = `
+        <em class="achievement-index">#${String(index + 1).padStart(3, "0")}</em>
         <strong>${achievement.name}</strong>
-        <span>${unlocked ? achievement.description : "Locked"}</span>
+        <span>${unlocked ? achievement.description : `Locked record ${index + 1} of ${game.achievementList.length}`}</span>
       `;
       list.appendChild(item);
     });
