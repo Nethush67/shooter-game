@@ -333,7 +333,7 @@ button {
 }
 
 .wide-panel {
-  width: min(900px, 94vw);
+  width: min(1120px, 94vw);
 }
 
 .title-bg {
@@ -348,6 +348,73 @@ button {
 .menu-panel > *:not(.title-bg) {
   position: relative;
 }
+
+.menu-overlay {
+  place-items: center;
+  padding: 36px;
+}
+
+.menu-overlay .menu-panel {
+  width: min(1180px, 92vw);
+  min-height: min(580px, calc(100vh - 72px));
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  grid-template-rows: auto auto 1fr;
+  column-gap: 58px;
+  row-gap: 18px;
+  align-items: center;
+  padding: clamp(38px, 5vw, 64px);
+  text-align: left;
+}
+
+.menu-overlay .title-mark {
+  grid-column: 1;
+  width: min(300px, 32vw);
+  margin: 0 0 4px;
+  justify-self: start;
+}
+
+.menu-overlay h1 {
+  grid-column: 1;
+  max-width: 760px;
+  font-size: clamp(54px, 6.2vw, 104px);
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.menu-overlay .menu-panel p {
+  grid-column: 1;
+  max-width: 680px;
+  margin: 0;
+  font-size: clamp(17px, 1.5vw, 22px);
+  color: #c4ced8;
+}
+
+.menu-overlay .menu-buttons {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  width: 100%;
+  align-self: center;
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 22px 70px rgba(0,0,0,0.22);
+}
+
+.menu-overlay .primary-button,
+.menu-overlay .secondary-button {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.menu-overlay .primary-button {
+  min-height: 66px;
+  font-size: 20px;
 }
 
 .title-mark {
@@ -808,9 +875,12 @@ select {
 
 .achievement-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin: 22px 0;
+  max-height: min(520px, 58vh);
+  overflow-y: auto;
+  padding-right: 6px;
   text-align: left;
 }
 
@@ -822,6 +892,15 @@ select {
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 8px;
   background: rgba(255,255,255,0.04);
+}
+
+.achievement-count {
+  margin: 10px auto 0;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .achievement-card.unlocked {
@@ -904,6 +983,39 @@ select {
 }
 
 @media (max-width: 760px) {
+  .menu-overlay {
+    padding: 16px;
+  }
+
+  .menu-overlay .menu-panel {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+    padding: 28px 22px;
+    text-align: center;
+  }
+
+  .menu-overlay .title-mark,
+  .menu-overlay h1,
+  .menu-overlay .menu-panel p,
+  .menu-overlay .menu-buttons {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: center;
+  }
+
+  .menu-overlay .title-mark {
+    width: min(220px, 70vw);
+  }
+
+  .menu-overlay h1 {
+    font-size: clamp(42px, 14vw, 64px);
+  }
+
+  .menu-overlay .menu-buttons {
+    padding: 14px;
+  }
+
   .hud {
     top: 10px;
     left: 10px;

@@ -18,12 +18,47 @@ const SETTINGS_KEY = "arenaEvolutionSettings";
 const BINDINGS_KEY = "arenaEvolutionBindings";
 const VICTORY_TIME = 300;
 
-const ACHIEVEMENTS = [
+const CORE_ACHIEVEMENTS = [
   { id: "first_run", name: "First Deployment", description: "Start your first run." },
   { id: "first_evolution", name: "Evolved", description: "Choose a new combat class." },
   { id: "level_five", name: "Operational", description: "Reach level 5 in a run." },
   { id: "hundred_kills", name: "Crowd Control", description: "Defeat 100 enemies across all runs." },
   { id: "survivor", name: "Five Minute Stand", description: "Survive for five minutes." }
+];
+
+const ACHIEVEMENT_SERIES = [
+  ["rookie", "Rookie Contract", "Complete arena contract tier"],
+  ["survival", "Survival Record", "Push a run past survival benchmark"],
+  ["evolution", "Evolution Archive", "Document class evolution branch"],
+  ["marksman", "Marksman Trial", "Maintain pressure with precision fire"],
+  ["swarm", "Swarm Control", "Clear hostile density milestone"],
+  ["titan", "Titan Protocol", "Win heavy weapon engagement trial"],
+  ["orbit", "Orbit Mastery", "Hold space with orbital weapons"],
+  ["map", "Arena Passport", "Deploy into map operation"],
+  ["collector", "Core Collector", "Recover XP core cache"],
+  ["veteran", "Veteran Log", "Record career combat milestone"],
+  ["flawless", "Flawless Segment", "Survive a clean combat segment"],
+  ["speed", "Velocity Drill", "Complete movement pressure test"],
+  ["economy", "Upgrade Economy", "Invest in stat development"],
+  ["danger", "Danger Close", "Survive high-pressure contact"],
+  ["boss", "Elite Contact", "Handle priority enemy engagement"],
+  ["endurance", "Endurance File", "Extend long-run operation"],
+  ["weapon", "Weapon License", "Field-test advanced weapon pattern"],
+  ["hazard", "Hazard Pay", "Survive hostile arena condition"],
+  ["archive", "Studio Archive", "Unlock historical combat record"]
+];
+
+const ACHIEVEMENTS = [
+  ...CORE_ACHIEVEMENTS,
+  ...Array.from({ length: 95 }, (_, index) => {
+    const tier = index + 1;
+    const series = ACHIEVEMENT_SERIES[index % ACHIEVEMENT_SERIES.length];
+    return {
+      id: `${series[0]}_${String(tier).padStart(2, "0")}`,
+      name: `${series[1]} ${tier}`,
+      description: `${series[2]} ${tier}.`
+    };
+  })
 ];
 
 class Game {

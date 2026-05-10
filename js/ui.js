@@ -321,6 +321,8 @@ class UI {
 
   showAchievements(game) {
     const list = this.el("achievementsList");
+    const countText = this.el("achievementCountText");
+    countText.textContent = `${game.saveData.achievements.length} / ${game.achievementList.length} unlocked`;
     list.innerHTML = "";
     game.achievementList.forEach((achievement) => {
       const unlocked = game.saveData.achievements.includes(achievement.id);
