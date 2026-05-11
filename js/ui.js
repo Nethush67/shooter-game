@@ -64,7 +64,7 @@ class UI {
     this.el("achievementsCloseButton").addEventListener("click", () => game.closeAchievements());
     this.el("creditsCloseButton").addEventListener("click", () => game.closeCredits());
     this.el("tutorialCloseButton").addEventListener("click", () => game.closeTutorial());
-        this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
+    this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
     this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
     this.buildStats(game);
     this.buildMaps(game);
