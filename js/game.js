@@ -63,11 +63,12 @@ const ACHIEVEMENTS = [
 ];
 
 // Generate the remaining ones up to 100 just to pad out the list if you haven't filled them all manually yet:
+// Pad the remaining list up to 100 with unique names
 for (let i = ACHIEVEMENTS.length; i < 100; i++) {
   ACHIEVEMENTS.push({ 
-    id: `classified_${i}`, 
-    name: `Classified Record ${i}`, 
-    description: "Discover this requirement by playing." 
+    id: `auto_record_${i + 1}`, 
+    name: `Combat Record #${i + 1}`, 
+    description: `Complete objective ${i + 1} to unlock this record.` 
   });
 }
 
@@ -649,6 +650,36 @@ class Game {
     this.saveData.achievements.push(id);
     this.persistSave();
     this.ui.showToast("Achievement Unlocked", achievement.name);
+  }
+
+checkAchievements() {
+    // Check Level Achievements
+    if (this.stats.level >= 2) this.unlockAchievement("lvl_1");
+    if (this.stats.level >= 5) this.unlockAchievement("lvl_5");
+    if (this.stats.level >= 10) this.unlockAchievement("lvl_10");
+    if (this.stats.level >= 20) this.unlockAchievement("lvl_20");
+    if (this.stats.level >= 30) this.unlockAchievement("lvl_30");
+
+    // Check Time Achievements (this.elapsed is in seconds)
+    if (this.elapsed >= 60) this.unlockAchievement("time_1m");
+    if (this.elapsed >= 120) this.unlockAchievement("time_2m");
+    if (this.elapsed >= 180) this.unlockAchievement("time_3m");
+    if (this.elapsed >= 240) this.unlockAchievement("time_4m");
+    if (this.elapsed >= 300) this.unlockAchievement("time_5m");
+
+    // Check Single Run Kill Achievements
+    if (this.stats.kills >= 50) this.unlockAchievement("run_kills_50");
+    if (this.stats.kills >= 200) this.unlockAchievement("run_kills_200");
+    if (this.stats.kills >= 500) this.unlockAchievement("run_kills_500");
+
+    // Check Lifetime Kills (from save data)
+    const lifetimeKills = this.saveData.lifetimeKills || 0;
+    if (lifetimeKills >= 10) this.unlockAchievement("kills_10");
+    if (lifetimeKills >= 100) this.unlockAchievement("kills_100");
+    if (lifetimeKills >= 500) this.unlockAchievement("kills_500");
+    if (lifetimeKills >= 1000) this.unlockAchievement("kills_1k");
+    if (lifetimeKills >= 5000) this.unlockAchievement("kills_5k");
+    if (lifetimeKills >= 10000) this.unlockAchievement("kills_10k");
   }
 }
 
