@@ -49,23 +49,32 @@ class UI {
   }
 
   bind(game) {
-    this.el("startButton").addEventListener("click", () => game.openMapChooser());
-    this.el("continueButton").addEventListener("click", () => game.continueRun());
-    this.el("achievementsButton").addEventListener("click", () => game.openAchievements());
-    this.el("settingsButton").addEventListener("click", () => game.openSettings("menu"));
-    this.el("creditsButton").addEventListener("click", () => game.openCredits());
-    this.el("quitButton").addEventListener("click", () => this.showToast("Browser Build", "Quit is disabled for the web version."));
-    this.el("restartButton").addEventListener("click", () => game.startRun());
-    this.el("summaryMenuButton").addEventListener("click", () => game.returnToMenu());
-    this.el("resumeButton").addEventListener("click", () => game.resume());
-    this.el("pauseSettingsButton").addEventListener("click", () => game.openSettings("pause"));
-    this.el("saveQuitButton").addEventListener("click", () => game.saveAndQuit());
-    this.el("settingsCloseButton").addEventListener("click", () => game.closeSettings());
-    this.el("achievementsCloseButton").addEventListener("click", () => game.closeAchievements());
-    this.el("creditsCloseButton").addEventListener("click", () => game.closeCredits());
-    this.el("tutorialCloseButton").addEventListener("click", () => game.closeTutorial());
-    this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
-    this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
+    const bindClick = (id, handler) => {
+      const el = this.el(id);
+      if (el) el.addEventListener("click", handler);
+      else console.warn(`[UI] Missing element: #${id}`);
+    };
+
+    bindClick("startButton", () => game.openMapChooser());
+    bindClick("continueButton", () => game.continueRun());
+    bindClick("achievementsButton", () => game.openAchievements());
+    bindClick("settingsButton", () => game.openSettings("menu"));
+    bindClick("creditsButton", () => game.openCredits());
+    bindClick("quitButton", () => this.showToast("Browser Build", "Quit is disabled for the web version."));
+    bindClick("restartButton", () => game.startRun());
+    bindClick("summaryMenuButton", () => game.returnToMenu());
+    bindClick("resumeButton", () => game.resume());
+    bindClick("pauseSettingsButton", () => game.openSettings("pause"));
+    bindClick("saveQuitButton", () => game.saveAndQuit());
+    bindClick("settingsCloseButton", () => game.closeSettings());
+    bindClick("achievementsCloseButton", () => game.closeAchievements());
+    bindClick("creditsCloseButton", () => game.closeCredits());
+    bindClick("tutorialCloseButton", () => game.closeTutorial());
+    bindClick("confirmCancelButton", () => game.closeConfirm());
+
+    if (this.playerMenuButton) this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
+    else console.warn("[UI] Missing element: #playerMenuButton");
+
     this.buildStats(game);
     this.buildMaps(game);
     this.bindSettings(game);
