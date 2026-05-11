@@ -332,14 +332,19 @@ showAchievements(game) {
     list.innerHTML = "";
     
     // Iterate over the FULL achievement list to build the UI
+// Iterate over the FULL achievement list to build the UI
     game.achievementList.forEach((achievement, index) => {
       const unlocked = unlockedIds.has(achievement.id);
       const item = document.createElement("article");
+      
+      // Keep the unlocked class so the CSS still greys out the locked ones
       item.className = `achievement-card ${unlocked ? "unlocked" : ""}`;
+      
+      // Always show the real name and description now
       item.innerHTML = `
         <em class="achievement-index">#${String(index + 1).padStart(3, "0")}</em>
-        <strong>${unlocked ? achievement.name : "Classified Record"}</strong>
-        <span>${unlocked ? achievement.description : `Locked record ${index + 1} of ${game.achievementList.length}`}</span>
+        <strong>${achievement.name}</strong>
+        <span>${achievement.description}</span>
       `;
       list.appendChild(item);
     });
