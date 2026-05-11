@@ -64,11 +64,7 @@ class UI {
     this.el("achievementsCloseButton").addEventListener("click", () => game.closeAchievements());
     this.el("creditsCloseButton").addEventListener("click", () => game.closeCredits());
     this.el("tutorialCloseButton").addEventListener("click", () => game.closeTutorial());
-    this.el("exportSaveButton").addEventListener("click", () => game.exportSave());
-    this.el("importSaveInput").addEventListener("change", (event) => game.importSave(event.target.files?.[0]));
-    this.el("resetSaveButton").addEventListener("click", () => game.confirmResetSave());
-    this.el("clearCacheButton").addEventListener("click", () => game.confirmClearCache());
-    this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
+        this.el("confirmCancelButton").addEventListener("click", () => game.closeConfirm());
     this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
     this.buildStats(game);
     this.buildMaps(game);
