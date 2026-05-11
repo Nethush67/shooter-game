@@ -20,46 +20,117 @@ const VICTORY_TIME = 300;
 
 // A full array of 100 unique achievements
 const ACHIEVEMENTS = [
-  // Progression & Levels
-  { id: "lvl_1", name: "First Steps", description: "Reach Level 2 in a single run." },
-  { id: "lvl_5", name: "Getting Stronger", description: "Reach Level 5." },
-  { id: "lvl_10", name: "Seasoned Fighter", description: "Reach Level 10." },
-  { id: "lvl_20", name: "Arena Champion", description: "Reach Level 20." },
-  { id: "lvl_30", name: "Ascended", description: "Reach Level 30." },
-  
-  // Surviving Time
+  // --- LEVELING (1-15) ---
+  { id: "lvl_2", name: "First Steps", description: "Reach Level 2 in a single run." },
+  { id: "lvl_5", name: "Getting Stronger", description: "Reach Level 5 in a single run." },
+  { id: "lvl_10", name: "Seasoned Fighter", description: "Reach Level 10 in a single run." },
+  { id: "lvl_15", name: "Rising Star", description: "Reach Level 15 in a single run." },
+  { id: "lvl_20", name: "Arena Champion", description: "Reach Level 20 in a single run." },
+  { id: "lvl_25", name: "Battle Hardened", description: "Reach Level 25 in a single run." },
+  { id: "lvl_30", name: "Ascended", description: "Reach Level 30 in a single run." },
+  { id: "lvl_35", name: "Dominator", description: "Reach Level 35 in a single run." },
+  { id: "lvl_40", name: "Unstoppable Force", description: "Reach Level 40 in a single run." },
+  { id: "lvl_45", name: "Apex Predator", description: "Reach Level 45 in a single run." },
+  { id: "lvl_50", name: "Demi-God", description: "Reach Level 50 in a single run." },
+  { id: "lvl_60", name: "Legendary", description: "Reach Level 60 in a single run." },
+  { id: "lvl_70", name: "Mythic", description: "Reach Level 70 in a single run." },
+  { id: "lvl_80", name: "Immortal", description: "Reach Level 80 in a single run." },
+  { id: "lvl_100", name: "Max Level Reached", description: "Reach Level 100 in a single run." },
+
+  // --- TIME SURVIVED (16-30) ---
   { id: "time_1m", name: "Hold the Line", description: "Survive for 1 minute." },
   { id: "time_2m", name: "Staying Alive", description: "Survive for 2 minutes." },
   { id: "time_3m", name: "Mid-game Crisis", description: "Survive for 3 minutes." },
   { id: "time_4m", name: "Almost There", description: "Survive for 4 minutes." },
   { id: "time_5m", name: "Five Minute Stand", description: "Survive for 5 minutes." },
+  { id: "time_6m", name: "Pushing Limits", description: "Survive for 6 minutes." },
+  { id: "time_7m", name: "Endurance Runner", description: "Survive for 7 minutes." },
+  { id: "time_8m", name: "Iron Will", description: "Survive for 8 minutes." },
+  { id: "time_9m", name: "Never Surrender", description: "Survive for 9 minutes." },
+  { id: "time_10m", name: "Decade in the Arena", description: "Survive for 10 minutes." },
+  { id: "time_12m", name: "Time Lord", description: "Survive for 12 minutes." },
+  { id: "time_15m", name: "Quarter Hour", description: "Survive for 15 minutes." },
+  { id: "time_20m", name: "Veteran Survivor", description: "Survive for 20 minutes." },
+  { id: "time_25m", name: "Marathon", description: "Survive for 25 minutes." },
+  { id: "time_30m", name: "Absolute Limit", description: "Survive for 30 minutes." },
 
-  // Kill Counts (Lifetime)
-  { id: "kills_10", name: "First Blood", description: "Defeat 10 enemies total." },
+  // --- LIFETIME KILLS (31-45) ---
+  { id: "kills_10", name: "First Blood", description: "Defeat 10 enemies total across all runs." },
   { id: "kills_100", name: "Crowd Control", description: "Defeat 100 enemies total." },
   { id: "kills_500", name: "Exterminator", description: "Defeat 500 enemies total." },
   { id: "kills_1k", name: "Massacre", description: "Defeat 1,000 enemies total." },
+  { id: "kills_2k", name: "Slayer", description: "Defeat 2,000 enemies total." },
   { id: "kills_5k", name: "Genocide", description: "Defeat 5,000 enemies total." },
   { id: "kills_10k", name: "One Man Army", description: "Defeat 10,000 enemies total." },
+  { id: "kills_15k", name: "Reaper", description: "Defeat 15,000 enemies total." },
+  { id: "kills_20k", name: "Harvester", description: "Defeat 20,000 enemies total." },
+  { id: "kills_25k", name: "Destroyer of Worlds", description: "Defeat 25,000 enemies total." },
+  { id: "kills_30k", name: "Annihilation", description: "Defeat 30,000 enemies total." },
+  { id: "kills_40k", name: "Extinction Event", description: "Defeat 40,000 enemies total." },
+  { id: "kills_50k", name: "Pest Control", description: "Defeat 50,000 enemies total." },
+  { id: "kills_75k", name: "The Cleanup Crew", description: "Defeat 75,000 enemies total." },
+  { id: "kills_100k", name: "Millionaire of Death", description: "Defeat 100,000 enemies total." },
 
-  // Kill Counts (Single Run)
-  { id: "run_kills_50", name: "Good Start", description: "Defeat 50 enemies in one run." },
-  { id: "run_kills_200", name: "Killing Spree", description: "Defeat 200 enemies in one run." },
-  { id: "run_kills_500", name: "Unstoppable", description: "Defeat 500 enemies in one run." },
+  // --- SINGLE RUN KILLS (46-60) ---
+  { id: "run_kills_50", name: "Good Start", description: "Defeat 50 enemies in a single run." },
+  { id: "run_kills_100", name: "Warming Up", description: "Defeat 100 enemies in a single run." },
+  { id: "run_kills_200", name: "Killing Spree", description: "Defeat 200 enemies in a single run." },
+  { id: "run_kills_300", name: "Rampage", description: "Defeat 300 enemies in a single run." },
+  { id: "run_kills_400", name: "Dominating", description: "Defeat 400 enemies in a single run." },
+  { id: "run_kills_500", name: "Unstoppable", description: "Defeat 500 enemies in a single run." },
+  { id: "run_kills_750", name: "Godlike", description: "Defeat 750 enemies in a single run." },
+  { id: "run_kills_1000", name: "Bloodlust", description: "Defeat 1,000 enemies in a single run." },
+  { id: "run_kills_1500", name: "Carnage", description: "Defeat 1,500 enemies in a single run." },
+  { id: "run_kills_2000", name: "Slaughterhouse", description: "Defeat 2,000 enemies in a single run." },
+  { id: "run_kills_2500", name: "Merciless", description: "Defeat 2,500 enemies in a single run." },
+  { id: "run_kills_3000", name: "Ruthless", description: "Defeat 3,000 enemies in a single run." },
+  { id: "run_kills_4000", name: "Savage", description: "Defeat 4,000 enemies in a single run." },
+  { id: "run_kills_5000", name: "Grim Reaper", description: "Defeat 5,000 enemies in a single run." },
+  { id: "run_kills_10000", name: "True Survivor", description: "Defeat 10,000 enemies in a single run." },
 
-  // Upgrades & Classes
-  { id: "first_upgrade", name: "Tinkerer", description: "Purchase your first stat upgrade." },
-  { id: "max_upgrade", name: "Min-Maxer", description: "Max out a single stat to level 10." },
-  { id: "first_evolution", name: "Evolved", description: "Choose a new combat class." },
-  { id: "tier_3_class", name: "Final Form", description: "Evolve to a Tier 3 class." },
-  
-  // Map Exploration
-  { id: "map_desert", name: "Desert Rush", description: "Play on the Desert Map." },
-  { id: "map_ice", name: "Winter War", description: "Play on the Ice Map." },
-  { id: "map_volcano", name: "Heatwave", description: "Play on the Volcano Map." },
+  // --- UPGRADES & STATS (61-80) ---
+  { id: "upg_first", name: "Tinkerer", description: "Purchase your first stat upgrade." },
+  { id: "upg_hp_max", name: "Juggernaut", description: "Max out your Health stat to level 10." },
+  { id: "upg_spd_max", name: "Speed Demon", description: "Max out your Speed stat to level 10." },
+  { id: "upg_dmg_max", name: "Heavy Hitter", description: "Max out your Damage stat to level 10." },
+  { id: "upg_fire_max", name: "Machine Gunner", description: "Max out your Fire Rate stat to level 10." },
+  { id: "upg_shd_max", name: "Ironclad", description: "Max out your Shield stat to level 10." },
+  { id: "upg_reg_max", name: "Troll Blood", description: "Max out your Regen stat to level 10." },
+  { id: "upg_size_max", name: "Massive Ordnance", description: "Max out your Projectile Size stat to level 10." },
+  { id: "upg_pen_max", name: "Armor Piercing", description: "Max out your Penetration stat to level 10." },
+  { id: "upg_three_max", name: "Specialized Build", description: "Max out three different stats in one run." },
+  { id: "upg_five_max", name: "Jack of All Trades", description: "Max out five different stats in one run." },
+  { id: "upg_all_max", name: "Perfectionist", description: "Max out every single stat to level 10." },
+  { id: "evo_1", name: "Evolved", description: "Choose a new combat class." },
+  { id: "evo_tier_2", name: "Second Form", description: "Evolve to a Tier 2 class." },
+  { id: "evo_tier_3", name: "Final Form", description: "Evolve to a Tier 3 class." },
+  { id: "evo_velocity", name: "Speed is Life", description: "Unlock the Velocity class branch." },
+  { id: "evo_titan", name: "Brute Force", description: "Unlock the Titan class branch." },
+  { id: "evo_swarm", name: "Strength in Numbers", description: "Unlock the Swarm class branch." },
+  { id: "evo_orbit", name: "Personal Space", description: "Unlock the Orbit class branch." },
+  { id: "evo_all", name: "Weapon Master", description: "Play every class at least once." },
 
-  // Add more customized achievements here to reach 100...
-  // (You can easily duplicate the format above to create specific challenges like "Take no damage for 2 mins" or "Unlock all classes")
+  // --- CHALLENGES & MASTERY (81-100) ---
+  { id: "chal_nodamage_1m", name: "Untouchable", description: "Take no damage for the first 1 minute." },
+  { id: "chal_nodamage_3m", name: "Ghost", description: "Take no damage for the first 3 minutes." },
+  { id: "chal_pacifist_1m", name: "Pacifist", description: "Survive 1 minute without killing any enemies." },
+  { id: "chal_close_call", name: "By a Thread", description: "Survive with exactly 1 HP left." },
+  { id: "chal_boss_kill", name: "David and Goliath", description: "Defeat your first Boss enemy." },
+  { id: "chal_multi_kill", name: "Splash Damage", description: "Defeat 10 enemies with a single explosion." },
+  { id: "map_desert", name: "Desert Rush", description: "Play a run on the Desert Map." },
+  { id: "map_ice", name: "Winter War", description: "Play a run on the Ice Map." },
+  { id: "map_volcano", name: "Heatwave", description: "Play a run on the Volcano Map." },
+  { id: "map_all", name: "World Traveler", description: "Play at least once on every single map." },
+  { id: "enemy_chaser_1k", name: "Chaser Bane", description: "Defeat 1,000 Chaser enemies." },
+  { id: "enemy_tank_500", name: "Tank Buster", description: "Defeat 500 Tank enemies." },
+  { id: "enemy_fast_500", name: "Swatter", description: "Defeat 500 Fast enemies." },
+  { id: "enemy_ranger_500", name: "Counter-Sniper", description: "Defeat 500 Ranger enemies." },
+  { id: "boss_killer_10", name: "Boss Slayer", description: "Defeat 10 Bosses total." },
+  { id: "boss_killer_50", name: "Apex Champion", description: "Defeat 50 Bosses total." },
+  { id: "chal_speedrun", name: "Speed Leveler", description: "Reach level 10 in under 2 minutes." },
+  { id: "chal_hoarder", name: "Hoarder", description: "Hold onto 10 unused upgrade points at once." },
+  { id: "chal_glass_cannon", name: "Glass Cannon", description: "Reach Level 30 without upgrading Health." },
+  { id: "chal_completionist", name: "Completionist", description: "Unlock the other 99 achievements. You did it!" }
 ];
 
 // Generate the remaining ones up to 100 just to pad out the list if you haven't filled them all manually yet:
