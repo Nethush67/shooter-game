@@ -219,7 +219,6 @@ class Game {
       bestTime: 0,
       bestLevel: 1,
       bestClassName: "Basic",
-      lifetimeKills: 0,
       totalPointsSpent: 0,
       totalXpCollected: 0,
       lifetimeXpCollected: 0,
@@ -286,6 +285,8 @@ class Game {
   openAchievements() {
     this.previousState = this.state;
     this.state = State.ACHIEVEMENTS;
+    this.saveData.achievementsMenuOpens += 1;
+    this.persistSave();
     this.ui.showAchievements(this);
     this.audio.play("open");
   }
@@ -524,14 +525,17 @@ class Game {
     updateParticles(this.particlePool, dt);
     updateFloaters(this.floaters, dt);
 
+    // Check achievements during gameplay
+    this.checkAchievements();
+
     if (this.elapsed >= VICTORY_TIME) this.finishRun(true);
     if (this.player.hp <= 0) this.finishRun(false);
-    if (this.elapsed >= 300) this.unlockAchievement("survivor");
   }
 
   addXp(value) {
     if (this.state !== State.PLAYING) return;
     this.xp += value;
+    this.saveData.totalXpCollected += value;
     if (this.xp >= this.xpRequired) {
       this.xp -= this.xpRequired;
       this.level += 1;
@@ -614,7 +618,6 @@ class Game {
     enemy.active = false;
     this.kills += 1;
     this.saveData.totalKills += 1;
-    if (this.saveData.totalKills >= 100) this.unlockAchievement("hundred_kills");
     XP.drop(this, enemy.x, enemy.y, enemy.xp);
     this.createBurst(enemy.x, enemy.y, enemy.radius * 2, enemy.config.fill, 14);
     this.audio.play("pickup");
@@ -686,6 +689,7 @@ class Game {
 
   spendStat(id) {
     if (!Stats.spend(this.stats, id)) return;
+    this.saveData.totalPointsSpent += 1;
     this.statEffects = Stats.effects(this.stats);
     this.player.applyStats(this, 0);
     this.createBurst(this.player.x, this.player.y, 44, this.player.classDef.accent, 10);
@@ -704,11 +708,13 @@ class Game {
     this.state = victory ? State.VICTORY : State.GAME_OVER;
     this.saveData.bestTime = Math.max(this.saveData.bestTime, this.elapsed);
     this.saveData.bestLevel = Math.max(this.saveData.bestLevel, this.level);
+    this.saveData.totalPlayTime += this.elapsed;
+    if (!victory) this.saveData.gameOverCount += 1;
     this.saveData.currentRun = null;
     this.persistSave();
     this.ui.hideLevelUp();
     this.ui.showGameOver(this, victory);
-    this.audio.play("gameOver");
+    this.audio.play(victory ? "victory" : "gameOver");
   }
 
   unlockAchievement(id) {
@@ -723,30 +729,30 @@ class Game {
   checkAchievements() {
     // Check COMBAT achievements (1-25)
     if (this.stats.kills >= 1) this.unlockAchievement("first_blood");
-    if (this.saveData.lifetimeKills >= 100) this.unlockAchievement("crowd_control");
-    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("janitor");
-    if (this.saveData.lifetimeKills >= 1000) this.unlockAchievement("john_wick_intern");
-    if (this.saveData.lifetimeKills >= 5000) this.unlockAchievement("delete_button");
-    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("career_reaper");
-    if (this.saveData.lifetimeKills >= 20000) this.unlockAchievement("pest_control");
-    if (this.saveData.lifetimeKills >= 50000) this.unlockAchievement("dead_pixels");
-    if (this.saveData.lifetimeKills >= 100000) this.unlockAchievement("one_million_no_wait");
-    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("ranger_danger");
+    if (this.saveData.totalKills >= 100) this.unlockAchievement("crowd_control");
+    if (this.saveData.totalKills >= 500) this.unlockAchievement("janitor");
+    if (this.saveData.totalKills >= 1000) this.unlockAchievement("john_wick_intern");
+    if (this.saveData.totalKills >= 5000) this.unlockAchievement("delete_button");
+    if (this.saveData.totalKills >= 10000) this.unlockAchievement("career_reaper");
+    if (this.saveData.totalKills >= 20000) this.unlockAchievement("pest_control");
+    if (this.saveData.totalKills >= 50000) this.unlockAchievement("dead_pixels");
+    if (this.saveData.totalKills >= 100000) this.unlockAchievement("one_million_no_wait");
+    if (this.saveData.totalKills >= 500) this.unlockAchievement("ranger_danger");
     if (this.stats.kills >= 250) this.unlockAchievement("tank_buster");
-    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("swatter");
-    if (this.saveData.lifetimeKills >= 1000) this.unlockAchievement("chaser_chaser");
+    if (this.saveData.totalKills >= 500) this.unlockAchievement("swatter");
+    if (this.saveData.totalKills >= 1000) this.unlockAchievement("chaser_chaser");
     if (this.stats.kills >= 50) this.unlockAchievement("elite_hunter");
     if (this.stats.kills >= 10) this.unlockAchievement("boss_killer_10");
-    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("collateral_damage");
+    if (this.saveData.totalKills >= 10000) this.unlockAchievement("collateral_damage");
     if (this.stats.kills >= 5) this.unlockAchievement("sniping_service");
     if (this.stats.kills >= 20) this.unlockAchievement("personal_space");
-    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("bullet_hell");
+    if (this.saveData.totalKills >= 10000) this.unlockAchievement("bullet_hell");
     if (this.stats.levels.fireRate >= 10) this.unlockAchievement("spray_and_pray");
     if (this.stats.kills >= 1) this.unlockAchievement("heavy_hitter");
     if (this.stats.levels.projectileSize >= 10) this.unlockAchievement("massive_ordnance");
     if (this.stats.kills >= 1) this.unlockAchievement("nothing_personal");
     if (this.stats.kills >= 1) this.unlockAchievement("close_shave");
-    if (this.saveData.lifetimeKills >= 100) this.unlockAchievement("untouchable");
+    if (this.saveData.totalKills >= 100) this.unlockAchievement("untouchable");
 
     // Check SURVIVAL achievements (26-45)
     if (this.elapsed >= 60) this.unlockAchievement("just_warming_up");
