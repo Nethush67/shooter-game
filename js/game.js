@@ -18,130 +18,118 @@ const SETTINGS_KEY = "arenaEvolutionSettings";
 const BINDINGS_KEY = "arenaEvolutionBindings";
 const VICTORY_TIME = 300;
 
-// A full array of 100 unique achievements
+// 100 unique achievements with funny names - no loops, all hardcoded
 const ACHIEVEMENTS = [
-  // --- LEVELING (1-15) ---
-  { id: "lvl_2", name: "First Steps", description: "Reach Level 2 in a single run." },
-  { id: "lvl_5", name: "Getting Stronger", description: "Reach Level 5 in a single run." },
-  { id: "lvl_10", name: "Seasoned Fighter", description: "Reach Level 10 in a single run." },
-  { id: "lvl_15", name: "Rising Star", description: "Reach Level 15 in a single run." },
-  { id: "lvl_20", name: "Arena Champion", description: "Reach Level 20 in a single run." },
-  { id: "lvl_25", name: "Battle Hardened", description: "Reach Level 25 in a single run." },
-  { id: "lvl_30", name: "Ascended", description: "Reach Level 30 in a single run." },
-  { id: "lvl_35", name: "Dominator", description: "Reach Level 35 in a single run." },
-  { id: "lvl_40", name: "Unstoppable Force", description: "Reach Level 40 in a single run." },
-  { id: "lvl_45", name: "Apex Predator", description: "Reach Level 45 in a single run." },
-  { id: "lvl_50", name: "Demi-God", description: "Reach Level 50 in a single run." },
-  { id: "lvl_60", name: "Legendary", description: "Reach Level 60 in a single run." },
-  { id: "lvl_70", name: "Mythic", description: "Reach Level 70 in a single run." },
-  { id: "lvl_80", name: "Immortal", description: "Reach Level 80 in a single run." },
-  { id: "lvl_100", name: "Max Level Reached", description: "Reach Level 100 in a single run." },
+  // --- COMBAT (1-25) ---
+  { id: "first_blood", name: "First Blood", description: "Defeat your first enemy." },
+  { id: "crowd_control", name: "Crowd Control", description: "Defeat 100 enemies." },
+  { id: "janitor", name: "The Janitor", description: "Defeat 500 enemies." },
+  { id: "john_wick_intern", name: "John Wick's Intern", description: "Defeat 1,000 enemies." },
+  { id: "delete_button", name: "Delete Button", description: "Defeat 5,000 enemies." },
+  { id: "career_reaper", name: "Career Choice: Reaper", description: "Defeat 10,000 enemies total." },
+  { id: "pest_control", name: "Pest Control", description: "Defeat 20,000 enemies." },
+  { id: "dead_pixels", name: "I See Dead Pixels", description: "Defeat 50,000 enemies." },
+  { id: "one_million_no_wait", name: "One Million... No Wait", description: "Defeat 100,000 enemies." },
+  { id: "ranger_danger", name: "Ranger Danger", description: "Defeat 500 Ranger enemies." },
+  { id: "tank_buster", name: "Tank Buster", description: "Defeat 250 Tank enemies." },
+  { id: "swatter", name: "Swatter", description: "Defeat 500 Fast enemies." },
+  { id: "chaser_chaser", name: "Chaser Chaser", description: "Defeat 1,000 Chaser enemies." },
+  { id: "boss_what_boss", name: "Boss? What Boss?", description: "Defeat a Boss enemy in under 10 seconds." },
+  { id: "elite_hunter", name: "Elite Hunter", description: "Defeat 50 Bosses total." },
+  { id: "collateral_damage", name: "Collateral Damage", description: "Kill 10 enemies with one explosion." },
+  { id: "sniping_service", name: "Sniping Service", description: "Kill 5 enemies with a single Railgun shot." },
+  { id: "personal_space", name: "Personal Space", description: "Kill 20 enemies using only Orbit weapon." },
+  { id: "bullet_hell", name: "Bullet Hell", description: "Fire 10,000 projectiles in one run." },
+  { id: "spray_and_pray", name: "Spray and Pray", description: "Reach a Fire Rate level of 10." },
+  { id: "heavy_hitter", name: "Heavy Hitter", description: "Deal 500 damage in a single hit." },
+  { id: "massive_ordnance", name: "Massive Ordnance", description: "Reach Projectile Size level of 10." },
+  { id: "nothing_personal", name: "Nothing Personal", description: "Kill an enemy from off-screen." },
+  { id: "close_shave", name: "Close Shave", description: "Kill an enemy while below 5% HP." },
+  { id: "untouchable", name: "Untouchable", description: "Kill 100 enemies without taking damage." },
 
-  // --- TIME SURVIVED (16-30) ---
-  { id: "time_1m", name: "Hold the Line", description: "Survive for 1 minute." },
-  { id: "time_2m", name: "Staying Alive", description: "Survive for 2 minutes." },
-  { id: "time_3m", name: "Mid-game Crisis", description: "Survive for 3 minutes." },
-  { id: "time_4m", name: "Almost There", description: "Survive for 4 minutes." },
-  { id: "time_5m", name: "Five Minute Stand", description: "Survive for 5 minutes." },
-  { id: "time_6m", name: "Pushing Limits", description: "Survive for 6 minutes." },
-  { id: "time_7m", name: "Endurance Runner", description: "Survive for 7 minutes." },
-  { id: "time_8m", name: "Iron Will", description: "Survive for 8 minutes." },
-  { id: "time_9m", name: "Never Surrender", description: "Survive for 9 minutes." },
-  { id: "time_10m", name: "Decade in the Arena", description: "Survive for 10 minutes." },
-  { id: "time_12m", name: "Time Lord", description: "Survive for 12 minutes." },
-  { id: "time_15m", name: "Quarter Hour", description: "Survive for 15 minutes." },
-  { id: "time_20m", name: "Veteran Survivor", description: "Survive for 20 minutes." },
-  { id: "time_25m", name: "Marathon", description: "Survive for 25 minutes." },
-  { id: "time_30m", name: "Absolute Limit", description: "Survive for 30 minutes." },
+  // --- SURVIVAL (26-45) ---
+  { id: "just_warming_up", name: "Just Warming Up", description: "Survive for 1 minute." },
+  { id: "stayin_alive", name: "Stayin' Alive", description: "Survive for 2 minutes." },
+  { id: "is_it_over_yet", name: "Is it over yet?", description: "Survive for 5 minutes." },
+  { id: "professional_procrastinator", name: "Professional Procrastinator", description: "Survive for 10 minutes." },
+  { id: "marathon_runner", name: "Marathon Runner", description: "Survive for 20 minutes." },
+  { id: "leg_day", name: "Leg Day", description: "Survive for 30 minutes." },
+  { id: "time_is_a_circle", name: "Time Is A Circle", description: "Survive for 45 minutes." },
+  { id: "the_eternalist", name: "The Eternalist", description: "Survive for 60 minutes." },
+  { id: "living_on_a_prayer", name: "Living on a Prayer", description: "Survive 1 minute with less than 10 HP." },
+  { id: "pacifist_mode", name: "Pacifist Mode", description: "Survive 1 minute without killing anything." },
+  { id: "social_distancing", name: "Social Distancing", description: "Go 2 minutes without an enemy touching you." },
+  { id: "speedrun", name: "Speedrun", description: "Reach Level 10 in under 2 minutes." },
+  { id: "turtle_power", name: "Turtle Power", description: "Survive 5 minutes without moving." },
+  { id: "iron_will", name: "Iron Will", description: "Survive a run on Volcano map for 10 minutes." },
+  { id: "cold_blooded", name: "Cold Blooded", description: "Survive a run on Ice map for 10 minutes." },
+  { id: "desert_mirage", name: "Desert Mirage", description: "Survive a run on Desert map for 10 minutes." },
+  { id: "map_master", name: "Map Master", description: "Play every map at least once." },
+  { id: "frequent_flyer", name: "Frequent Flyer", description: "Move a total distance of 100,000 units." },
+  { id: "home_for_dinner", name: "Home for Dinner", description: "Complete a run successfully." },
+  { id: "one_more_run", name: "One More Run", description: "Die within first 30 seconds." },
 
-  // --- LIFETIME KILLS (31-45) ---
-  { id: "kills_10", name: "First Blood", description: "Defeat 10 enemies total across all runs." },
-  { id: "kills_100", name: "Crowd Control", description: "Defeat 100 enemies total." },
-  { id: "kills_500", name: "Exterminator", description: "Defeat 500 enemies total." },
-  { id: "kills_1k", name: "Massacre", description: "Defeat 1,000 enemies total." },
-  { id: "kills_2k", name: "Slayer", description: "Defeat 2,000 enemies total." },
-  { id: "kills_5k", name: "Genocide", description: "Defeat 5,000 enemies total." },
-  { id: "kills_10k", name: "One Man Army", description: "Defeat 10,000 enemies total." },
-  { id: "kills_15k", name: "Reaper", description: "Defeat 15,000 enemies total." },
-  { id: "kills_20k", name: "Harvester", description: "Defeat 20,000 enemies total." },
-  { id: "kills_25k", name: "Destroyer of Worlds", description: "Defeat 25,000 enemies total." },
-  { id: "kills_30k", name: "Annihilation", description: "Defeat 30,000 enemies total." },
-  { id: "kills_40k", name: "Extinction Event", description: "Defeat 40,000 enemies total." },
-  { id: "kills_50k", name: "Pest Control", description: "Defeat 50,000 enemies total." },
-  { id: "kills_75k", name: "The Cleanup Crew", description: "Defeat 75,000 enemies total." },
-  { id: "kills_100k", name: "Millionaire of Death", description: "Defeat 100,000 enemies total." },
+  // --- PROGRESSION (46-65) ---
+  { id: "level_up", name: "Level Up!", description: "Reach Level 5." },
+  { id: "double_digits", name: "Double Digits", description: "Reach Level 10." },
+  { id: "quarter_life_crisis", name: "Quarter Life Crisis", description: "Reach Level 25." },
+  { id: "halfway_there", name: "Halfway There", description: "Reach Level 50." },
+  { id: "grandmaster", name: "Grandmaster", description: "Reach Level 75." },
+  { id: "i_have_ascended", name: "I Have Ascended", description: "Reach Level 100." },
+  { id: "evolved", name: "Evolved", description: "Perform your first evolution." },
+  { id: "final_form_implemented", name: "Final Form Implemented", description: "Reach a Tier 3 class." },
+  { id: "velocity_junkie", name: "Velocity Junkie", description: "Reach Tier 3 in Velocity branch." },
+  { id: "titan_of_industry", name: "Titan of Industry", description: "Reach Tier 3 in Titan branch." },
+  { id: "swarm_intelligence", name: "Swarm Intelligence", description: "Reach Tier 3 in Swarm branch." },
+  { id: "orbiting_sun", name: "Orbiting Sun", description: "Reach Tier 3 in Orbit branch." },
+  { id: "class_act", name: "Class Act", description: "Unlock 5 different classes." },
+  { id: "multi_talented", name: "Multi-Talented", description: "Unlock 15 different classes." },
+  { id: "completionist_phase1", name: "Completionist Phase 1", description: "Unlock all classes." },
 
-  // --- SINGLE RUN KILLS (46-60) ---
-  { id: "run_kills_50", name: "Good Start", description: "Defeat 50 enemies in a single run." },
-  { id: "run_kills_100", name: "Warming Up", description: "Defeat 100 enemies in a single run." },
-  { id: "run_kills_200", name: "Killing Spree", description: "Defeat 200 enemies in a single run." },
-  { id: "run_kills_300", name: "Rampage", description: "Defeat 300 enemies in a single run." },
-  { id: "run_kills_400", name: "Dominating", description: "Defeat 400 enemies in a single run." },
-  { id: "run_kills_500", name: "Unstoppable", description: "Defeat 500 enemies in a single run." },
-  { id: "run_kills_750", name: "Godlike", description: "Defeat 750 enemies in a single run." },
-  { id: "run_kills_1000", name: "Bloodlust", description: "Defeat 1,000 enemies in a single run." },
-  { id: "run_kills_1500", name: "Carnage", description: "Defeat 1,500 enemies in a single run." },
-  { id: "run_kills_2000", name: "Slaughterhouse", description: "Defeat 2,000 enemies in a single run." },
-  { id: "run_kills_2500", name: "Merciless", description: "Defeat 2,500 enemies in a single run." },
-  { id: "run_kills_3000", name: "Ruthless", description: "Defeat 3,000 enemies in a single run." },
-  { id: "run_kills_4000", name: "Savage", description: "Defeat 4,000 enemies in a single run." },
-  { id: "run_kills_5000", name: "Grim Reaper", description: "Defeat 5,000 enemies in a single run." },
-  { id: "run_kills_10000", name: "True Survivor", description: "Defeat 10,000 enemies in a single run." },
+  // --- STAT MAXING (66-80) ---
+  { id: "hoarder", name: "Hoarder", description: "Have 10 unspent upgrade points." },
+  { id: "big_spender", name: "Big Spender", description: "Spend 50 upgrade points total." },
+  { id: "maxed_out", name: "Maxed Out", description: "Max out any stat." },
+  { id: "jack_of_all_trades", name: "Jack of All Trades", description: "Have all stats at Level 5." },
+  { id: "perfectionist", name: "Perfectionist", description: "Have all stats at Level 10." },
+  { id: "glass_cannon", name: "Glass Cannon", description: "Level 30 with no Health upgrades." },
+  { id: "chonky_boy", name: "Chonky Boy", description: "Reach 500 Max HP." },
+  { id: "im_fast_af_boi", name: "I'm Fast AF Boi", description: "Reach 150% Movement Speed." },
+  { id: "vampire", name: "Vampire", description: "Reach 5.0 HP/sec Regeneration." },
+  { id: "unstoppable_force", name: "Unstoppable Force", description: "Reach 200% Damage." },
+  { id: "machine_gunner", name: "Machine Gunner", description: "Reach 200% Fire Rate." },
+  { id: "steel_wall", name: "Steel Wall", description: "Reach 50% Damage Reduction." },
+  { id: "needle_threader", name: "Needle Threader", description: "Reach +5 Penetration." },
+  { id: "screen_filler", name: "Screen Filler", description: "Reach +100% Projectile Size." },
 
-  // --- UPGRADES & STATS (61-80) ---
-  { id: "upg_first", name: "Tinkerer", description: "Purchase your first stat upgrade." },
-  { id: "upg_hp_max", name: "Juggernaut", description: "Max out your Health stat to level 10." },
-  { id: "upg_spd_max", name: "Speed Demon", description: "Max out your Speed stat to level 10." },
-  { id: "upg_dmg_max", name: "Heavy Hitter", description: "Max out your Damage stat to level 10." },
-  { id: "upg_fire_max", name: "Machine Gunner", description: "Max out your Fire Rate stat to level 10." },
-  { id: "upg_shd_max", name: "Ironclad", description: "Max out your Shield stat to level 10." },
-  { id: "upg_reg_max", name: "Troll Blood", description: "Max out your Regen stat to level 10." },
-  { id: "upg_size_max", name: "Massive Ordnance", description: "Max out your Projectile Size stat to level 10." },
-  { id: "upg_pen_max", name: "Armor Piercing", description: "Max out your Penetration stat to level 10." },
-  { id: "upg_three_max", name: "Specialized Build", description: "Max out three different stats in one run." },
-  { id: "upg_five_max", name: "Jack of All Trades", description: "Max out five different stats in one run." },
-  { id: "upg_all_max", name: "Perfectionist", description: "Max out every single stat to level 10." },
-  { id: "evo_1", name: "Evolved", description: "Choose a new combat class." },
-  { id: "evo_tier_2", name: "Second Form", description: "Evolve to a Tier 2 class." },
-  { id: "evo_tier_3", name: "Final Form", description: "Evolve to a Tier 3 class." },
-  { id: "evo_velocity", name: "Speed is Life", description: "Unlock the Velocity class branch." },
-  { id: "evo_titan", name: "Brute Force", description: "Unlock the Titan class branch." },
-  { id: "evo_swarm", name: "Strength in Numbers", description: "Unlock the Swarm class branch." },
-  { id: "evo_orbit", name: "Personal Space", description: "Unlock the Orbit class branch." },
-  { id: "evo_all", name: "Weapon Master", description: "Play every class at least once." },
-
-  // --- CHALLENGES & MASTERY (81-100) ---
-  { id: "chal_nodamage_1m", name: "Untouchable", description: "Take no damage for the first 1 minute." },
-  { id: "chal_nodamage_3m", name: "Ghost", description: "Take no damage for the first 3 minutes." },
-  { id: "chal_pacifist_1m", name: "Pacifist", description: "Survive 1 minute without killing any enemies." },
-  { id: "chal_close_call", name: "By a Thread", description: "Survive with exactly 1 HP left." },
-  { id: "chal_boss_kill", name: "David and Goliath", description: "Defeat your first Boss enemy." },
-  { id: "chal_multi_kill", name: "Splash Damage", description: "Defeat 10 enemies with a single explosion." },
-  { id: "map_desert", name: "Desert Rush", description: "Play a run on the Desert Map." },
-  { id: "map_ice", name: "Winter War", description: "Play a run on the Ice Map." },
-  { id: "map_volcano", name: "Heatwave", description: "Play a run on the Volcano Map." },
-  { id: "map_all", name: "World Traveler", description: "Play at least once on every single map." },
-  { id: "enemy_chaser_1k", name: "Chaser Bane", description: "Defeat 1,000 Chaser enemies." },
-  { id: "enemy_tank_500", name: "Tank Buster", description: "Defeat 500 Tank enemies." },
-  { id: "enemy_fast_500", name: "Swatter", description: "Defeat 500 Fast enemies." },
-  { id: "enemy_ranger_500", name: "Counter-Sniper", description: "Defeat 500 Ranger enemies." },
-  { id: "boss_killer_10", name: "Boss Slayer", description: "Defeat 10 Bosses total." },
-  { id: "boss_killer_50", name: "Apex Champion", description: "Defeat 50 Bosses total." },
-  { id: "chal_speedrun", name: "Speed Leveler", description: "Reach level 10 in under 2 minutes." },
-  { id: "chal_hoarder", name: "Hoarder", description: "Hold onto 10 unused upgrade points at once." },
-  { id: "chal_glass_cannon", name: "Glass Cannon", description: "Reach Level 30 without upgrading Health." },
-  { id: "chal_completionist", name: "Completionist", description: "Unlock the other 99 achievements. You did it!" }
+  // --- SKILL & OOPSIES (81-100) ---
+  { id: "infinite_ammo", name: "Infinite Ammo", description: "Fire for 60 seconds without stopping." },
+  { id: "full_house", name: "Full House", description: "Max out 3 stats in one run." },
+  { id: "overpowered", name: "Overpowered", description: "Max out 5 stats in one run." },
+  { id: "god_mode", name: "God Mode", description: "Max out all stats in one run." },
+  { id: "wealthy", name: "Wealthy", description: "Collect 1,000 XP gems in one run." },
+  { id: "magician", name: "Magician", description: "Collect 5,000 XP gems total." },
+  { id: "oopsies", name: "Oopsies", description: "Take damage from a boss." },
+  { id: "how_are_you_not_dead", name: "How are you not dead?", description: "Survive a hit with 1 HP remaining." },
+  { id: "wrong_way", name: "Wrong Way", description: "Walk into arena border 10 times." },
+  { id: "medic", name: "Medic!", description: "Regenerate 1,000 HP total." },
+  { id: "shields_up", name: "Shields Up", description: "Block 500 damage with your shield." },
+  { id: "explorer", name: "Explorer", description: "Visit every corner of map." },
+  { id: "shiny", name: "Shiny!", description: "Find a rare XP drop." },
+  { id: "lucky_number_7", name: "Lucky Number 7", description: "Reach Level 7 with 7 upgrade points." },
+  { id: "wait_thats_illegal", name: "Wait, that's illegal", description: "Reach Level 20 without firing a shot (Regen/Orbit)." },
+  { id: "look_at_me_now", name: "Look at me now", description: "Change your class 3 times in one run." },
+  { id: "variety_is_life", name: "Variety is Life", description: "Use 10 different weapons." },
+  { id: "boomer", name: "Boomer", description: "Use only Explosive-type weapons for a whole run." },
+  { id: "sniper_elite", name: "Sniper Elite", description: "Use only Sniper-type weapons for a whole run." },
+  { id: "technician", name: "Technician", description: "Spend 5 minutes in upgrade menu total." },
+  { id: "game_over", name: "Game Over?", description: "Reach Game Over screen 10 times." },
+  { id: "persistence", name: "Persistence", description: "Play for a total of 5 hours." },
+  { id: "devs_best_friend", name: "Dev's Best Friend", description: "Open achievements menu 50 times." },
+  { id: "almost_there", name: "Almost There", description: "Unlock 90 achievements." },
+  { id: "the_legend", name: "The Legend", description: "Unlock 99 achievements." },
+  { id: "the_completionist", name: "The Completionist", description: "Unlock all other 99 achievements." }
 ];
-
-// Generate the remaining ones up to 100 just to pad out the list if you haven't filled them all manually yet:
-// Pad the remaining list up to 100 with unique names
-for (let i = ACHIEVEMENTS.length; i < 100; i++) {
-  ACHIEVEMENTS.push({ 
-    id: `auto_record_${i + 1}`, 
-    name: `Combat Record #${i + 1}`, 
-    description: `Complete objective ${i + 1} to unlock this record.` 
-  });
-}
 
 class Game {
   constructor() {
@@ -230,6 +218,15 @@ class Game {
       totalKills: 0,
       bestTime: 0,
       bestLevel: 1,
+      bestClassName: "Basic",
+      lifetimeKills: 0,
+      totalPointsSpent: 0,
+      totalXpCollected: 0,
+      lifetimeXpCollected: 0,
+      totalPlayTime: 0,
+      achievementsMenuOpens: 0,
+      gameOverCount: 0,
+      unlockedMaps: ["standard"],
       currentRun: null
     }, readJson(SAVE_KEY, {}));
   }
@@ -723,34 +720,116 @@ class Game {
     this.ui.showToast("Achievement Unlocked", achievement.name);
   }
 
-checkAchievements() {
-    // Check Level Achievements
-    if (this.stats.level >= 2) this.unlockAchievement("lvl_1");
-    if (this.stats.level >= 5) this.unlockAchievement("lvl_5");
-    if (this.stats.level >= 10) this.unlockAchievement("lvl_10");
-    if (this.stats.level >= 20) this.unlockAchievement("lvl_20");
-    if (this.stats.level >= 30) this.unlockAchievement("lvl_30");
+  checkAchievements() {
+    // Check COMBAT achievements (1-25)
+    if (this.stats.kills >= 1) this.unlockAchievement("first_blood");
+    if (this.saveData.lifetimeKills >= 100) this.unlockAchievement("crowd_control");
+    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("janitor");
+    if (this.saveData.lifetimeKills >= 1000) this.unlockAchievement("john_wick_intern");
+    if (this.saveData.lifetimeKills >= 5000) this.unlockAchievement("delete_button");
+    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("career_reaper");
+    if (this.saveData.lifetimeKills >= 20000) this.unlockAchievement("pest_control");
+    if (this.saveData.lifetimeKills >= 50000) this.unlockAchievement("dead_pixels");
+    if (this.saveData.lifetimeKills >= 100000) this.unlockAchievement("one_million_no_wait");
+    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("ranger_danger");
+    if (this.stats.kills >= 250) this.unlockAchievement("tank_buster");
+    if (this.saveData.lifetimeKills >= 500) this.unlockAchievement("swatter");
+    if (this.saveData.lifetimeKills >= 1000) this.unlockAchievement("chaser_chaser");
+    if (this.stats.kills >= 50) this.unlockAchievement("elite_hunter");
+    if (this.stats.kills >= 10) this.unlockAchievement("boss_killer_10");
+    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("collateral_damage");
+    if (this.stats.kills >= 5) this.unlockAchievement("sniping_service");
+    if (this.stats.kills >= 20) this.unlockAchievement("personal_space");
+    if (this.saveData.lifetimeKills >= 10000) this.unlockAchievement("bullet_hell");
+    if (this.stats.levels.fireRate >= 10) this.unlockAchievement("spray_and_pray");
+    if (this.stats.kills >= 1) this.unlockAchievement("heavy_hitter");
+    if (this.stats.levels.projectileSize >= 10) this.unlockAchievement("massive_ordnance");
+    if (this.stats.kills >= 1) this.unlockAchievement("nothing_personal");
+    if (this.stats.kills >= 1) this.unlockAchievement("close_shave");
+    if (this.saveData.lifetimeKills >= 100) this.unlockAchievement("untouchable");
 
-    // Check Time Achievements (this.elapsed is in seconds)
-    if (this.elapsed >= 60) this.unlockAchievement("time_1m");
-    if (this.elapsed >= 120) this.unlockAchievement("time_2m");
-    if (this.elapsed >= 180) this.unlockAchievement("time_3m");
-    if (this.elapsed >= 240) this.unlockAchievement("time_4m");
-    if (this.elapsed >= 300) this.unlockAchievement("time_5m");
+    // Check SURVIVAL achievements (26-45)
+    if (this.elapsed >= 60) this.unlockAchievement("just_warming_up");
+    if (this.elapsed >= 120) this.unlockAchievement("stayin_alive");
+    if (this.elapsed >= 300) this.unlockAchievement("is_it_over_yet");
+    if (this.elapsed >= 600) this.unlockAchievement("professional_procrastinator");
+    if (this.elapsed >= 1200) this.unlockAchievement("marathon_runner");
+    if (this.elapsed >= 1800) this.unlockAchievement("leg_day");
+    if (this.elapsed >= 2700) this.unlockAchievement("time_is_a_circle");
+    if (this.elapsed >= 3600) this.unlockAchievement("the_eternalist");
+    if (this.elapsed >= 60 && this.player.hp < 10) this.unlockAchievement("living_on_a_prayer");
+    if (this.elapsed >= 60 && this.stats.kills === 0) this.unlockAchievement("pacifist_mode");
+    if (this.elapsed >= 120 && !this.player.lastDamageTime) this.unlockAchievement("social_distancing");
+    if (this.stats.level >= 10 && this.elapsed <= 120) this.unlockAchievement("speedrun");
+    if (this.elapsed >= 300 && !this.player.hasMoved) this.unlockAchievement("turtle_power");
+    if (this.elapsed >= 600 && this.currentMap.id === "volcano") this.unlockAchievement("iron_will");
+    if (this.elapsed >= 600 && this.currentMap.id === "ice") this.unlockAchievement("cold_blooded");
+    if (this.elapsed >= 600 && this.currentMap.id === "desert") this.unlockAchievement("desert_mirage");
+    if (this.saveData.unlockedMaps && this.saveData.unlockedMaps.length >= 5) this.unlockAchievement("map_master");
+    if (this.player.totalDistance >= 100000) this.unlockAchievement("frequent_flyer");
+    if (this.elapsed >= 300 && this.state === State.VICTORY) this.unlockAchievement("home_for_dinner");
+    if (this.elapsed <= 30 && this.state === State.GAME_OVER) this.unlockAchievement("one_more_run");
 
-    // Check Single Run Kill Achievements
-    if (this.stats.kills >= 50) this.unlockAchievement("run_kills_50");
-    if (this.stats.kills >= 200) this.unlockAchievement("run_kills_200");
-    if (this.stats.kills >= 500) this.unlockAchievement("run_kills_500");
+    // Check PROGRESSION achievements (46-65)
+    if (this.stats.level >= 5) this.unlockAchievement("level_up");
+    if (this.stats.level >= 10) this.unlockAchievement("double_digits");
+    if (this.stats.level >= 25) this.unlockAchievement("quarter_life_crisis");
+    if (this.stats.level >= 50) this.unlockAchievement("halfway_there");
+    if (this.stats.level >= 75) this.unlockAchievement("grandmaster");
+    if (this.stats.level >= 100) this.unlockAchievement("i_have_ascended");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.length > 1) this.unlockAchievement("evolved");
+    if (this.player.classDef.tier >= 3) this.unlockAchievement("final_form_implemented");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.includes("velocity_tier_3")) this.unlockAchievement("velocity_junkie");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.includes("titan_tier_3")) this.unlockAchievement("titan_of_industry");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.includes("swarm_tier_3")) this.unlockAchievement("swarm_intelligence");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.includes("orbit_tier_3")) this.unlockAchievement("orbiting_sun");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.length >= 5) this.unlockAchievement("class_act");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.length >= 15) this.unlockAchievement("multi_talented");
+    if (this.saveData.unlockedClasses && this.saveData.unlockedClasses.length >= 20) this.unlockAchievement("completionist_phase1");
 
-    // Check Lifetime Kills (from save data)
-    const lifetimeKills = this.saveData.lifetimeKills || 0;
-    if (lifetimeKills >= 10) this.unlockAchievement("kills_10");
-    if (lifetimeKills >= 100) this.unlockAchievement("kills_100");
-    if (lifetimeKills >= 500) this.unlockAchievement("kills_500");
-    if (lifetimeKills >= 1000) this.unlockAchievement("kills_1k");
-    if (lifetimeKills >= 5000) this.unlockAchievement("kills_5k");
-    if (lifetimeKills >= 10000) this.unlockAchievement("kills_10k");
+    // Check STAT MAXING achievements (66-80)
+    if (this.stats.points >= 10) this.unlockAchievement("hoarder");
+    if (this.saveData.totalPointsSpent >= 50) this.unlockAchievement("big_spender");
+    if (Object.values(this.stats.levels).some(level => level >= 10)) this.unlockAchievement("maxed_out");
+    if (Object.values(this.stats.levels).every(level => level >= 5)) this.unlockAchievement("jack_of_all_trades");
+    if (Object.values(this.stats.levels).every(level => level >= 10)) this.unlockAchievement("perfectionist");
+    if (this.stats.level >= 30 && this.stats.levels.health === 0) this.unlockAchievement("glass_cannon");
+    if (this.player.maxHp >= 500) this.unlockAchievement("chonky_boy");
+    if (this.statEffects.speedMultiplier >= 2.5) this.unlockAchievement("im_fast_af_boi");
+    if (this.statEffects.regenPerSecond >= 5.0) this.unlockAchievement("vampire");
+    if (this.statEffects.damageMultiplier >= 3.0) this.unlockAchievement("unstoppable_force");
+    if (this.statEffects.cooldownMultiplier <= 0.5) this.unlockAchievement("machine_gunner");
+    if (this.statEffects.damageTakenMultiplier <= 0.5) this.unlockAchievement("steel_wall");
+    if (this.statEffects.extraPierce >= 5) this.unlockAchievement("needle_threader");
+    if (this.statEffects.projectileSizeMultiplier >= 2.0) this.unlockAchievement("screen_filler");
+
+    // Check SKILL & OOPSIES achievements (81-100)
+    if (this.player.lastFireTime && this.elapsed - this.player.lastFireTime >= 60) this.unlockAchievement("infinite_ammo");
+    if (Object.values(this.stats.levels).filter(level => level >= 10).length >= 3) this.unlockAchievement("full_house");
+    if (Object.values(this.stats.levels).filter(level => level >= 10).length >= 5) this.unlockAchievement("overpowered");
+    if (Object.values(this.stats.levels).every(level => level >= 10)) this.unlockAchievement("god_mode");
+    if (this.saveData.totalXpCollected >= 1000) this.unlockAchievement("wealthy");
+    if (this.saveData.lifetimeXpCollected >= 5000) this.unlockAchievement("magician");
+    if (this.player.lastBossDamageTime) this.unlockAchievement("oopsies");
+    if (this.player.hp === 1 && this.player.lastDamageTime) this.unlockAchievement("how_are_you_not_dead");
+    if (this.player.borderHits >= 10) this.unlockAchievement("wrong_way");
+    if (this.player.totalRegenerated >= 1000) this.unlockAchievement("medic");
+    if (this.player.totalDamageBlocked >= 500) this.unlockAchievement("shields_up");
+    if (this.player.cornersVisited >= 4) this.unlockAchievement("explorer");
+    if (this.player.foundRareXp) this.unlockAchievement("shiny");
+    if (this.stats.level === 7 && this.stats.points === 7) this.unlockAchievement("lucky_number_7");
+    if (this.stats.level >= 20 && this.stats.kills === 0) this.unlockAchievement("wait_thats_illegal");
+    if (this.player.classChanges >= 3) this.unlockAchievement("look_at_me_now");
+    if (this.player.weaponsUsed >= 10) this.unlockAchievement("variety_is_life");
+    if (this.player.explosiveOnlyRun) this.unlockAchievement("boomer");
+    if (this.player.sniperOnlyRun) this.unlockAchievement("sniper_elite");
+    if (this.player.menuTime >= 300) this.unlockAchievement("technician");
+    if (this.saveData.gameOverCount >= 10) this.unlockAchievement("game_over");
+    if (this.saveData.totalPlayTime >= 18000) this.unlockAchievement("persistence");
+    if (this.saveData.achievementsMenuOpens >= 50) this.unlockAchievement("devs_best_friend");
+    if (this.saveData.achievements.length >= 90) this.unlockAchievement("almost_there");
+    if (this.saveData.achievements.length >= 99) this.unlockAchievement("the_legend");
+    if (this.saveData.achievements.length >= 99) this.unlockAchievement("the_completionist");
   }
 }
 

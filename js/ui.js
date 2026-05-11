@@ -332,15 +332,14 @@ showAchievements(game) {
     list.innerHTML = "";
     
     // Iterate over the FULL achievement list to build the UI
-// Iterate over the FULL achievement list to build the UI
     game.achievementList.forEach((achievement, index) => {
       const unlocked = unlockedIds.has(achievement.id);
       const item = document.createElement("article");
       
-      // Keep the unlocked class so the CSS still greys out the locked ones
-      item.className = `achievement-card ${unlocked ? "unlocked" : ""}`;
+      // Use locked-achievement class for unearned achievements
+      item.className = `achievement-card ${unlocked ? "unlocked" : "locked-achievement"}`;
       
-      // Always show the real name and description now
+      // Always show the real name and description - no text masking
       item.innerHTML = `
         <em class="achievement-index">#${String(index + 1).padStart(3, "0")}</em>
         <strong>${achievement.name}</strong>
@@ -376,10 +375,23 @@ showAchievements(game) {
   }
 
   showToast(title, body) {
-    this.achievementToast.innerHTML = `<strong>${title}</strong><span>${body}</span>`;
-    this.achievementToast.classList.remove("hidden");
-    clearTimeout(this._toastTimer);
-    this._toastTimer = setTimeout(() => this.achievementToast.classList.add("hidden"), 3200);
+    // Create Minecraft-style toast notification dynamically
+    const toast = document.createElement("div");
+    toast.className = "mc-toast";
+    toast.innerHTML = `
+      <div class="toast-title">Achievement Get!</div>
+      <div class="toast-body">${body}</div>
+    `;
+    
+    // Add to body and trigger animation
+    document.body.appendChild(toast);
+    
+    // Auto-remove after animation completes (4 seconds)
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 4000);
   }
 
   showSettingsTab(id) {
