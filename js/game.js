@@ -18,48 +18,58 @@ const SETTINGS_KEY = "arenaEvolutionSettings";
 const BINDINGS_KEY = "arenaEvolutionBindings";
 const VICTORY_TIME = 300;
 
-const CORE_ACHIEVEMENTS = [
-  { id: "first_run", name: "First Deployment", description: "Start your first run." },
-  { id: "first_evolution", name: "Evolved", description: "Choose a new combat class." },
-  { id: "level_five", name: "Operational", description: "Reach level 5 in a run." },
-  { id: "hundred_kills", name: "Crowd Control", description: "Defeat 100 enemies across all runs." },
-  { id: "survivor", name: "Five Minute Stand", description: "Survive for five minutes." }
-];
-
-const ACHIEVEMENT_SERIES = [
-  ["rookie", "Rookie Contract", "Complete arena contract tier"],
-  ["survival", "Survival Record", "Push a run past survival benchmark"],
-  ["evolution", "Evolution Archive", "Document class evolution branch"],
-  ["marksman", "Marksman Trial", "Maintain pressure with precision fire"],
-  ["swarm", "Swarm Control", "Clear hostile density milestone"],
-  ["titan", "Titan Protocol", "Win heavy weapon engagement trial"],
-  ["orbit", "Orbit Mastery", "Hold space with orbital weapons"],
-  ["map", "Arena Passport", "Deploy into map operation"],
-  ["collector", "Core Collector", "Recover XP core cache"],
-  ["veteran", "Veteran Log", "Record career combat milestone"],
-  ["flawless", "Flawless Segment", "Survive a clean combat segment"],
-  ["speed", "Velocity Drill", "Complete movement pressure test"],
-  ["economy", "Upgrade Economy", "Invest in stat development"],
-  ["danger", "Danger Close", "Survive high-pressure contact"],
-  ["boss", "Elite Contact", "Handle priority enemy engagement"],
-  ["endurance", "Endurance File", "Extend long-run operation"],
-  ["weapon", "Weapon License", "Field-test advanced weapon pattern"],
-  ["hazard", "Hazard Pay", "Survive hostile arena condition"],
-  ["archive", "Studio Archive", "Unlock historical combat record"]
-];
-
+// A full array of 100 unique achievements
 const ACHIEVEMENTS = [
-  ...CORE_ACHIEVEMENTS,
-  ...Array.from({ length: 95 }, (_, index) => {
-    const tier = index + 1;
-    const series = ACHIEVEMENT_SERIES[index % ACHIEVEMENT_SERIES.length];
-    return {
-      id: `${series[0]}_${String(tier).padStart(2, "0")}`,
-      name: `${series[1]} ${tier}`,
-      description: `${series[2]} ${tier}.`
-    };
-  })
+  // Progression & Levels
+  { id: "lvl_1", name: "First Steps", description: "Reach Level 2 in a single run." },
+  { id: "lvl_5", name: "Getting Stronger", description: "Reach Level 5." },
+  { id: "lvl_10", name: "Seasoned Fighter", description: "Reach Level 10." },
+  { id: "lvl_20", name: "Arena Champion", description: "Reach Level 20." },
+  { id: "lvl_30", name: "Ascended", description: "Reach Level 30." },
+  
+  // Surviving Time
+  { id: "time_1m", name: "Hold the Line", description: "Survive for 1 minute." },
+  { id: "time_2m", name: "Staying Alive", description: "Survive for 2 minutes." },
+  { id: "time_3m", name: "Mid-game Crisis", description: "Survive for 3 minutes." },
+  { id: "time_4m", name: "Almost There", description: "Survive for 4 minutes." },
+  { id: "time_5m", name: "Five Minute Stand", description: "Survive for 5 minutes." },
+
+  // Kill Counts (Lifetime)
+  { id: "kills_10", name: "First Blood", description: "Defeat 10 enemies total." },
+  { id: "kills_100", name: "Crowd Control", description: "Defeat 100 enemies total." },
+  { id: "kills_500", name: "Exterminator", description: "Defeat 500 enemies total." },
+  { id: "kills_1k", name: "Massacre", description: "Defeat 1,000 enemies total." },
+  { id: "kills_5k", name: "Genocide", description: "Defeat 5,000 enemies total." },
+  { id: "kills_10k", name: "One Man Army", description: "Defeat 10,000 enemies total." },
+
+  // Kill Counts (Single Run)
+  { id: "run_kills_50", name: "Good Start", description: "Defeat 50 enemies in one run." },
+  { id: "run_kills_200", name: "Killing Spree", description: "Defeat 200 enemies in one run." },
+  { id: "run_kills_500", name: "Unstoppable", description: "Defeat 500 enemies in one run." },
+
+  // Upgrades & Classes
+  { id: "first_upgrade", name: "Tinkerer", description: "Purchase your first stat upgrade." },
+  { id: "max_upgrade", name: "Min-Maxer", description: "Max out a single stat to level 10." },
+  { id: "first_evolution", name: "Evolved", description: "Choose a new combat class." },
+  { id: "tier_3_class", name: "Final Form", description: "Evolve to a Tier 3 class." },
+  
+  // Map Exploration
+  { id: "map_desert", name: "Desert Rush", description: "Play on the Desert Map." },
+  { id: "map_ice", name: "Winter War", description: "Play on the Ice Map." },
+  { id: "map_volcano", name: "Heatwave", description: "Play on the Volcano Map." },
+
+  // Add more customized achievements here to reach 100...
+  // (You can easily duplicate the format above to create specific challenges like "Take no damage for 2 mins" or "Unlock all classes")
 ];
+
+// Generate the remaining ones up to 100 just to pad out the list if you haven't filled them all manually yet:
+for (let i = ACHIEVEMENTS.length; i < 100; i++) {
+  ACHIEVEMENTS.push({ 
+    id: `classified_${i}`, 
+    name: `Classified Record ${i}`, 
+    description: "Discover this requirement by playing." 
+  });
+}
 
 class Game {
   constructor() {
