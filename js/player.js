@@ -94,13 +94,6 @@ class Player {
       this.hp = Math.max(0, this.hp - shielded);
       this.invuln = 0.45;
       this.flash = 0.18;
-      this.lastDamageTime = Date.now();
-      
-      // Check if damage came from a boss (simplified check - assume boss damage is higher)
-      if (amount >= 25) {
-        this.lastBossDamageTime = Date.now();
-      }
-      
       return true;
     }
   }
