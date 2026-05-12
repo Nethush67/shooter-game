@@ -26,6 +26,23 @@ class Player {
       this.weaponPhase = 0;
       this.flash = 0;
       this.pulse = 0;
+      
+      // Achievement tracking properties
+      this.lastFireTime = 0;
+      this.lastBossDamageTime = 0;
+      this.lastDamageTime = 0;
+      this.borderHits = 0;
+      this.totalRegenerated = 0;
+      this.totalDamageBlocked = 0;
+      this.cornersVisited = 0;
+      this.foundRareXp = false;
+      this.classChanges = 0;
+      this.weaponsUsed = 0;
+      this.explosiveOnlyRun = false;
+      this.sniperOnlyRun = false;
+      this.menuTime = 0;
+      this.totalDistance = 0;
+      this.hasMoved = false;
     }
 
     setClass(classId) {
