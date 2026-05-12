@@ -42,7 +42,29 @@ class UI {
     this.frameCount = 0;
     this.previousOverlay = "menu";
     this._levelUpTimer = null;
+    // Wire up the Reset Data Button
+    const resetBtn = document.getElementById("resetDataButton");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        this.showConfirm(
+          "Wipe Save Data?", 
+          "This will permanently delete all achievements, stats, and unlocked classes. Are you sure?", 
+          () => {
+            localStorage.removeItem("arenaEvolutionSave");
+            localStorage.removeItem("arenaEvolutionSettings");
+            window.location.reload(); // Reloads the game completely fresh
+          }
+        );
+      });
+    }
+
+    // Ensure the cancel button on the confirm overlay works
+    const cancelBtn = document.getElementById("confirmCancelButton");
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => this.hideConfirm());
+    }
   }
+
 
   el(id) {
     return document.getElementById(id);

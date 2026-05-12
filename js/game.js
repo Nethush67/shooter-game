@@ -20,6 +20,7 @@ const VICTORY_TIME = 300;
 
 // 100 unique achievements with funny names - no loops, all hardcoded
 // 100 Unique Achievements - Perfectly Paced from Early to End Game
+// 100 Unique Achievements - Perfectly Paced from Early to End Game
 const ACHIEVEMENTS = [
   // --- TIER 1: THE BASICS (0-30 Mins) ---
   { id: "first_blood", name: "First Blood", description: "Defeat your very first enemy." },
@@ -728,91 +729,99 @@ class Game {
 
   checkAchievements() {
     // Shared safe variables to prevent undefined crashes
-    const lifetimeKills = this.saveData.totalKills || 0;
-    const unlockedClasses = this.saveData.unlockedClasses || [];
-    const unlockedMaps = this.saveData.unlockedMaps || [];
-    const pointsSpent = this.saveData.totalPointsSpent || 0;
+    const elapsed = this.elapsed || 0;
+    const kills = this.kills || 0;
+    const level = this.stats?.level || 1;
+    const hp = this.player?.hp || 0;
+    const maxHp = this.player?.maxHp || 100;
+    const points = this.stats?.points || 0;
+    const stats = this.stats?.levels || {};
+    
+    const lifetimeKills = this.saveData?.totalKills || 0;
+    const unlockedClasses = this.saveData?.unlockedClasses || [];
+    const unlockedMaps = this.saveData?.unlockedMaps || [];
+    const pointsSpent = this.saveData?.totalPointsSpent || 0;
 
     // --- TIER 1: THE BASICS ---
-    if (this.kills >= 1) this.unlockAchievement("first_blood");
-    if (this.stats.level >= 5) this.unlockAchievement("level_up");
+    if (kills >= 1) this.unlockAchievement("first_blood");
+    if (level >= 5) this.unlockAchievement("level_up");
     if (pointsSpent >= 1) this.unlockAchievement("first_upgrade");
-    if (this.stats.level >= 10) this.unlockAchievement("double_digits");
+    if (level >= 10) this.unlockAchievement("double_digits");
     if (unlockedClasses.length > 1) this.unlockAchievement("evolved");
-    if (this.elapsed >= 60) this.unlockAchievement("just_warming_up");
-    if (this.elapsed >= 120) this.unlockAchievement("stayin_alive");
-    if ((this.player.borderHits || 0) >= 10) this.unlockAchievement("wrong_way");
-    if ((this.player.lastBossDamageTime || 0) > 0) this.unlockAchievement("oopsies");
-    if (this.player.foundRareXp) this.unlockAchievement("shiny");
+    if (elapsed >= 60) this.unlockAchievement("just_warming_up");
+    if (elapsed >= 120) this.unlockAchievement("stayin_alive");
+    if ((this.player?.borderHits || 0) >= 10) this.unlockAchievement("wrong_way");
+    if ((this.player?.lastBossDamageTime || 0) > 0) this.unlockAchievement("oopsies");
+    if (this.player?.foundRareXp) this.unlockAchievement("shiny");
     if (unlockedMaps.length >= 2) this.unlockAchievement("tourist");
     if (lifetimeKills >= 100) this.unlockAchievement("crowd_control");
     if (this.state === U.State.VICTORY) this.unlockAchievement("home_for_dinner");
-    if (this.state === U.State.GAME_OVER && this.elapsed <= 30) this.unlockAchievement("one_more_run");
-    if (this.stats.points >= 5) this.unlockAchievement("hoarder");
-    if (this.stats.level === 7 && this.stats.points === 7) this.unlockAchievement("lucky_number_7");
-    if (this.elapsed >= 60 && this.kills === 0) this.unlockAchievement("pacifist_mostly");
-    if (this.elapsed >= 120 && !(this.player.lastDamageTime || 0)) this.unlockAchievement("social_distancing");
-    if ((this.player.maxMultiKill || 0) >= 10 || this.kills >= 150) this.unlockAchievement("collateral_damage");
-    if ((this.statEffects.damageMultiplier || 1) >= 2.0) this.unlockAchievement("heavy_hitter");
-    if (this.player.hp > 0 && this.player.hp <= this.player.maxHp * 0.05) this.unlockAchievement("close_shave");
-    if (this.player.hp === 1) this.unlockAchievement("how_are_you_not_dead");
-    if (this.stats.level >= 10 && this.elapsed <= 120) this.unlockAchievement("speedrun");
-    if ((this.player.classChanges || 0) >= 3) this.unlockAchievement("look_at_me_now");
-    if ((this.player.menuTime || 0) >= 60) this.unlockAchievement("technician");
+    if (this.state === U.State.GAME_OVER && elapsed <= 30) this.unlockAchievement("one_more_run");
+    if (points >= 5) this.unlockAchievement("hoarder");
+    if (level === 7 && points === 7) this.unlockAchievement("lucky_number_7");
+    if (elapsed >= 60 && kills === 0) this.unlockAchievement("pacifist_mostly");
+    if (elapsed >= 120 && !(this.player?.lastDamageTime || 0)) this.unlockAchievement("social_distancing");
+    if ((this.player?.maxMultiKill || 0) >= 10 || kills >= 150) this.unlockAchievement("collateral_damage");
+    if ((this.statEffects?.damageMultiplier || 1) >= 2.0) this.unlockAchievement("heavy_hitter");
+    if (hp > 0 && hp <= maxHp * 0.05) this.unlockAchievement("close_shave");
+    if (hp === 1) this.unlockAchievement("how_are_you_not_dead");
+    if (level >= 10 && elapsed <= 120) this.unlockAchievement("speedrun");
+    if ((this.player?.classChanges || 0) >= 3) this.unlockAchievement("look_at_me_now");
+    if ((this.player?.menuTime || 0) >= 60) this.unlockAchievement("technician");
 
     // --- TIER 2: THE COMBATANT ---
     if (lifetimeKills >= 500) this.unlockAchievement("janitor");
-    if (this.stats.level >= 25) this.unlockAchievement("quarter_life_crisis");
-    if (this.elapsed >= 300) this.unlockAchievement("is_it_over_yet");
-    if ((this.saveData.bossesKilled || 0) >= 1) this.unlockAchievement("boss_slayer_1");
+    if (level >= 25) this.unlockAchievement("quarter_life_crisis");
+    if (elapsed >= 300) this.unlockAchievement("is_it_over_yet");
+    if ((this.saveData?.bossesKilled || 0) >= 1) this.unlockAchievement("boss_slayer_1");
     if (unlockedClasses.length >= 3) this.unlockAchievement("class_act");
-    if (Object.values(this.stats.levels).some(l => l >= 10)) this.unlockAchievement("maxed_out");
-    if (Object.values(this.stats.levels).every(l => l >= 5)) this.unlockAchievement("jack_of_all_trades");
-    if (this.player.maxHp >= 300) this.unlockAchievement("chonky_boy");
-    if ((this.statEffects.speedMultiplier || 1) >= 1.5) this.unlockAchievement("im_fast_af_boi");
-    if ((this.statEffects.regenPerSecond || 0) >= 5.0) this.unlockAchievement("vampire");
-    if ((this.statEffects.cooldownMultiplier || 1) <= 0.6) this.unlockAchievement("machine_gunner");
-    if ((this.statEffects.damageTakenMultiplier || 1) <= 0.65) this.unlockAchievement("steel_wall");
-    if ((this.statEffects.projectileSizeMultiplier || 1) >= 1.6) this.unlockAchievement("screen_filler");
-    if ((this.player.gemsCollected || 0) >= 1000 || this.stats.level >= 30) this.unlockAchievement("wealthy");
+    if (Object.values(stats).some(l => l >= 10)) this.unlockAchievement("maxed_out");
+    if (Object.values(stats).every(l => l >= 5)) this.unlockAchievement("jack_of_all_trades");
+    if (maxHp >= 300) this.unlockAchievement("chonky_boy");
+    if ((this.statEffects?.speedMultiplier || 1) >= 1.5) this.unlockAchievement("im_fast_af_boi");
+    if ((this.statEffects?.regenPerSecond || 0) >= 5.0) this.unlockAchievement("vampire");
+    if ((this.statEffects?.cooldownMultiplier || 1) <= 0.6) this.unlockAchievement("machine_gunner");
+    if ((this.statEffects?.damageTakenMultiplier || 1) <= 0.65) this.unlockAchievement("steel_wall");
+    if ((this.statEffects?.projectileSizeMultiplier || 1) >= 1.6) this.unlockAchievement("screen_filler");
+    if ((this.player?.gemsCollected || 0) >= 1000 || level >= 30) this.unlockAchievement("wealthy");
     if (unlockedMaps.length >= 5) this.unlockAchievement("map_master");
-    if ((this.saveData.lifetimeDistance || 0) >= 100000) this.unlockAchievement("frequent_flyer");
-    if ((this.saveData.totalRegenerated || 0) >= 500) this.unlockAchievement("medic");
-    if ((this.saveData.totalDamageBlocked || 0) >= 500) this.unlockAchievement("shields_up");
-    if ((this.player.cornersVisited || 0) >= 4) this.unlockAchievement("explorer");
-    if ((this.player.offScreenKills || 0) >= 1 || lifetimeKills >= 1500) this.unlockAchievement("nothing_personal");
-    if ((this.saveData.tanksKilled || 0) >= 250) this.unlockAchievement("tank_buster");
-    if ((this.saveData.fastKilled || 0) >= 500) this.unlockAchievement("swatter");
-    if ((this.saveData.chasersKilled || 0) >= 1000) this.unlockAchievement("chaser_chaser");
-    if ((this.saveData.rangersKilled || 0) >= 500) this.unlockAchievement("ranger_danger");
-    if ((this.saveData.weaponsUsed || 0) >= 10) this.unlockAchievement("variety_is_life");
+    if ((this.saveData?.lifetimeDistance || 0) >= 100000) this.unlockAchievement("frequent_flyer");
+    if ((this.saveData?.totalRegenerated || 0) >= 500) this.unlockAchievement("medic");
+    if ((this.saveData?.totalDamageBlocked || 0) >= 500) this.unlockAchievement("shields_up");
+    if ((this.player?.cornersVisited || 0) >= 4) this.unlockAchievement("explorer");
+    if ((this.player?.offScreenKills || 0) >= 1 || lifetimeKills >= 1500) this.unlockAchievement("nothing_personal");
+    if ((this.saveData?.tanksKilled || 0) >= 250) this.unlockAchievement("tank_buster");
+    if ((this.saveData?.fastKilled || 0) >= 500) this.unlockAchievement("swatter");
+    if ((this.saveData?.chasersKilled || 0) >= 1000) this.unlockAchievement("chaser_chaser");
+    if ((this.saveData?.rangersKilled || 0) >= 500) this.unlockAchievement("ranger_danger");
+    if ((this.saveData?.weaponsUsed || 0) >= 10) this.unlockAchievement("variety_is_life");
 
     // --- TIER 3: THE SPECIALIST ---
     if (lifetimeKills >= 1000) this.unlockAchievement("john_wick_intern");
-    if (this.elapsed >= 600) this.unlockAchievement("professional_procrastinator");
-    if (this.stats.level >= 50) this.unlockAchievement("halfway_there");
-    if (Object.values(this.stats.levels).filter(l => l >= 10).length >= 3) this.unlockAchievement("full_house");
-    if ((this.statEffects.extraPierce || 0) >= 5) this.unlockAchievement("needle_threader");
-    if (this.elapsed >= 180 && !(this.player.hasMoved || false)) this.unlockAchievement("turtle_power");
-    if (this.elapsed >= 600 && this.currentMap && this.currentMap.id === "volcano") this.unlockAchievement("iron_will");
-    if (this.elapsed >= 600 && this.currentMap && this.currentMap.id === "ice") this.unlockAchievement("cold_blooded");
-    if (this.elapsed >= 600 && this.currentMap && this.currentMap.id === "desert") this.unlockAchievement("desert_mirage");
-    if (this.player.classDef && this.player.classDef.tier >= 3) this.unlockAchievement("final_form_implemented");
+    if (elapsed >= 600) this.unlockAchievement("professional_procrastinator");
+    if (level >= 50) this.unlockAchievement("halfway_there");
+    if (Object.values(stats).filter(l => l >= 10).length >= 3) this.unlockAchievement("full_house");
+    if ((this.statEffects?.extraPierce || 0) >= 5) this.unlockAchievement("needle_threader");
+    if (elapsed >= 180 && !(this.player?.hasMoved || false)) this.unlockAchievement("turtle_power");
+    if (elapsed >= 600 && this.currentMap?.id === "volcano") this.unlockAchievement("iron_will");
+    if (elapsed >= 600 && this.currentMap?.id === "ice") this.unlockAchievement("cold_blooded");
+    if (elapsed >= 600 && this.currentMap?.id === "desert") this.unlockAchievement("desert_mirage");
+    if ((this.player?.classDef?.tier || 0) >= 3) this.unlockAchievement("final_form_implemented");
     if (unlockedClasses.includes("velocity_tier_3")) this.unlockAchievement("velocity_junkie");
     if (unlockedClasses.includes("titan_tier_3")) this.unlockAchievement("titan_of_industry");
     if (unlockedClasses.includes("swarm_tier_3")) this.unlockAchievement("swarm_intelligence");
     if (unlockedClasses.includes("orbit_tier_3")) this.unlockAchievement("orbiting_sun");
     if (unlockedClasses.length >= 10) this.unlockAchievement("multi_talented");
-    if (this.player.explosiveOnlyRun && this.elapsed > 300) this.unlockAchievement("boomer");
-    if (this.player.sniperOnlyRun && this.elapsed > 300) this.unlockAchievement("sniper_elite");
-    if (this.player.orbitOnlyRun && this.elapsed > 300) this.unlockAchievement("personal_space");
-    if ((this.player.fastBossKill || 0) >= 1) this.unlockAchievement("boss_what_boss");
-    if ((this.player.sniperMultiKill || 0) >= 5) this.unlockAchievement("sniping_service");
-    if ((this.player.projectilesFired || 0) >= 10000) this.unlockAchievement("bullet_hell");
-    if (this.kills >= 100 && !(this.player.lastDamageTime || 0)) this.unlockAchievement("untouchable");
-    if (this.elapsed >= 60 && this.player.hp < 10) this.unlockAchievement("living_on_a_prayer");
-    if (this.stats.level >= 20 && this.kills === 0) this.unlockAchievement("wait_thats_illegal");
-    if (this.player.lastFireTime && this.elapsed - this.player.lastFireTime >= 60) this.unlockAchievement("infinite_ammo");
+    if (this.player?.explosiveOnlyRun && elapsed > 300) this.unlockAchievement("boomer");
+    if (this.player?.sniperOnlyRun && elapsed > 300) this.unlockAchievement("sniper_elite");
+    if (this.player?.orbitOnlyRun && elapsed > 300) this.unlockAchievement("personal_space");
+    if ((this.player?.fastBossKill || 0) >= 1) this.unlockAchievement("boss_what_boss");
+    if ((this.player?.sniperMultiKill || 0) >= 5) this.unlockAchievement("sniping_service");
+    if ((this.player?.projectilesFired || 0) >= 10000) this.unlockAchievement("bullet_hell");
+    if (kills >= 100 && !(this.player?.lastDamageTime || 0)) this.unlockAchievement("untouchable");
+    if (elapsed >= 60 && hp < 10) this.unlockAchievement("living_on_a_prayer");
+    if (level >= 20 && kills === 0) this.unlockAchievement("wait_thats_illegal");
+    if (this.player?.lastFireTime && elapsed - this.player.lastFireTime >= 60) this.unlockAchievement("infinite_ammo");
 
     // --- TIER 4 & 5: THE ELITE LEGEND ---
     if (lifetimeKills >= 10000) this.unlockAchievement("delete_button");
@@ -820,34 +829,32 @@ class Game {
     if (lifetimeKills >= 100000) this.unlockAchievement("dead_pixels");
     if (lifetimeKills >= 250000) this.unlockAchievement("career_reaper");
     if (lifetimeKills >= 1000000) this.unlockAchievement("one_million_no_wait");
-    if (this.elapsed >= 1200) this.unlockAchievement("marathon_runner");
-    if (this.elapsed >= 1800) this.unlockAchievement("leg_day");
-    if (this.elapsed >= 2700) this.unlockAchievement("time_is_a_circle");
-    if (this.elapsed >= 3600) this.unlockAchievement("the_eternalist");
-    if (this.stats.level >= 75) this.unlockAchievement("grandmaster");
-    if (this.stats.level >= 100) this.unlockAchievement("i_have_ascended");
+    if (elapsed >= 1200) this.unlockAchievement("marathon_runner");
+    if (elapsed >= 1800) this.unlockAchievement("leg_day");
+    if (elapsed >= 2700) this.unlockAchievement("time_is_a_circle");
+    if (elapsed >= 3600) this.unlockAchievement("the_eternalist");
+    if (level >= 75) this.unlockAchievement("grandmaster");
+    if (level >= 100) this.unlockAchievement("i_have_ascended");
     if (pointsSpent >= 500) this.unlockAchievement("big_spender");
-    if (Object.values(this.stats.levels).every(l => l >= 10)) this.unlockAchievement("perfectionist");
-    if (this.stats.level >= 30 && this.stats.levels.health === 0) this.unlockAchievement("glass_cannon");
-    if (Object.values(this.stats.levels).filter(l => l >= 10).length >= 5) this.unlockAchievement("overpowered");
+    if (Object.values(stats).length > 0 && Object.values(stats).every(l => l >= 10)) this.unlockAchievement("perfectionist");
+    if (level >= 30 && (stats.health || 0) === 0) this.unlockAchievement("glass_cannon");
+    if (Object.values(stats).filter(l => l >= 10).length >= 5) this.unlockAchievement("overpowered");
     
-    // God mode requires Max Level AND Maxed out upgrade tree
-    if (Object.values(this.stats.levels).every(l => l >= 10) && this.stats.level >= 100) {
+    if (Object.values(stats).length > 0 && Object.values(stats).every(l => l >= 10) && level >= 100) {
         this.unlockAchievement("god_mode");
     }
 
-    if ((this.saveData.lifetimeXpCollected || 0) >= 10000) this.unlockAchievement("magician");
-    if ((this.saveData.gameOverCount || 0) >= 20) this.unlockAchievement("game_over");
-    if ((this.saveData.totalPlayTime || 0) >= 18000) this.unlockAchievement("persistence");
-    if ((this.saveData.achievementsMenuOpens || 0) >= 50) this.unlockAchievement("devs_best_friend");
-    if ((this.saveData.bossesKilled || 0) >= 25) this.unlockAchievement("elite_hunter");
+    if ((this.saveData?.lifetimeXpCollected || 0) >= 10000) this.unlockAchievement("magician");
+    if ((this.saveData?.gameOverCount || 0) >= 20) this.unlockAchievement("game_over");
+    if ((this.saveData?.totalPlayTime || 0) >= 18000) this.unlockAchievement("persistence");
+    if ((this.saveData?.achievementsMenuOpens || 0) >= 50) this.unlockAchievement("devs_best_friend");
+    if ((this.saveData?.bossesKilled || 0) >= 25) this.unlockAchievement("elite_hunter");
     if (unlockedClasses.length >= 20) this.unlockAchievement("completionist_phase1");
-    if (this.saveData.achievements.length >= 90) this.unlockAchievement("almost_there");
-    if (this.saveData.achievements.length >= 98) this.unlockAchievement("the_legend");
-    if (this.saveData.achievements.length >= 99) this.unlockAchievement("the_penultimate");
+    if (this.saveData?.achievements?.length >= 90) this.unlockAchievement("almost_there");
+    if (this.saveData?.achievements?.length >= 98) this.unlockAchievement("the_legend");
+    if (this.saveData?.achievements?.length >= 99) this.unlockAchievement("the_penultimate");
     
-    // Triggers when 99 other achievements are already logged in saveData
-    if (this.saveData.achievements.length === 99) this.unlockAchievement("the_completionist");
+    if (this.saveData?.achievements?.length === 99) this.unlockAchievement("the_completionist");
   }
 }
 
