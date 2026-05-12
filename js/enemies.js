@@ -198,6 +198,77 @@ const EnemyTypes = {
       shape: "hex",
       unlock: 155,
       weight: 2
+    },
+    // Boss enemies - spawn every 5 minutes
+    inferno_lord: {
+      name: "Inferno Lord",
+      fill: "#ff3300",
+      stroke: "#ff9966",
+      radius: 48,
+      hp: 800,
+      speed: 85,
+      damage: 35,
+      xp: 250,
+      shape: "hex",
+      unlock: 300,
+      weight: 1,
+      boss: true
+    },
+    frost_queen: {
+      name: "Frost Queen",
+      fill: "#00ccff",
+      stroke: "#99e6ff",
+      radius: 45,
+      hp: 750,
+      speed: 95,
+      damage: 30,
+      xp: 235,
+      shape: "diamond",
+      unlock: 300,
+      weight: 1,
+      boss: true
+    },
+    thunder_giant: {
+      name: "Thunder Giant",
+      fill: "#ffcc00",
+      stroke: "#ffe680",
+      radius: 52,
+      hp: 900,
+      speed: 70,
+      damage: 40,
+      xp: 280,
+      shape: "square",
+      unlock: 300,
+      weight: 1,
+      boss: true
+    },
+    void_master: {
+      name: "Void Master",
+      fill: "#6600cc",
+      stroke: "#b366ff",
+      radius: 46,
+      hp: 850,
+      speed: 88,
+      damage: 32,
+      xp: 260,
+      shape: "hex",
+      unlock: 300,
+      weight: 1,
+      boss: true
+    },
+    plague_bearer: {
+      name: "Plague Bearer",
+      fill: "#66cc00",
+      stroke: "#b3ff66",
+      radius: 44,
+      hp: 780,
+      speed: 92,
+      damage: 28,
+      xp: 245,
+      shape: "diamond",
+      unlock: 300,
+      weight: 1,
+      boss: true
     }
   };
 
