@@ -94,6 +94,7 @@ class Player {
       this.hp = Math.max(0, this.hp - shielded);
       this.invuln = 0.45;
       this.flash = 0.18;
+      if (game) game.hasTakenDamage = true;
       return true;
     }
   }

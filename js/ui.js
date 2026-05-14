@@ -16,6 +16,9 @@ class UI {
     this.mapText = this.el("mapText");
     this.timeText = this.el("timeText");
     this.fpsText = this.el("fpsText");
+    this.scoreText = this.el("scoreText");
+    this.menuBestScore = this.el("menuBestScore");
+    this.gameOverBestScore = this.el("bestScoreDisplay");
     this.playerMenuButton = this.el("playerMenuButton");
     this.upgradePointsText = this.el("upgradePointsText");
     this.statBars = this.el("statBars");
@@ -173,6 +176,7 @@ class UI {
     this.timeText.textContent = U.secondsToClock(game.elapsed);
     this.upgradePointsText.textContent = game.stats.points;
     this.updateStats(game);
+    this.updateScore(game);
     if (game.settings.fpsCounter) this.updateFPS(now);
   }
 
@@ -206,10 +210,12 @@ class UI {
     this.loadingOverlay.classList.remove("hidden");
   }
 
-  showMenu(canContinue) {
+showMenu(canContinue, game) {
     this.hideAllOverlays();
     this.menuOverlay.classList.remove("hidden");
     this.el("continueButton").disabled = !canContinue;
+    const best = (game && game.saveData && game.saveData.bestDamage) || 0;
+    this.menuBestScore.textContent = Math.floor(best).toLocaleString();
   }
 
   showTutorial() {
@@ -389,7 +395,7 @@ showAchievements(game) {
     this.creditsOverlay.classList.add("hidden");
   }
 
-  showGameOver(game, victory) {
+showGameOver(game, victory) {
     this.summaryEyebrow.textContent = victory ? "Victory" : "Run Ended";
     this.summaryTitle.textContent = victory ? "Extraction Complete" : "Extraction Failed";
     this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
@@ -398,6 +404,8 @@ showAchievements(game) {
       <span><strong>${game.bestClassName}</strong>Final Class</span>
       <span><strong>${game.currentMap.name}</strong>Map</span>
     `;
+    const best = game.saveData.bestDamage || 0;
+    this.gameOverBestScore.textContent = Math.floor(best).toLocaleString();
     this.gameOverOverlay.classList.remove("hidden");
   }
 
@@ -457,3 +465,11 @@ function actionLabel(action) {
 }
 
 export { UI };
+
+  updateScore(game) {
+    if (this.scoreText) {
+      this.scoreText.textContent = `SCORE: ${Math.floor(game.totalDamageDealt).toLocaleString()}`;
+      this.scoreText.classList.add("score-pop");
+      setTimeout(() => this.scoreText.classList.remove("score-pop"), 150);
+    }
+  }

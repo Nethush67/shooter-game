@@ -38,6 +38,7 @@
         <span id="classText">Basic</span>
         <span id="mapText">Normal Arena</span>
         <span id="timeText">00:00</span>
+        <span id="scoreText" class="score-display">SCORE: 0</span>
         <span id="fpsText" class="fps-counter hidden">60 FPS</span>
       </div>
     </section>
@@ -83,8 +84,12 @@
           <path d="M74 70 L120 57 L166 70" fill="none" stroke="#f5f7fb" stroke-width="8" stroke-linecap="round"/>
         </svg>
         <h1>Arena Evolution Survival</h1>
-        <p>A class-evolution arena shooter about pressure, precision, and one more impossible run.</p>
-        <div class="menu-buttons">
+<p>A class-evolution arena shooter about pressure, precision, and one more impossible run.</p>
+         <div class="score-row">
+           <span class="score-label">BEST SCORE</span>
+           <span id="menuBestScore" class="score-display">0</span>
+         </div>
+         <div class="menu-buttons">
           <button id="startButton" type="button" class="primary-button">Play</button>
           <button id="continueButton" type="button" class="secondary-button">Continue Run</button>
           <button id="achievementsButton" type="button" class="secondary-button">Achievements</button>
@@ -224,11 +229,15 @@
           <h2 id="summaryTitle">Extraction Failed</h2>
         </div>
         <p id="finalStats">You survived 00:00 and reached level 1.</p>
-        <div id="summaryDetails" class="summary-grid"></div>
-        <div class="menu-buttons">
-          <button id="restartButton" type="button" class="primary-button">Restart</button>
-          <button id="summaryMenuButton" type="button" class="secondary-button">Main Menu</button>
-        </div>
+<div id="summaryDetails" class="summary-grid"></div>
+         <div class="score-row">
+           <span class="score-label">BEST SCORE</span>
+           <span id="bestScoreDisplay" class="score-display">0</span>
+         </div>
+         <div class="menu-buttons">
+           <button id="restartButton" type="button" class="primary-button">Restart</button>
+           <button id="summaryMenuButton" type="button" class="secondary-button">Main Menu</button>
+         </div>
       </div>
     </section>
   </main>

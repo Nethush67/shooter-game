@@ -34,14 +34,14 @@ const ACHIEVEMENTS = [
   { id: "run_kills_100", name: "Crowd Control", description: "Defeat 100 enemies in one run." },
   { id: "survive_3m", name: "Finding Your Footing", description: "Survive for 3 minutes." },
   { id: "max_one_stat", name: "Specialist", description: "Max out any stat to Level 10." },
-  { id: "lucky_7", name: "Lucky Number 7", description: "Reach Level 7 with exactly 7 unspent upgrade points." },
+  { id: "lucky_7", name: "Lucky Number 7", description: "Hold 7 unspent upgrade points at once." },
   { id: "hoarder", name: "Hoarder", description: "Hold 5 unspent upgrade points at once." },
   { id: "survive_5m", name: "Is It Over Yet?", description: "Survive for 5 minutes." },
   { id: "pacifist_1m", name: "Pacifist", description: "Survive the first 1 minute without killing anything." },
-  { id: "untouched_10", name: "Untouched Potential", description: "Reach Level 10 without spending any upgrade points." },
+  { id: "untouchable_1m", name: "Untouchable", description: "Survive for 1 minute without taking damage." },
   { id: "run_kills_500", name: "The Janitor", description: "Defeat 500 enemies in one run." },
   { id: "level_20", name: "Rising Star", description: "Reach Level 20." },
-  { id: "tier_2_class", name: "Specialized", description: "Reach a Tier 2 class." },
+  { id: "level_15", name: "Stepping Up", description: "Reach Level 15." },
   { id: "tier_3_class", name: "Final Form", description: "Reach a Tier 3 class." },
   { id: "survive_10m", name: "Professional Procrastinator", description: "Survive for 10 minutes." },
 
@@ -64,22 +64,23 @@ const ACHIEVEMENTS = [
   { id: "close_shave", name: "Close Shave", description: "Survive with less than 5% HP." },
   { id: "glass_cannon_20", name: "Glass Cannon", description: "Reach Level 20 with ZERO Health upgrades." },
   { id: "pacifist_2m", name: "Zen Master", description: "Survive the first 2 minutes without killing anything." },
+  { id: "untouchable_3m", name: "Can't Touch This", description: "Survive for 3 minutes without taking damage." },
   { id: "three_max_stats", name: "Synergy", description: "Max out 3 different stats in a single run." },
   { id: "hoarder_pro", name: "Dragon's Hoard", description: "Hold 15 unspent upgrade points at once." },
   { id: "run_kills_2500", name: "Crowd Favorite", description: "Defeat 2,500 enemies in one run." },
-  { id: "juggernaut", name: "Juggernaut", description: "Max out Health, Shield, and Regen in one run." },
+  { id: "level_35", name: "Unstoppable", description: "Reach Level 35." },
   { id: "level_40", name: "Dominator", description: "Reach Level 40." },
   { id: "survive_20m", name: "The 20-Minute Club", description: "Survive for 20 minutes." },
-  { id: "untouched_20", name: "Saving for Retirement", description: "Reach Level 20 without spending any upgrade points." },
 
   // --- TIER 3: LATE GAME MASTERY (1-5 Hours) ---
   { id: "run_kills_5000", name: "Delete Button", description: "Defeat 5,000 enemies in one run." },
   { id: "level_50", name: "Halfway There", description: "Reach Level 50." },
   { id: "five_max_stats", name: "Overpowered", description: "Max out 5 different stats in a single run." },
   { id: "glass_cannon_40", name: "Fragile but Deadly", description: "Reach Level 40 with ZERO Health upgrades." },
+  { id: "untouchable_5m", name: "Matrix Dodge", description: "Survive for 5 minutes without taking damage." },
   { id: "speedrun_20", name: "Speed Demon", description: "Reach Level 20 in under 4 minutes." },
   { id: "pacifist_3m", name: "Ultimate Pacifist", description: "Survive the first 3 minutes without killing anything." },
-  { id: "rapid_ascent", name: "Rapid Ascent", description: "Reach Level 30 in under 6 minutes." },
+  { id: "level_45", name: "Veteran", description: "Reach Level 45." },
   { id: "level_60", name: "Legendary", description: "Reach Level 60." },
   { id: "run_kills_7500", name: "Extinction Event", description: "Defeat 7,500 enemies in one run." },
   { id: "survive_25m", name: "Endurance Test", description: "Survive for 25 minutes." },
@@ -87,7 +88,6 @@ const ACHIEVEMENTS = [
   { id: "level_70", name: "Mythic", description: "Reach Level 70." },
   { id: "run_kills_10000", name: "One Man Army", description: "Defeat 10,000 enemies in one run." },
   { id: "survive_30m", name: "The 30-Minute Stand", description: "Survive for 30 minutes." },
-  { id: "untouched_30", name: "Diamond Hands", description: "Reach Level 30 without spending any upgrade points." },
 
   // --- MAPS & PROGRESSION ---
   { id: "play_desert", name: "Sand in my Boots", description: "Play a run on the Desert Map." },
@@ -103,6 +103,10 @@ const ACHIEVEMENTS = [
   { id: "lifetime_kills_25k", name: "Pest Control", description: "Defeat 25,000 enemies total across all runs." },
   { id: "lifetime_kills_50k", name: "I See Dead Pixels", description: "Defeat 50,000 enemies total across all runs." },
   { id: "lifetime_kills_100k", name: "One Million... No Wait", description: "Defeat 100,000 enemies total across all runs." },
+  { id: "survive_7m", name: "Lucky Number 7", description: "Survive for 7 minutes." },
+  { id: "survive_12m", name: "A Dozen Minutes", description: "Survive for 12 minutes." },
+  { id: "survive_17m", name: "Getting Sweaty", description: "Survive for 17 minutes." },
+  { id: "survive_22m", name: "Deep Dive", description: "Survive for 22 minutes." },
   { id: "classes_unlocked_5", name: "Class Act", description: "Unlock 5 different classes." },
   { id: "classes_unlocked_10", name: "Multi-Talented", description: "Unlock 10 different classes." },
   { id: "classes_unlocked_all", name: "Full Pokédex", description: "Unlock every base class in the game." },
@@ -119,7 +123,8 @@ const ACHIEVEMENTS = [
   { id: "glass_cannon_50", name: "Untouchable God", description: "Reach Level 50 with ZERO Health upgrades." },
   { id: "speedrun_30", name: "Light Speed", description: "Reach Level 30 in under 8 minutes." },
   { id: "pacifist_5m", name: "Ascended Pacifist", description: "Survive 5 minutes without killing anything." },
-  { id: "untouched_40", name: "Monastic Life", description: "Reach Level 40 without spending any upgrade points." },
+  { id: "untouchable_10m", name: "Ghost", description: "Survive for 10 minutes without taking damage." },
+  { id: "survive_35m", name: "Marathon Master", description: "Survive for 35 minutes." },
   { id: "level_120", name: "Game Tester", description: "Find a way to reach Level 120." },
   { id: "achievements_50", name: "Halfway Done", description: "Unlock 50 achievements." },
   { id: "achievements_75", name: "Completionist in Training", description: "Unlock 75 achievements." },
@@ -162,12 +167,25 @@ class Game {
     this.saveData = this.loadSave();
     this.audio = new AudioBus(this.settings);
     this.loop = this.loop.bind(this);
+    this.totalDamageDealt = 0;
+
+    // Achievement tracking flags
+    this.hasTakenDamage = false;
+    this.runStartedWithZeroKills = true;
+    this.closeShaveUnlocked = false;
 
     this.input.setPauseHandler(() => this.togglePause());
     this.ui.bind(this);
     this.ui.updateSettingsUI(this.settings, this.input.bindings);
     this.svg.addEventListener("pointerdown", (event) => this.handleArenaPointer(event));
+    // FAIL-SAFE ACHIEVEMENT TRACKER: Runs once every second independently of the game loop
+    setInterval(() => {
+      if (typeof this.checkAchievements === 'function') {
+        this.checkAchievements();
+      }
+    }, 1000);
   }
+
 
   start() {
     this.ui.showLoading();
@@ -416,7 +434,9 @@ class Game {
     this.ui.hideAllOverlays();
     this.renderer.buildArena(this.currentMap);
     for (let i = 0; i < 4; i += 1) Enemies.spawn(this, "chaser");
-    this.unlockAchievement("first_run");
+    this.hasTakenDamage = false;
+    this.runStartedWithZeroKills = true;
+    this.closeShaveUnlocked = false;
     this.saveCurrentRun();
     this.ui.update(this, performance.now());
     this.audio.play("start");
@@ -438,6 +458,7 @@ class Game {
     this.player.setClass(run.classId || "basic");
     this.player.hp = U.clamp(run.hp || this.player.maxHp, 1, this.player.maxHp);
     this.kills = run.kills || 0;
+    this.runStartedWithZeroKills = (run.kills || 0) === 0;
     this.bestClassName = this.player.classDef.name;
     this.audio.play("start");
   }
@@ -537,10 +558,10 @@ class Game {
     if (this.xp >= this.xpRequired) {
       this.xp -= this.xpRequired;
       this.level += 1;
-      this.stats.points += 1;
-      this.xpRequired = XP.requiredForLevel(this.level);
-      if (this.level >= 5) this.unlockAchievement("level_five");
-      this.pauseForLevelUp();
+       this.stats.points += 1;
+       this.xpRequired = XP.requiredForLevel(this.level);
+       if (this.level >= 5) this.unlockAchievement("level_5");
+       this.pauseForLevelUp();
       this.audio.play("level");
     }
   }
@@ -559,7 +580,7 @@ class Game {
     this.bestClassName = this.player.classDef.name;
     this.createBurst(this.player.x, this.player.y, 110, this.player.classDef.accent, 34);
     this.saveData.unlocks.classes = Array.from(new Set([...(this.saveData.unlocks.classes || []), classDef.id]));
-    this.unlockAchievement("first_evolution");
+    this.unlockAchievement("evolved");
     this.ui.hideLevelUp();
     this.state = State.PLAYING;
     this.audio.play("select");
@@ -590,6 +611,9 @@ class Game {
       const radius = enemy.radius + projectile.radius;
       if (U.dist2(enemy, projectile) > radius * radius) return;
       projectile.hits.add(enemy.id);
+      const damageDealt = projectile.damage;
+      this.totalDamageDealt += damageDealt;
+      this.saveData.bestDamage = Math.max(this.saveData.bestDamage || 0, this.totalDamageDealt);
       Enemies.damage(enemy, projectile.damage, projectile.type);
       if (this.settings.damageNumbers) this.floaters.push({ x: enemy.x, y: enemy.y - enemy.radius, value: Math.round(projectile.damage), color: projectile.config.fill, life: 0.65, maxLife: 0.65, el: null });
       Projectiles.onHit(this, projectile, projectile.x, projectile.y);
@@ -615,6 +639,7 @@ class Game {
     if (!enemy.active) return;
     enemy.active = false;
     this.kills += 1;
+    this.runStartedWithZeroKills = false;
     this.saveData.totalKills += 1;
     XP.drop(this, enemy.x, enemy.y, enemy.xp);
     this.createBurst(enemy.x, enemy.y, enemy.radius * 2, enemy.config.fill, 14);
@@ -711,6 +736,12 @@ class Game {
     this.saveData.currentRun = null;
     this.persistSave();
     this.ui.hideLevelUp();
+    
+    // Check die_quick after state change
+    if (!victory && this.elapsed <= 30) {
+      this.unlockAchievement("die_quick");
+    }
+    
     this.ui.showGameOver(this, victory);
     this.audio.play(victory ? "victory" : "gameOver");
   }
@@ -725,163 +756,167 @@ class Game {
   }
 
 checkAchievements() {
-    // Shared safe variables
-    const elapsed = this.elapsed || 0;
-    const kills = this.kills || 0;
-    const level = this.stats?.level || 1;
-    const hp = this.player?.hp || 0;
-    const maxHp = this.player?.maxHp || 100;
-    const points = this.stats?.points || 0;
-    const stats = this.stats?.levels || {};
-    
-    const lifetimeKills = this.saveData?.totalKills || 0;
-    const unlockedClasses = this.saveData?.unlockedClasses || [];
-    const unlockedMaps = this.saveData?.unlockedMaps || [];
-    const pointsSpent = this.saveData?.totalPointsSpent || 0;
-    const maxedStatsCount = Object.values(stats).filter(v => v >= 10).length;
+     // Only process achievements if we have started playing or died
+     if (!this.state || (this.state !== State.PLAYING && this.state !== State.GAME_OVER)) return;
 
-    // --- LEVEL MILESTONES ---
-    if (level >= 5) this.unlockAchievement("level_5");
-    if (level >= 10) this.unlockAchievement("level_10");
-    if (level >= 20) this.unlockAchievement("level_20");
-    if (level >= 30) this.unlockAchievement("level_30");
-    if (level >= 40) this.unlockAchievement("level_40");
-    if (level >= 50) this.unlockAchievement("level_50");
-    if (level >= 60) this.unlockAchievement("level_60");
-    if (level >= 70) this.unlockAchievement("level_70");
-    if (level >= 80) this.unlockAchievement("level_80");
-    if (level >= 90) this.unlockAchievement("level_90");
-    if (level >= 100) this.unlockAchievement("level_100");
-    if (level >= 120) this.unlockAchievement("level_120");
+     // Shared safe variables (Defaults to 0 or empty to prevent crashes)
+     const elapsed = this.elapsed || 0;
+     const kills = this.kills || 0;
+     const level = this.level || 1;
+     const hp = this.player?.hp || 0;
+     const maxHp = this.player?.maxHp || 100;
+     const points = this.stats?.points || 0;
+     const stats = this.stats?.levels || {};
+     
+     const lifetimeKills = this.saveData?.totalKills || kills; 
+     const unlockedClasses = this.saveData?.unlocks?.classes || [];
+     const maxedStatsCount = Object.values(stats).filter(v => v >= 10).length;
+     const upgradedStatCount = Object.values(stats).filter(v => v > 0).length;
 
-    // --- KILL MILESTONES ---
-    if (kills >= 1) this.unlockAchievement("first_blood");
-    if (kills >= 100) this.unlockAchievement("run_kills_100");
-    if (kills >= 500) this.unlockAchievement("run_kills_500");
-    if (kills >= 1000) this.unlockAchievement("run_kills_1000");
-    if (kills >= 2500) this.unlockAchievement("run_kills_2500");
-    if (kills >= 5000) this.unlockAchievement("run_kills_5000");
-    if (kills >= 7500) this.unlockAchievement("run_kills_7500");
-    if (kills >= 10000) this.unlockAchievement("run_kills_10000");
-    if (kills >= 15000) this.unlockAchievement("run_kills_15000");
+     // --- 1. LEVEL & PROGRESSION ---
+     if (level >= 5) this.unlockAchievement("level_5");
+     if (level >= 10) this.unlockAchievement("level_10");
+     if (level >= 15) this.unlockAchievement("level_15");
+     if (level >= 20) this.unlockAchievement("level_20");
+     if (level >= 30) this.unlockAchievement("level_30");
+     if (level >= 35) this.unlockAchievement("level_35");
+     if (level >= 40) this.unlockAchievement("level_40");
+     if (level >= 45) this.unlockAchievement("level_45");
+     if (level >= 50) this.unlockAchievement("level_50");
+     if (level >= 60) this.unlockAchievement("level_60");
+     if (level >= 70) this.unlockAchievement("level_70");
+     if (level >= 80) this.unlockAchievement("level_80");
+     if (level >= 90) this.unlockAchievement("level_90");
+     if (level >= 100) this.unlockAchievement("level_100");
+     if (level >= 120) this.unlockAchievement("level_120");
 
-    // --- SURVIVAL TIME ---
-    if (elapsed >= 60) this.unlockAchievement("survive_1m");
-    if (elapsed >= 180) this.unlockAchievement("survive_3m");
-    if (elapsed >= 300) this.unlockAchievement("survive_5m");
-    if (elapsed >= 600) this.unlockAchievement("survive_10m");
-    if (elapsed >= 900) this.unlockAchievement("survive_15m");
-    if (elapsed >= 1200) this.unlockAchievement("survive_20m");
-    if (elapsed >= 1500) this.unlockAchievement("survive_25m");
-    if (elapsed >= 1800) this.unlockAchievement("survive_30m");
-    if (elapsed >= 2400) this.unlockAchievement("survive_40m");
-    if (elapsed >= 3000) this.unlockAchievement("survive_50m");
-    if (elapsed >= 3600) this.unlockAchievement("survive_60m");
+     // --- 2. KILLS ---
+     if (kills >= 1) this.unlockAchievement("first_blood");
+     if (kills >= 100) this.unlockAchievement("run_kills_100");
+     if (kills >= 500) this.unlockAchievement("run_kills_500");
+     if (kills >= 1000) this.unlockAchievement("run_kills_1000");
+     if (kills >= 2500) this.unlockAchievement("run_kills_2500");
+     if (kills >= 5000) this.unlockAchievement("run_kills_5000");
+     if (kills >= 7500) this.unlockAchievement("run_kills_7500");
+     if (kills >= 10000) this.unlockAchievement("run_kills_10000");
+     if (kills >= 15000) this.unlockAchievement("run_kills_15000");
 
-    // --- STATE CHANGES (These now work flawlessly because we moved the check!) ---
-    if (this.state === U.State.GAME_OVER && elapsed <= 30) this.unlockAchievement("die_quick");
+     // --- 3. SURVIVAL TIME ---
+     if (elapsed >= 60) this.unlockAchievement("survive_1m");
+     if (elapsed >= 180) this.unlockAchievement("survive_3m");
+     if (elapsed >= 300) this.unlockAchievement("survive_5m");
+     if (elapsed >= 420) this.unlockAchievement("survive_7m");
+     if (elapsed >= 600) this.unlockAchievement("survive_10m");
+     if (elapsed >= 720) this.unlockAchievement("survive_12m");
+     if (elapsed >= 900) this.unlockAchievement("survive_15m");
+     if (elapsed >= 1020) this.unlockAchievement("survive_17m");
+     if (elapsed >= 1200) this.unlockAchievement("survive_20m");
+     if (elapsed >= 1320) this.unlockAchievement("survive_22m");
+     if (elapsed >= 1500) this.unlockAchievement("survive_25m");
+     if (elapsed >= 1800) this.unlockAchievement("survive_30m");
+     if (elapsed >= 2100) this.unlockAchievement("survive_35m");
+     if (elapsed >= 2400) this.unlockAchievement("survive_40m");
+     if (elapsed >= 3000) this.unlockAchievement("survive_50m");
+     if (elapsed >= 3600) this.unlockAchievement("survive_60m");
 
-    // --- STAT MAXING ---
-    const healthLvl = stats.health || 0;
-    if (healthLvl >= 10) this.unlockAchievement("max_health");
-    if ((stats.speed || 0) >= 10) this.unlockAchievement("max_speed");
-    if ((stats.regen || 0) >= 10) this.unlockAchievement("max_regen");
-    if ((stats.damage || 0) >= 10) this.unlockAchievement("max_damage");
-    if ((stats.fireRate || 0) >= 10) this.unlockAchievement("max_fire_rate");
-    if ((stats.shield || 0) >= 10) this.unlockAchievement("max_shield");
-    if ((stats.size || 0) >= 10) this.unlockAchievement("max_size");
-    if ((stats.pierce || 0) >= 10) this.unlockAchievement("max_pierce");
+     // --- 4. GAME STATE (die_quick checked after finishRun) ---
 
-    if (maxedStatsCount >= 1) this.unlockAchievement("max_one_stat");
-    if (maxedStatsCount >= 3) this.unlockAchievement("three_max_stats");
-    if (maxedStatsCount >= 5) this.unlockAchievement("five_max_stats");
-    
-    // Juggernaut logic
-    if ((stats.health || 0) >= 10 && (stats.shield || 0) >= 10 && (stats.regen || 0) >= 10) {
-      this.unlockAchievement("juggernaut");
-    }
+     // --- 5. STAT MAXING & UPGRADES ---
+     if (upgradedStatCount >= 1) this.unlockAchievement("first_upgrade");
 
-    if (Object.keys(stats).length > 0 && Object.values(stats).every(v => v >= 5)) this.unlockAchievement("all_stats_5");
-    if (Object.keys(stats).length > 0 && Object.values(stats).every(v => v >= 10)) {
-        this.unlockAchievement("all_stats_10");
-        if (level >= 100) this.unlockAchievement("god_mode");
-    }
+     const healthLvl = stats.health || 0;
+     if (healthLvl >= 10) this.unlockAchievement("max_health");
+     if ((stats.speed || 0) >= 10) this.unlockAchievement("max_speed");
+     if ((stats.regen || 0) >= 10) this.unlockAchievement("max_regen");
+     if ((stats.damage || 0) >= 10) this.unlockAchievement("max_damage");
+     if ((stats.fireRate || 0) >= 10) this.unlockAchievement("max_fire_rate");
+     if ((stats.shield || 0) >= 10) this.unlockAchievement("max_shield");
+     if ((stats.size || 0) >= 10) this.unlockAchievement("max_size");
+     if ((stats.pierce || 0) >= 10) this.unlockAchievement("max_pierce");
 
-    // --- CHALLENGES ---
-    if (pointsSpent >= 1) this.unlockAchievement("first_upgrade");
-    if (points >= 5) this.unlockAchievement("hoarder");
-    if (points >= 15) this.unlockAchievement("hoarder_pro");
-    
-    // Level vs Point challenges (Guaranteed tracking)
-    if (level === 7 && points === 7 && pointsSpent === 0) this.unlockAchievement("lucky_7");
-    if (level >= 10 && pointsSpent === 0) this.unlockAchievement("untouched_10");
-    if (level >= 20 && pointsSpent === 0) this.unlockAchievement("untouched_20");
-    if (level >= 30 && pointsSpent === 0) this.unlockAchievement("untouched_30");
-    if (level >= 40 && pointsSpent === 0) this.unlockAchievement("untouched_40");
+     if (maxedStatsCount >= 1) this.unlockAchievement("max_one_stat");
+     if (maxedStatsCount >= 3) this.unlockAchievement("three_max_stats");
+     if (maxedStatsCount >= 5) this.unlockAchievement("five_max_stats");
+     if (maxedStatsCount >= 8) this.unlockAchievement("all_stats_10");
 
-    // Glass Cannon
-    if (level >= 20 && healthLvl === 0) this.unlockAchievement("glass_cannon_20");
-    if (level >= 40 && healthLvl === 0) this.unlockAchievement("glass_cannon_40");
-    if (level >= 50 && healthLvl === 0) this.unlockAchievement("glass_cannon_50");
+     if (Object.values(stats).every(v => v >= 5)) this.unlockAchievement("all_stats_5");
 
-    // Pacifist
-    if (elapsed >= 60 && kills === 0) this.unlockAchievement("pacifist_1m");
-    if (elapsed >= 120 && kills === 0) this.unlockAchievement("pacifist_2m");
-    if (elapsed >= 180 && kills === 0) this.unlockAchievement("pacifist_3m");
-    if (elapsed >= 300 && kills === 0) this.unlockAchievement("pacifist_5m");
+     if (level >= 20 && healthLvl === 0) this.unlockAchievement("glass_cannon_20");
+     if (level >= 40 && healthLvl === 0) this.unlockAchievement("glass_cannon_40");
+     if (level >= 50 && healthLvl === 0) this.unlockAchievement("glass_cannon_50");
 
-    if (hp > 0 && hp <= maxHp * 0.05) this.unlockAchievement("close_shave");
-    if (level >= 20 && elapsed <= 240) this.unlockAchievement("speedrun_20");
-    if (level >= 30 && elapsed <= 360) this.unlockAchievement("rapid_ascent");
-    if (level >= 30 && elapsed <= 480) this.unlockAchievement("speedrun_30");
+     // --- 6. CHALLENGES ---
+     if (points >= 5) this.unlockAchievement("hoarder");
+     if (points >= 7) this.unlockAchievement("lucky_7");
+     if (points >= 15) this.unlockAchievement("hoarder_pro");
 
-    // --- CLASSES & MAPS ---
-    const tier = this.player?.classDef?.tier || 0;
-    const classId = this.player?.classDef?.id || "";
-    const mapId = this.currentMap?.id || "";
+     // Pacifist: check that we've never killed anything from start
+     if (elapsed >= 60 && this.runStartedWithZeroKills && kills === 0) this.unlockAchievement("pacifist_1m");
+     if (elapsed >= 120 && this.runStartedWithZeroKills && kills === 0) this.unlockAchievement("pacifist_2m");
+     if (elapsed >= 180 && this.runStartedWithZeroKills && kills === 0) this.unlockAchievement("pacifist_3m");
+     if (elapsed >= 300 && this.runStartedWithZeroKills && kills === 0) this.unlockAchievement("pacifist_5m");
+     
+     // Untouchable: check that we've never taken damage
+     if (elapsed >= 60 && !this.hasTakenDamage && hp >= maxHp) this.unlockAchievement("untouchable_1m");
+     if (elapsed >= 180 && !this.hasTakenDamage && hp >= maxHp) this.unlockAchievement("untouchable_3m");
+     if (elapsed >= 300 && !this.hasTakenDamage && hp >= maxHp) this.unlockAchievement("untouchable_5m");
+     if (elapsed >= 600 && !this.hasTakenDamage && hp >= maxHp) this.unlockAchievement("untouchable_10m");
 
-    if (tier >= 1) this.unlockAchievement("evolved");
-    if (tier >= 2) this.unlockAchievement("tier_2_class");
-    if (tier >= 3) this.unlockAchievement("tier_3_class");
-    if (classId.includes("velocity") && tier >= 3) this.unlockAchievement("velocity_t3");
-    if (classId.includes("titan") && tier >= 3) this.unlockAchievement("titan_t3");
-    if (classId.includes("swarm") && tier >= 3) this.unlockAchievement("swarm_t3");
-    if (classId.includes("orbit") && tier >= 3) this.unlockAchievement("orbit_t3");
+     if (hp > 0 && hp <= maxHp * 0.05 && !this.closeShaveUnlocked) {
+       this.closeShaveUnlocked = true;
+       this.unlockAchievement("close_shave");
+     }
+     if (level >= 20 && elapsed <= 240) this.unlockAchievement("speedrun_20");
+     if (level >= 30 && elapsed <= 480) this.unlockAchievement("speedrun_30");
 
-    if (mapId === "desert") this.unlockAchievement("play_desert");
-    if (mapId === "ice") this.unlockAchievement("play_ice");
-    if (mapId === "volcano") this.unlockAchievement("play_volcano");
-    
-    if (elapsed >= 300) {
-        if (mapId === "standard") this.unlockAchievement("win_standard");
-        if (mapId === "desert") this.unlockAchievement("win_desert");
-        if (mapId === "ice") this.unlockAchievement("win_ice");
-        if (mapId === "volcano") this.unlockAchievement("win_volcano");
-    }
+     // --- 7. CLASSES & MAPS ---
+     const tier = this.player?.classDef?.tier || 0;
+     const classId = this.player?.classDef?.id || "";
+     const mapId = this.currentMap?.id || "";
 
-    // --- LIFETIME STATS (Saves across runs) ---
-    if (lifetimeKills >= 1000) this.unlockAchievement("lifetime_kills_1k");
-    if (lifetimeKills >= 5000) this.unlockAchievement("lifetime_kills_5k");
-    if (lifetimeKills >= 10000) this.unlockAchievement("lifetime_kills_10k");
-    if (lifetimeKills >= 25000) this.unlockAchievement("lifetime_kills_25k");
-    if (lifetimeKills >= 50000) this.unlockAchievement("lifetime_kills_50k");
-    if (lifetimeKills >= 100000) this.unlockAchievement("lifetime_kills_100k");
+     if (tier >= 1) this.unlockAchievement("evolved");
+     if (tier >= 3) this.unlockAchievement("tier_3_class");
+     if (classId.includes("velocity") && tier >= 3) this.unlockAchievement("velocity_t3");
+     if (classId.includes("titan") && tier >= 3) this.unlockAchievement("titan_t3");
+     if (classId.includes("swarm") && tier >= 3) this.unlockAchievement("swarm_t3");
+     if (classId.includes("orbit") && tier >= 3) this.unlockAchievement("orbit_t3");
 
-    if (unlockedClasses.length >= 5) this.unlockAchievement("classes_unlocked_5");
-    if (unlockedClasses.length >= 10) this.unlockAchievement("classes_unlocked_10");
-    if (unlockedClasses.length >= 15) this.unlockAchievement("classes_unlocked_all");
+     if (mapId === "desert") this.unlockAchievement("play_desert");
+     if (mapId === "ice") this.unlockAchievement("play_ice");
+     if (mapId === "volcano") this.unlockAchievement("play_volcano");
+     
+     if (elapsed >= 300) {
+         if (mapId === "standard") this.unlockAchievement("win_standard");
+         if (mapId === "desert") this.unlockAchievement("win_desert");
+         if (mapId === "ice") this.unlockAchievement("win_ice");
+         if (mapId === "volcano") this.unlockAchievement("win_volcano");
+     }
 
-    // --- MILESTONES ---
-    const totalUnlocked = this.saveData?.achievements?.length || 0;
-    if (totalUnlocked >= 50) this.unlockAchievement("achievements_50");
-    if (totalUnlocked >= 75) this.unlockAchievement("achievements_75");
-    if (totalUnlocked >= 90) this.unlockAchievement("achievements_90");
-    if (totalUnlocked >= 98) this.unlockAchievement("achievements_98");
-    if (totalUnlocked >= 99) this.unlockAchievement("achievements_99");
-    
-    // Triggers automatically once 99 are collected
-    if (totalUnlocked === 99) this.unlockAchievement("achievements_100");
-  }
+     // --- 8. LIFETIME STATS (Saves across runs) ---
+     if (lifetimeKills >= 1000) this.unlockAchievement("lifetime_kills_1k");
+     if (lifetimeKills >= 5000) this.unlockAchievement("lifetime_kills_5k");
+     if (lifetimeKills >= 10000) this.unlockAchievement("lifetime_kills_10k");
+     if (lifetimeKills >= 25000) this.unlockAchievement("lifetime_kills_25k");
+     if (lifetimeKills >= 50000) this.unlockAchievement("lifetime_kills_50k");
+     if (lifetimeKills >= 100000) this.unlockAchievement("lifetime_kills_100k");
+
+     if (unlockedClasses.length >= 5) this.unlockAchievement("classes_unlocked_5");
+     if (unlockedClasses.length >= 10) this.unlockAchievement("classes_unlocked_10");
+     if (unlockedClasses.length >= 15) this.unlockAchievement("classes_unlocked_all");
+
+     // --- 9. COMPLETIONIST MILESTONES ---
+     const totalUnlocked = this.saveData?.achievements?.length || 0;
+     if (totalUnlocked >= 50) this.unlockAchievement("achievements_50");
+     if (totalUnlocked >= 75) this.unlockAchievement("achievements_75");
+     if (totalUnlocked >= 90) this.unlockAchievement("achievements_90");
+     if (totalUnlocked >= 98) this.unlockAchievement("achievements_98");
+     if (totalUnlocked >= 99) this.unlockAchievement("achievements_99");
+     
+     // Automatically granted when all 99 others are earned
+     if (totalUnlocked === 99 && !this.saveData.achievements.includes("achievements_100")) {
+       this.unlockAchievement("achievements_100");
+     }
+   }
 }
 
 function createParticlePool(size) {
