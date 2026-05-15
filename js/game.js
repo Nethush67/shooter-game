@@ -188,12 +188,12 @@ class Game {
 
 
    start() {
-     // Immediately go to menu, don't show loading then menu
+     // Go directly to menu without showing loading screen first
      this.state = State.MENU;
      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
      this.audio.startMusic();
      if (!this.saveData.seenTutorial) this.ui.showTutorial();
-     // Start the game loop after UI is ready
+     // Start the game loop
      requestAnimationFrame(this.loop);
    }
 

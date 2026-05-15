@@ -508,6 +508,8 @@ h2 {
   font-weight: 800;
   letter-spacing: 0.5px;
   text-shadow: 0 0 12px rgba(85,240,208,0.4);
+  margin-left: 12px;
+  transition: all 0.3s ease;
 }
 
 @keyframes score-pop {

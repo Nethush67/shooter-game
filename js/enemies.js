@@ -173,24 +173,26 @@ function phaseWeight(def, elapsed) {
 }
 
 function updateDirector(game, dt) {
-  game.spawnTimer -= dt;
-  if (game.spawnTimer > 0) return;
+   game.spawnTimer -= dt;
+   if (game.spawnTimer > 0) return;
 
-  const map = game.currentMap || Maps.get("standard");
-  const difficulty = game.settings?.difficulty || "normal";
-  const difficultyRate = difficulty === "easy" ? 0.82 : difficulty === "hard" ? 1.18 : 1;
-  const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 210), 1.3) * 1.6;
-  const interval = Math.max(0.35, (1.8 / pressure) / (map.spawnRate * difficultyRate));
-  game.spawnTimer = interval;
+   const map = game.currentMap || Maps.get("standard");
+   const difficulty = game.settings?.difficulty || "normal";
+   const difficultyRate = difficulty === "easy" ? 0.7 : difficulty === "hard" ? 1.3 : 1;
+   const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 300), 1.2) * 1.2; // Reduced pressure growth
+   const interval = Math.max(0.8, (2.5 / pressure) / (map.spawnRate * difficultyRate)); // Increased base interval
+   game.spawnTimer = interval;
 
-  const activeEnemies = game.enemyPool.items.filter((e) => e.active).length;
-  if (activeEnemies >= 35) return;
+   const activeEnemies = game.enemyPool.items.filter((e) => e.active).length;
+   if (activeEnemies >= 25) return; // Reduced max active enemies
 
-  const count = Math.min(3, 1 + Math.floor(game.elapsed / 120) + (Math.random() < Math.min(0.3, game.elapsed / 300) ? 1 : 0));
-  for (let i = 0; i < count; i += 1) {
-    spawn(game, pickType(game));
-  }
-}
+   // Limit enemy variety - only spawn from early/mid game enemies until later
+   const maxUnlock = Math.min(60, Math.floor(game.elapsed / 2)); // Slower unlock progression
+   const count = Math.min(2, 1 + Math.floor(game.elapsed / 180)); // Reduced spawn frequency
+   for (let i = 0; i < count; i += 1) {
+     spawn(game, pickType(game));
+   }
+ }
 
 function update(game, dt) {
   game.enemyPool.items.forEach((enemy) => {
