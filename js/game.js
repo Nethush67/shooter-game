@@ -192,7 +192,7 @@ class Game {
     requestAnimationFrame(this.loop);
     window.setTimeout(() => {
       this.state = State.MENU;
-      this.ui.showMenu(Boolean(this.saveData.currentRun));
+      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
       this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
     }, 320);
@@ -376,7 +376,7 @@ class Game {
       localStorage.removeItem(SAVE_KEY);
       this.saveData = this.loadSave();
       this.ui.hideConfirm();
-      this.ui.showMenu(false);
+      this.ui.showMenu(false, this);
       this.ui.showToast("Save Reset", "Progression data has been cleared.");
     });
   }
@@ -389,7 +389,7 @@ class Game {
       this.saveData = this.loadSave();
       this.persistSettings();
       this.ui.hideConfirm();
-      this.ui.showMenu(false);
+      this.ui.showMenu(false, this);
       this.ui.showToast("Game Reset", "Local data has been restored to defaults.");
     });
   }
@@ -485,7 +485,7 @@ class Game {
 
   returnToMenu() {
     this.state = State.MENU;
-    this.ui.showMenu(Boolean(this.saveData.currentRun));
+    this.ui.showMenu(Boolean(this.saveData.currentRun), this);
     this.audio.startMusic();
     this.audio.play("close");
   }
