@@ -468,8 +468,18 @@ showToast(title, body) {
   updateScore(game) {
     if (this.scoreText) {
       this.scoreText.textContent = `SCORE: ${Math.floor(game.totalDamageDealt).toLocaleString()}`;
-      this.scoreText.classList.add("score-pop");
-      setTimeout(() => this.scoreText.classList.remove("score-pop"), 150);
+      // Cool animation: pulse + color shift + slight scale
+      this.scoreText.style.transform = 'scale(1.1)';
+      this.scoreText.style.transition = 'all 0.3s ease';
+      this.scoreText.style.color = 'var(--gold)';
+      this.scoreText.style.textShadow = '0 0 15px rgba(246,199,94,0.6)';
+      
+      // Reset after animation
+      setTimeout(() => {
+        this.scoreText.style.transform = 'scale(1)';
+        this.scoreText.style.color = 'var(--cyan)';
+        this.scoreText.style.textShadow = '0 0 12px rgba(85,240,208,0.4)';
+      }, 300);
     }
   }
 }

@@ -187,16 +187,15 @@ class Game {
   }
 
 
-  start() {
-    this.ui.showLoading();
-    requestAnimationFrame(this.loop);
-    window.setTimeout(() => {
-      this.state = State.MENU;
-      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
-      this.audio.startMusic();
-      if (!this.saveData.seenTutorial) this.ui.showTutorial();
-    }, 320);
-  }
+   start() {
+     // Immediately go to menu, don't show loading then menu
+     this.state = State.MENU;
+     this.ui.showMenu(Boolean(this.saveData.currentRun), this);
+     this.audio.startMusic();
+     if (!this.saveData.seenTutorial) this.ui.showTutorial();
+     // Start the game loop after UI is ready
+     requestAnimationFrame(this.loop);
+   }
 
   loadSettings() {
     const defaults = {
