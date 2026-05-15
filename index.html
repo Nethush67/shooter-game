@@ -38,10 +38,13 @@
         <span id="classText">Basic</span>
         <span id="mapText">Normal Arena</span>
         <span id="timeText">00:00</span>
-        <span id="scoreText" class="score-display">SCORE: 0</span>
         <span id="fpsText" class="fps-counter hidden">60 FPS</span>
       </div>
     </section>
+
+    <div id="scoreBar" class="score-bar">
+      <span id="scoreText" class="score-display">SCORE: 0</span>
+    </div>
 
     <button id="playerMenuButton" type="button" class="player-menu-button" aria-label="Open map selection">MAP</button>
 
@@ -84,14 +87,14 @@
           <path d="M74 70 L120 57 L166 70" fill="none" stroke="#f5f7fb" stroke-width="8" stroke-linecap="round"/>
         </svg>
         <h1>Arena Evolution Survival</h1>
-         <p>A class-evolution arena shooter about pressure, precision, and one more impossible run.</p>
-         <div class="score-row">
-           <span class="score-label">BEST SCORE</span>
-           <span id="menuBestScore" class="best-score-display">0</span>
-         </div>
-         <div class="menu-buttons">
-<button id="startButton" type="button" class="primary-button">Play</button>
-           <button id="achievementsButton" type="button" class="secondary-button">Achievements</button>
+        <p>A class-evolution arena shooter about pressure, precision, and one more impossible run.</p>
+        <div class="score-row">
+          <span class="score-label">BEST SCORE</span>
+          <span id="menuBestScore" class="best-score-display">0</span>
+        </div>
+        <div class="menu-buttons">
+          <button id="startButton" type="button" class="primary-button">Play</button>
+          <button id="achievementsButton" type="button" class="secondary-button">Achievements</button>
           <button id="settingsButton" type="button" class="secondary-button">Settings</button>
           <button id="creditsButton" type="button" class="secondary-button">Credits</button>
           <button id="quitButton" type="button" class="secondary-button" disabled>Quit</button>
@@ -158,16 +161,16 @@
           <div class="settings-page" data-settings-page="gameplay">
             <label class="setting-row"><span class="setting-name">Difficulty</span><select data-select-setting="difficulty" aria-label="Difficulty"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
             <label class="setting-row"><span class="setting-name">Show Damage Numbers</span><button type="button" class="toggle-switch" data-setting="damageNumbers" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
-<label class="setting-row"><span class="setting-name">Auto Pickup</span><button type="button" class="toggle-switch" data-setting="autoPickup" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
+            <label class="setting-row"><span class="setting-name">Auto Pickup</span><button type="button" class="toggle-switch" data-setting="autoPickup" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
             <label class="setting-row"><span class="setting-name">Screen Flash</span><button type="button" class="toggle-switch" data-setting="screenFlash" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
-            
+
             <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
               <h3 style="color: #ff6777; margin-bottom: 10px;">Danger Zone</h3>
               <button id="resetDataButton" type="button" class="primary-button" style="background: #4a1010; color: #ff8888; border-color: #ff3333;">Wipe Save Data</button>
             </div>
 
           </div>
-                  </div>
+        </div>
         <button id="settingsCloseButton" type="button" class="primary-button settings-close">Close</button>
       </div>
     </section>
@@ -214,9 +217,9 @@
       <div class="menu-panel compact-panel">
         <div class="level-header">
           <span>Credits</span>
-          <h2>Small Studio Mode</h2>
+          <h2>Credits</h2>
         </div>
-        <p>Design, code, combat systems, and UI polish for this browser release demo.</p>
+        <p>Made by Nethush thx bro</p>
         <button id="creditsCloseButton" type="button" class="primary-button settings-close">Back</button>
       </div>
     </section>
@@ -227,16 +230,16 @@
           <span id="summaryEyebrow">Run Ended</span>
           <h2 id="summaryTitle">Extraction Failed</h2>
         </div>
-<p id="finalStats">You survived 00:00 and reached level 1.</p>
-         <div id="summaryDetails" class="summary-grid"></div>
-         <div class="score-row">
-           <span class="score-label">BEST SCORE</span>
-           <span id="bestScoreDisplay" class="best-score-display">0</span>
-         </div>
-         <div class="menu-buttons">
-           <button id="restartButton" type="button" class="primary-button">Restart</button>
-           <button id="summaryMenuButton" type="button" class="secondary-button">Main Menu</button>
-         </div>
+        <p id="finalStats">You survived 00:00 and reached level 1.</p>
+        <div id="summaryDetails" class="summary-grid"></div>
+        <div class="score-row">
+          <span class="score-label">BEST SCORE</span>
+          <span id="bestScoreDisplay" class="best-score-display">0</span>
+        </div>
+        <div class="menu-buttons">
+          <button id="restartButton" type="button" class="primary-button">Restart</button>
+          <button id="summaryMenuButton" type="button" class="secondary-button">Main Menu</button>
+        </div>
       </div>
     </section>
   </main>

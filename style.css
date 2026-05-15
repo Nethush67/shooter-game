@@ -508,7 +508,6 @@ h2 {
   font-weight: 800;
   letter-spacing: 0.5px;
   text-shadow: 0 0 12px rgba(85,240,208,0.4);
-  margin-left: 12px;
 }
 
 @keyframes score-pop {
@@ -518,6 +517,20 @@ h2 {
 
 .score-pop {
   animation: score-pop 220ms ease-out forwards;
+}
+
+.score-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 74px;
+  z-index: 4;
+  padding: 6px 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(145deg, rgba(12,22,35,0.82), rgba(6,11,19,0.68));
+  backdrop-filter: blur(12px);
+  border-radius: 6px;
+  pointer-events: none;
 }
 
 .best-score-display {
