@@ -213,7 +213,8 @@ class UI {
 showMenu(canContinue, game) {
     this.hideAllOverlays();
     this.menuOverlay.classList.remove("hidden");
-    this.el("continueButton").disabled = !canContinue;
+    const contBtn = this.el("continueButton");
+    if (contBtn) contBtn.disabled = !canContinue;
     const best = (game && game.saveData && game.saveData.bestDamage) || 0;
     this.menuBestScore.textContent = Math.floor(best).toLocaleString();
   }
@@ -451,6 +452,14 @@ showGameOver(game, victory) {
   hideConfirm() {
     this.confirmOverlay.classList.add("hidden");
   }
+
+  updateScore(game) {
+    if (this.scoreText) {
+      this.scoreText.textContent = `SCORE: ${Math.floor(game.totalDamageDealt).toLocaleString()}`;
+      this.scoreText.classList.add("score-pop");
+      setTimeout(() => this.scoreText.classList.remove("score-pop"), 150);
+    }
+  }
 }
 
 function keyLabel(key) {
@@ -465,11 +474,3 @@ function actionLabel(action) {
 }
 
 export { UI };
-
-  updateScore(game) {
-    if (this.scoreText) {
-      this.scoreText.textContent = `SCORE: ${Math.floor(game.totalDamageDealt).toLocaleString()}`;
-      this.scoreText.classList.add("score-pop");
-      setTimeout(() => this.scoreText.classList.remove("score-pop"), 150);
-    }
-  }
