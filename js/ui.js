@@ -410,25 +410,37 @@ showGameOver(game, victory) {
     this.gameOverOverlay.classList.remove("hidden");
   }
 
-  showToast(title, body) {
-    // Create Minecraft-style toast notification dynamically
-    const toast = document.createElement("div");
-    toast.className = "mc-toast";
-    toast.innerHTML = `
-      <div class="toast-title">Achievement Get!</div>
-      <div class="toast-body">${body}</div>
+showToast(title, body) {
+    // Remove any existing achievement notifications
+    const existing = document.querySelector('.achievement-notification');
+    if (existing) {
+        existing.remove();
+    }
+
+    // Create achievement notification element
+    const notification = document.createElement('div');
+    notification.className = 'achievement-notification';
+    notification.innerHTML = `
+        <strong>Achievement Unlocked!</strong>
+        <span>${body}</span>
     `;
-    
-    // Add to body and trigger animation
-    document.body.appendChild(toast);
-    
-    // Auto-remove after animation completes (4 seconds)
+
+    // Add to body
+    document.body.appendChild(notification);
+
+    // Trigger slide-in animation
+    requestAnimationFrame(() => {
+        notification.classList.add('visible', 'slide-in');
+    });
+
+    // Auto-remove after animation completes (4 seconds total)
     setTimeout(() => {
-      if (toast.parentNode) {
-        toast.parentNode.removeChild(toast);
-      }
+        notification.classList.add('slide-out');
+        notification.addEventListener('animationend', () => {
+            notification.remove();
+        }, { once: true });
     }, 4000);
-  }
+}
 
   showSettingsTab(id) {
     this.settingsOverlay.querySelectorAll("[data-settings-tab]").forEach((tab) => {
