@@ -159,15 +159,23 @@
             </div>
           </div>
           <div class="settings-page" data-settings-page="gameplay">
-            <label class="setting-row"><span class="setting-name">Difficulty</span><select data-select-setting="difficulty" aria-label="Difficulty"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
+            <label class="setting-row"><span class="setting-name">Difficulty</span><select data-select-setting="difficulty" aria-label="Difficulty"><option value="baby">Baby</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option><option value="super">Super Hard</option></select></label>
             <label class="setting-row"><span class="setting-name">Show Damage Numbers</span><button type="button" class="toggle-switch" data-setting="damageNumbers" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
             <label class="setting-row"><span class="setting-name">Auto Pickup</span><button type="button" class="toggle-switch" data-setting="autoPickup" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
             <label class="setting-row"><span class="setting-name">Screen Flash</span><button type="button" class="toggle-switch" data-setting="screenFlash" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
 
-            <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
-              <h3 style="color: #ff6777; margin-bottom: 10px;">Danger Zone</h3>
-              <button id="resetDataButton" type="button" class="primary-button" style="background: #4a1010; color: #ff8888; border-color: #ff3333;">Wipe Save Data</button>
-            </div>
+             <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
+               <h3 style="color: #ff6777; margin-bottom: 10px;">Danger Zone</h3>
+               <button id="resetDataButton" type="button" class="primary-button" style="background: #4a1010; color: #ff8888; border-color: #ff3333;">Wipe Save Data</button>
+             </div>
+
+             <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
+               <h3 style="color: #f6c75e; margin-bottom: 10px;">Game Modes</h3>
+               <svg id="supremeModeSkull" width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;">
+                 <path fill="#ff6777" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+               </svg>
+               <p style="margin-top: 12px; font-size: 14px; color: var(--muted);">Click skull for SUPREME mode</p>
+             </div>
 
           </div>
         </div>

@@ -177,8 +177,11 @@ function updateDirector(game, dt) {
    if (game.spawnTimer > 0) return;
 
    const map = game.currentMap || Maps.get("standard");
-   const difficulty = game.settings?.difficulty || "normal";
-   const difficultyRate = difficulty === "easy" ? 0.7 : difficulty === "hard" ? 1.3 : 1;
+    const difficulty = game.settings?.difficulty || "medium";
+    const difficultyRate = difficulty === "baby" || difficulty === "easy" ? 0.05 : 
+                         difficulty === "medium" ? 1 : 
+                         difficulty === "hard" ? 1.5 : 
+                         difficulty === "super" ? 1.8 : 1;
    const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 300), 1.2) * 1.2; // Reduced pressure growth
    const interval = Math.max(0.8, (2.5 / pressure) / (map.spawnRate * difficultyRate)); // Increased base interval
    game.spawnTimer = interval;
