@@ -177,11 +177,21 @@ function updateDirector(game, dt) {
    if (game.spawnTimer > 0) return;
 
    const map = game.currentMap || Maps.get("standard");
-    const difficulty = game.settings?.difficulty || "medium";
-    const difficultyRate = difficulty === "baby" || difficulty === "easy" ? 0.05 : 
-                         difficulty === "medium" ? 1 : 
-                         difficulty === "hard" ? 1.5 : 
-                         difficulty === "super" ? 1.8 : 1;
+   
+   // BOSS SPAWNING SYSTEM - Exact 5 minute intervals
+   if (!game.currentBoss && game.elapsed >= 300 && Math.floor(game.elapsed / 300) > Math.floor((game.elapsed - dt) / 300)) {
+       // Time to spawn a new boss (exactly every 5 minutes: 300s, 600s, 900s, etc.)
+       const bossIndex = Math.min(Math.floor(game.elapsed / 300) - 1, Object.keys(BossTypes).length - 1);
+       const bossIds = Object.keys(BossTypes);
+       const bossId = bossIds[bossIndex];
+       spawnBoss(game, bossId);
+   }
+   
+   const difficulty = game.settings?.difficulty || "medium";
+   const difficultyRate = difficulty === "baby" || difficulty === "easy" ? 0.05 : 
+                        difficulty === "medium" ? 1 : 
+                        difficulty === "hard" ? 1.5 : 
+                        difficulty === "super" ? 1.8 : 1;
    const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 300), 1.2) * 1.2; // Reduced pressure growth
    const interval = Math.max(0.8, (2.5 / pressure) / (map.spawnRate * difficultyRate)); // Increased base interval
    game.spawnTimer = interval;
@@ -195,7 +205,7 @@ function updateDirector(game, dt) {
    for (let i = 0; i < count; i += 1) {
      spawn(game, pickType(game));
    }
- }
+}
 
 function update(game, dt) {
   game.enemyPool.items.forEach((enemy) => {
