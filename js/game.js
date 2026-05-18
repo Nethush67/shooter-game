@@ -3,7 +3,7 @@
 import * as U from './utils.js';
 import { Input, DEFAULT_BINDINGS } from './input.js';
 import { Renderer } from './renderer.js';
-import { UI } from './ui.js?v=10';
+import { UI } from './ui.js?v=11';
 import { Player } from './player.js';
 import { Projectiles } from './projectiles.js';
 import { Enemies } from './enemies.js';
@@ -758,7 +758,7 @@ class Game {
   }
 
   difficultyScoreMultiplier() {
-    return ({ baby: 0.05, easy: 0.05, medium: 1, hard: 1.5, super: 1.8 })[this.settings.difficulty] || 1;
+    return ({ baby: 0.05, easy: 0.05, medium: 1, hard: 1.5, super: 1.8, supreme: 2 })[this.settings.difficulty] || 1;
   }
 
 checkAchievements() {

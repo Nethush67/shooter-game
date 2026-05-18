@@ -132,6 +132,15 @@ class UI {
       select.addEventListener("change", () => game.updateSetting(select.dataset.selectSetting, select.value));
     });
 
+    const supremeButton = this.el("supremeDifficultyButton");
+    if (supremeButton) {
+      supremeButton.addEventListener("click", () => {
+        game.updateSetting("difficulty", "supreme");
+        this.updateSettingsUI(game.settings, game.input.bindings);
+        this.showToast("Supreme Enabled", "Difficulty set to Supreme. Score multiplier: 2.0x.");
+      });
+    }
+
     this.settingsOverlay.querySelectorAll("[data-settings-tab]").forEach((tab) => {
       tab.addEventListener("click", () => this.showSettingsTab(tab.dataset.settingsTab));
     });

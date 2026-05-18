@@ -214,7 +214,8 @@ function difficultyConfig(game) {
     easy: { spawnRate: 0.55, enemy: { hp: 0.78, speed: 0.9, damage: 0.7, xp: 1.12 } },
     medium: { spawnRate: 1, enemy: { hp: 1, speed: 1, damage: 1, xp: 1 } },
     hard: { spawnRate: 1.5, enemy: { hp: 1.22, speed: 1.08, damage: 1.28, xp: 1.18 } },
-    super: { spawnRate: 1.8, enemy: { hp: 1.45, speed: 1.16, damage: 1.55, xp: 1.32 } }
+    super: { spawnRate: 1.8, enemy: { hp: 1.45, speed: 1.16, damage: 1.55, xp: 1.32 } },
+    supreme: { spawnRate: 2.15, enemy: { hp: 1.75, speed: 1.24, damage: 1.9, xp: 1.45 } }
   };
   return configs[difficulty] || configs.medium;
 }

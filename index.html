@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Arena Evolution Survival</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css?v=10">
+  <link rel="stylesheet" href="./style.css?v=11">
 </head>
 <body>
   <main id="gameRoot" aria-label="Arena Evolution Survival">
@@ -160,22 +160,23 @@
             </div>
           </div>
           <div class="settings-page" data-settings-page="gameplay">
-            <label class="setting-row"><span class="setting-name">Difficulty</span><select data-select-setting="difficulty" aria-label="Difficulty"><option value="baby">Baby (x0.05 score)</option><option value="easy">Easy (x0.05 score)</option><option value="medium">Medium (x1 score)</option><option value="hard">Hard (x1.5 score)</option><option value="super">Super Hard (x1.8 score)</option></select></label>
+            <label class="setting-row"><span class="setting-name">Difficulty</span><select data-select-setting="difficulty" aria-label="Difficulty"><option value="baby">Baby (x0.05 score)</option><option value="easy">Easy (x0.05 score)</option><option value="medium">Medium (x1 score)</option><option value="hard">Hard (x1.5 score)</option><option value="super">Super Hard (x1.8 score)</option><option value="supreme" hidden>Supreme (x2 score)</option></select></label>
             <label class="setting-row"><span class="setting-name">Show Damage Numbers</span><button type="button" class="toggle-switch" data-setting="damageNumbers" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
             <label class="setting-row"><span class="setting-name">Auto Pickup</span><button type="button" class="toggle-switch" data-setting="autoPickup" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
             <label class="setting-row"><span class="setting-name">Screen Flash</span><button type="button" class="toggle-switch" data-setting="screenFlash" aria-pressed="true"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">On</span></button></label>
+            <button id="supremeDifficultyButton" type="button" class="supreme-skull-button" aria-label="Enable Supreme difficulty">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M32 6 C18 6 9 16 9 30 c0 9 5 16 12 19 v7 h7 v-6 h8 v6 h7 v-7 c7-3 12-10 12-19 C55 16 46 6 32 6Z" fill="currentColor"/>
+                <circle cx="24" cy="30" r="5" fill="#061018"/>
+                <circle cx="40" cy="30" r="5" fill="#061018"/>
+                <path d="M28 42 h8 M24 50 v-7 M32 51 v-8 M40 50 v-7" fill="none" stroke="#061018" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </button>
           </div>
         </div>
         <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
           <h3 style="color: #ff6777; margin-bottom: 10px;">Danger Zone</h3>
           <button id="resetDataButton" type="button" class="primary-button" style="background: #4a1010; color: #ff8888; border-color: #ff3333;">Wipe Save Data</button>
-        </div>
-
-        <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
-          <h3 style="color: #f6c75e; margin-bottom: 10px;">Game Modes</h3>
-          <svg id="supremeModeSkull" width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="position: fixed; bottom: 20px; right: 20px; opacity: 0; cursor: pointer; transition: opacity 0.3s ease; z-index: 1000; pointer-events: none;">
-            <path fill="#ff6777" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-          </svg>
         </div>
       </div>
       <button id="settingsCloseButton" type="button" class="primary-button settings-close">Close</button>
@@ -250,6 +251,6 @@
     </section>
   </main>
 
-  <script type="module" src="./js/main.js?v=10"></script>
+  <script type="module" src="./js/main.js?v=11"></script>
 </body>
 </html>
