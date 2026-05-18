@@ -3,7 +3,7 @@
 import * as U from './utils.js';
 import { Input, DEFAULT_BINDINGS } from './input.js';
 import { Renderer } from './renderer.js';
-import { UI } from './ui.js?v=5';
+import { UI } from './ui.js?v=8';
 import { Player } from './player.js';
 import { Projectiles } from './projectiles.js';
 import { Enemies } from './enemies.js';
@@ -169,54 +169,34 @@ class Game {
     this.loop = this.loop.bind(this);
     this.totalDamageDealt = 0;
 
-     // Achievement tracking flags
-     this.hasTakenDamage = false;
-     this.runStartedWithZeroKills = true;
-     this.closeShaveUnlocked = false;
-     this.isSupremeModeActive = false; // Supreme mode tracking
-     this.currentBoss = null; // Current boss tracking
-   }
-   
-   // Supreme mode tracking for secret difficulty
-   setSupremeMode(active) {
-       this.isSupremeModeActive = active;
-       if (active) {
-           // Show skull briefly when activated
-           const skull = document.getElementById('supremeModeSkull');
-           if (skull) {
-               skull.style.opacity = '0.7';
-               setTimeout(() => {
-                   skull.style.opacity = '0';
-               }, 1500);
-           }
-       }
-   }
-   
-   getDifficultyMultiplier() {
-       const difficulty = this.settings?.difficulty || "medium";
-       if (this.isSupremeModeActive) return 2.0; // Supreme mode override
-       return difficulty === "baby" || difficulty === "easy" ? 0.05 : 
-              difficulty === "medium" ? 1 : 
-              difficulty === "hard" ? 1.5 : 
-              difficulty === "super" ? 1.8 : 1;
-   }
-   
-   getFinalScore() {
-       return Math.floor(this.totalDamageDealt * this.getDifficultyMultiplier());
-   }
+    // Achievement tracking flags
+    this.hasTakenDamage = false;
+    this.runStartedWithZeroKills = true;
+    this.closeShaveUnlocked = false;
+
+    this.input.setPauseHandler(() => this.togglePause());
+    this.ui.bind(this);
+    this.ui.updateSettingsUI(this.settings, this.input.bindings);
+    this.svg.addEventListener("pointerdown", (event) => this.handleArenaPointer(event));
+    // FAIL-SAFE ACHIEVEMENT TRACKER: Runs once every second independently of the game loop
+    setInterval(() => {
+      if (typeof this.checkAchievements === 'function') {
+        this.checkAchievements();
+      }
     }, 1000);
   }
 
 
-   start() {
-      // Go directly to menu without showing loading screen first
+  start() {
+    this.ui.showLoading();
+    requestAnimationFrame(this.loop);
+    window.setTimeout(() => {
       this.state = State.MENU;
-      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
+      this.ui.showMenu(Boolean(this.saveData.currentRun));
       this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
-      // Start the game loop
-      requestAnimationFrame(this.loop);
-   }
+    }, 320);
+  }
 
   loadSettings() {
     const defaults = {
