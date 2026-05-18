@@ -80,7 +80,7 @@ class UI {
       else console.warn(`[UI] Missing element: #${id}`);
     };
 
-    bindClick("startButton", () => game.openMapChooser());
+    bindClick("startButton", () => game.startRun());
     bindClick("continueButton", () => game.continueRun());
     bindClick("achievementsButton", () => game.openAchievements());
     bindClick("settingsButton", () => game.openSettings("menu"));
