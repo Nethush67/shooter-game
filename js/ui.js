@@ -166,9 +166,10 @@ class UI {
     });
     this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
       const key = bindings[btn.dataset.bind];
-      btn.querySelector("strong").textContent = keyLabel(key);
+      const label = btn.querySelector("strong");
+      if (label) label.textContent = keyLabel(key);
     });
-    this.fpsText.classList.toggle("hidden", !settings.fpsCounter);
+    this.fpsText?.classList.toggle("hidden", !settings.fpsCounter);
   }
 
   update(game, now) {
@@ -252,8 +253,8 @@ showMenu(canContinue, game) {
   }
 
   showPause(game) {
-    this.pauseStats.textContent = `${game.player.classDef.name}, level ${game.level}, ${U.secondsToClock(game.elapsed)} survived.`;
-    this.pauseOverlay.classList.remove("hidden");
+    if (this.pauseStats) this.pauseStats.textContent = `${game.player.classDef.name}, level ${game.level}, ${U.secondsToClock(game.elapsed)} survived.`;
+    this.pauseOverlay?.classList.remove("hidden");
   }
 
   hidePause() {
@@ -461,13 +462,16 @@ showToast(title, body) {
   }
 
   showConfirm(title, text, onAccept) {
-    this.el("confirmTitle").textContent = title;
-    this.el("confirmText").textContent = text;
+    const titleEl = this.el("confirmTitle");
+    const textEl = this.el("confirmText");
+    if (titleEl) titleEl.textContent = title;
+    if (textEl) textEl.textContent = text;
     const accept = this.el("confirmAcceptButton");
+    if (!accept) return;
     accept.replaceWith(accept.cloneNode(true));
     const nextAccept = this.el("confirmAcceptButton");
     nextAccept.addEventListener("click", onAccept);
-    this.confirmOverlay.classList.remove("hidden");
+    this.confirmOverlay?.classList.remove("hidden");
   }
 
   hideConfirm() {
