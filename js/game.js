@@ -915,36 +915,8 @@ checkAchievements() {
      // Automatically granted when all 99 others are earned
      if (totalUnlocked === 99 && !this.saveData.achievements.includes("achievements_100")) {
        this.unlockAchievement("achievements_100");
-    }
-    
-    // Supreme mode tracking for secret difficulty
-    setSupremeMode(active) {
-        this.isSupremeModeActive = active;
-        if (active) {
-            // Show skull briefly when activated
-            const skull = document.getElementById('supremeModeSkull');
-            if (skull) {
-                skull.style.opacity = '0.7';
-                setTimeout(() => {
-                    skull.style.opacity = '0';
-                }, 1500);
-            }
-        }
-    }
-    
-    getDifficultyMultiplier() {
-        const difficulty = this.settings?.difficulty || "medium";
-        if (this.isSupremeModeActive) return 2.0; // Supreme mode override
-        return difficulty === "baby" || difficulty === "easy" ? 0.05 : 
-               difficulty === "medium" ? 1 : 
-               difficulty === "hard" ? 1.5 : 
-               difficulty === "super" ? 1.8 : 1;
-    }
-    
-    getFinalScore() {
-        return Math.floor(this.totalDamageDealt * this.getDifficultyMultiplier());
-    }
-}
+     }
+   }
 }
 
 function createParticlePool(size) {
