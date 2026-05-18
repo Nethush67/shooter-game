@@ -113,6 +113,12 @@ class UI {
     bindClick("tutorialCloseButton", () => game.closeTutorial());
     bindClick("confirmCancelButton", () => game.closeConfirm());
 
+    if (this.settingsOverlay) {
+      this.settingsOverlay.addEventListener("click", (event) => {
+        if (event.target === this.settingsOverlay) game.closeSettings();
+      });
+    }
+
     if (this.playerMenuButton) this.playerMenuButton.addEventListener("click", () => game.openMapChooser());
     else console.warn("[UI] Missing element: #playerMenuButton");
 

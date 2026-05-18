@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Arena Evolution Survival</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css?v=12">
+  <link rel="stylesheet" href="./style.css?v=13">
 </head>
 <body>
   <main id="gameRoot" aria-label="Arena Evolution Survival">
@@ -126,6 +126,7 @@
 
     <section id="settingsOverlay" class="overlay settings-overlay hidden" aria-live="polite">
       <div class="settings-panel">
+        <button id="settingsCloseButton" type="button" class="settings-x-button" aria-label="Close settings">&times;</button>
         <div class="level-header">
           <span>Configuration</span>
           <h2>Settings</h2>
@@ -182,7 +183,6 @@
           <button id="resetDataButton" type="button" class="primary-button" style="background: #4a1010; color: #ff8888; border-color: #ff3333;">Wipe Save Data</button>
         </div>
       </div>
-      <button id="settingsCloseButton" type="button" class="primary-button settings-close">Close</button>
     </section>
 
     <section id="confirmOverlay" class="overlay confirm-overlay hidden" aria-live="polite">
@@ -254,6 +254,6 @@
     </section>
   </main>
 
-  <script type="module" src="./js/main.js?v=12"></script>
+  <script type="module" src="./js/main.js?v=13"></script>
 </body>
 </html>

@@ -585,11 +585,44 @@ h2 {
 }
 
 .settings-panel {
+  position: relative;
   width: min(760px, 94vw);
   padding: 28px 32px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: linear-gradient(145deg, rgba(14, 25, 39, 0.96), rgba(6, 11, 19, 0.92));
   box-shadow: 0 22px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+.settings-x-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: none;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.settings-x-button:hover,
+.settings-x-button:focus-visible {
+  color: var(--ink);
+  border-color: rgba(85,240,208,0.58);
+  background: rgba(85,240,208,0.12);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .settings-grid {
