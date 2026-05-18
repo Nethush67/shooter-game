@@ -5,66 +5,75 @@ import { Maps } from './maps.js';
 import { Projectiles } from './projectiles.js';
 
 const EnemyTypes = {
-  // --- REGULAR ENEMIES ---
-  chaser: {
-    name: "Chaser", fill: "#ff6777", stroke: "#ffd5db", radius: 18, hp: 36, speed: 112, damage: 8, xp: 14, shape: "triangle", unlock: 0, weight: 10
-  },
-  fast: {
-    name: "Fast", fill: "#f6c75e", stroke: "#fff3c6", radius: 14, hp: 24, speed: 210, damage: 7, xp: 12, shape: "diamond", unlock: 18, weight: 6
-  },
-  tank: {
-    name: "Tank", fill: "#a789ff", stroke: "#eee6ff", radius: 29, hp: 110, speed: 82, damage: 15, xp: 34, shape: "hex", unlock: 36, weight: 4
-  },
-  ranger: {
-    name: "Ranger", fill: "#61a8ff", stroke: "#dcecff", radius: 21, hp: 58, speed: 96, damage: 7, xp: 25, shape: "square", unlock: 55, weight: 5, ranged: true, range: 470, cadence: 1.45
-  },
-  swarm: {
-    name: "Swarm", fill: "#55f0d0", stroke: "#d9fff8", radius: 10, hp: 14, speed: 255, damage: 5, xp: 8, shape: "diamond", unlock: 12, weight: 7
-  },
-  bruiser: {
-    name: "Bruiser", fill: "#ff9f6e", stroke: "#ffe6cf", radius: 24, hp: 82, speed: 105, damage: 13, xp: 28, shape: "hex", unlock: 28, weight: 5
-  },
-  splitter: {
-    name: "Splitter", fill: "#c9b7ff", stroke: "#f2ecff", radius: 19, hp: 48, speed: 145, damage: 9, xp: 22, shape: "diamond", unlock: 42, weight: 5
-  },
-  skirmisher: {
-    name: "Skirmisher", fill: "#7ff59b", stroke: "#e5ffe9", radius: 16, hp: 34, speed: 190, damage: 8, xp: 18, shape: "triangle", unlock: 50, weight: 6, ranged: true, range: 330, cadence: 1.05
-  },
-  mortar: {
-    name: "Mortar", fill: "#f6c75e", stroke: "#fff3c6", radius: 26, hp: 72, speed: 68, damage: 14, xp: 36, shape: "square", unlock: 68, weight: 4, ranged: true, range: 620, cadence: 2.25
-  },
-  warden: {
-    name: "Warden", fill: "#9fe8ff", stroke: "#e5f8ff", radius: 31, hp: 150, speed: 70, damage: 18, xp: 48, shape: "hex", unlock: 84, weight: 3
-  },
-  blade: {
-    name: "Blade", fill: "#f5f7fb", stroke: "#ffffff", radius: 17, hp: 44, speed: 225, damage: 11, xp: 24, shape: "triangle", unlock: 98, weight: 5
-  },
-  leech: {
-    name: "Leech", fill: "#ff6777", stroke: "#ffd5db", radius: 15, hp: 38, speed: 175, damage: 10, xp: 20, shape: "diamond", unlock: 112, weight: 5
-  },
-  sentry: {
-    name: "Sentry", fill: "#a789ff", stroke: "#eee6ff", radius: 23, hp: 66, speed: 84, damage: 12, xp: 32, shape: "square", unlock: 130, weight: 4, ranged: true, range: 520, cadence: 0.92
-  },
-  titan: {
-    name: "Titan", fill: "#ff5268", stroke: "#ffd2d9", radius: 39, hp: 260, speed: 55, damage: 25, xp: 75, shape: "hex", unlock: 155, weight: 2
-  },
+   // --- REGULAR ENEMIES ---
+   chaser: {
+     name: "Chaser", fill: "#ff6777", stroke: "#ffd5db", radius: 18, hp: 36, speed: 112, damage: 8, xp: 14, shape: "triangle", unlock: 0, weight: 10
+   },
+   fast: {
+     name: "Fast", fill: "#f6c75e", stroke: "#fff3c6", radius: 14, hp: 24, speed: 210, damage: 7, xp: 12, shape: "diamond", unlock: 18, weight: 6
+   },
+   tank: {
+     name: "Tank", fill: "#a789ff", stroke: "#eee6ff", radius: 29, hp: 110, speed: 82, damage: 15, xp: 34, shape: "hex", unlock: 36, weight: 4
+   },
+   ranger: {
+     name: "Ranger", fill: "#61a8ff", stroke: "#dcecff", radius: 21, hp: 58, speed: 96, damage: 7, xp: 25, shape: "square", unlock: 55, weight: 5, ranged: true, range: 470, cadence: 1.45
+   },
+   swarm: {
+     name: "Swarm", fill: "#55f0d0", stroke: "#d9fff8", radius: 10, hp: 14, speed: 255, damage: 5, xp: 8, shape: "diamond", unlock: 12, weight: 7
+   },
+   bruiser: {
+     name: "Bruiser", fill: "#ff9f6e", stroke: "#ffe6cf", radius: 24, hp: 82, speed: 105, damage: 13, xp: 28, shape: "hex", unlock: 28, weight: 5
+   },
+   splitter: {
+     name: "Splitter", fill: "#c9b7ff", stroke: "#f2ecff", radius: 19, hp: 48, speed: 145, damage: 9, xp: 22, shape: "diamond", unlock: 42, weight: 5
+   },
+   skirmisher: {
+     name: "Skirmisher", fill: "#7ff59b", stroke: "#e5ffe9", radius: 16, hp: 34, speed: 190, damage: 8, xp: 18, shape: "triangle", unlock: 50, weight: 6, ranged: true, range: 330, cadence: 1.05
+   },
+   mortar: {
+     name: "Mortar", fill: "#f6c75e", stroke: "#fff3c6", radius: 26, hp: 72, speed: 68, damage: 14, xp: 36, shape: "square", unlock: 68, weight: 4, ranged: true, range: 620, cadence: 2.25
+   },
+   warden: {
+     name: "Warden", fill: "#9fe8ff", stroke: "#e5f8ff", radius: 31, hp: 150, speed: 70, damage: 18, xp: 48, shape: "hex", unlock: 84, weight: 3
+   },
+   blade: {
+     name: "Blade", fill: "#f5f7fb", stroke: "#ffffff", radius: 17, hp: 44, speed: 225, damage: 11, xp: 24, shape: "triangle", unlock: 98, weight: 5
+   },
+   leech: {
+     name: "Leech", fill: "#ff6777", stroke: "#ffd5db", radius: 15, hp: 38, speed: 175, damage: 10, xp: 20, shape: "diamond", unlock: 112, weight: 5
+   },
+   sentry: {
+     name: "Sentry", fill: "#a789ff", stroke: "#eee6ff", radius: 23, hp: 66, speed: 84, damage: 12, xp: 32, shape: "square", unlock: 130, weight: 4, ranged: true, range: 520, cadence: 0.92
+   },
+   titan: {
+     name: "Titan", fill: "#ff5268", stroke: "#ffd2d9", radius: 39, hp: 260, speed: 55, damage: 25, xp: 75, shape: "hex", unlock: 155, weight: 2
+   },
 
-  // --- 5-MINUTE BOSSES ---
-  vanguard: { 
-    name: "The Vanguard", fill: "#ff3333", stroke: "#ffaaaa", radius: 45, hp: 1000, speed: 70, damage: 25, xp: 800, shape: "hex", unlock: 0, weight: 0 
-  },
-  storm_bringer: { 
-    name: "The Storm-Bringer", fill: "#3333ff", stroke: "#aaaaff", radius: 40, hp: 1500, speed: 110, damage: 30, xp: 1200, shape: "diamond", unlock: 0, weight: 0 
-  },
-  colossus: { 
-    name: "The Colossus", fill: "#8833ff", stroke: "#ddaaff", radius: 65, hp: 2500, speed: 50, damage: 45, xp: 2000, shape: "square", unlock: 0, weight: 0 
-  },
-  voidweaver: { 
-    name: "The Voidweaver", fill: "#33ff33", stroke: "#aaffaa", radius: 35, hp: 3000, speed: 90, damage: 35, xp: 3000, shape: "triangle", unlock: 0, weight: 0, ranged: true, range: 400, cadence: 0.6 
-  },
-  executioner: { 
-    name: "The Executioner", fill: "#ff8833", stroke: "#ffddaa", radius: 50, hp: 4000, speed: 130, damage: 60, xp: 5000, shape: "hex", unlock: 0, weight: 0 
-  }
+   // --- 5-MINUTE BOSSES ---
+   vanguard: { 
+     name: "The Vanguard", fill: "#ff3333", stroke: "#ffaaaa", radius: 45, hp: 1000, speed: 70, damage: 25, xp: 800, shape: "hex", unlock: 0, weight: 0 
+   },
+   storm_bringer: { 
+     name: "The Storm-Bringer", fill: "#3333ff", stroke: "#aaaaff", radius: 40, hp: 1500, speed: 110, damage: 30, xp: 1200, shape: "diamond", unlock: 0, weight: 0 
+   },
+   colossus: { 
+     name: "The Colossus", fill: "#8833ff", stroke: "#ddaaff", radius: 65, hp: 2500, speed: 50, damage: 45, xp: 2000, shape: "square", unlock: 0, weight: 0 
+   },
+   voidweaver: { 
+     name: "The Voidweaver", fill: "#33ff33", stroke: "#aaffaa", radius: 35, hp: 3000, speed: 90, damage: 35, xp: 3000, shape: "triangle", unlock: 0, weight: 0, ranged: true, range: 400, cadence: 0.6 
+   },
+   executioner: { 
+     name: "The Executioner", fill: "#ff8833", stroke: "#ffddaa", radius: 50, hp: 4000, speed: 130, damage: 60, xp: 5000, shape: "hex", unlock: 0, weight: 0 
+   }
+};
+
+// Boss Types - Separate from regular enemies for special handling
+const BossTypes = {
+   vanguard: EnemyTypes.vanguard,
+   storm_bringer: EnemyTypes.storm_bringer,
+   colossus: EnemyTypes.colossus,
+   voidweaver: EnemyTypes.voidweaver,
+   executioner: EnemyTypes.executioner
 };
 
 function createPool(size) {

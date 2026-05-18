@@ -169,34 +169,54 @@ class Game {
     this.loop = this.loop.bind(this);
     this.totalDamageDealt = 0;
 
-    // Achievement tracking flags
-    this.hasTakenDamage = false;
-    this.runStartedWithZeroKills = true;
-    this.closeShaveUnlocked = false;
-
-    this.input.setPauseHandler(() => this.togglePause());
-    this.ui.bind(this);
-    this.ui.updateSettingsUI(this.settings, this.input.bindings);
-    this.svg.addEventListener("pointerdown", (event) => this.handleArenaPointer(event));
-    // FAIL-SAFE ACHIEVEMENT TRACKER: Runs once every second independently of the game loop
-    setInterval(() => {
-      if (typeof this.checkAchievements === 'function') {
-        this.checkAchievements();
-      }
+     // Achievement tracking flags
+     this.hasTakenDamage = false;
+     this.runStartedWithZeroKills = true;
+     this.closeShaveUnlocked = false;
+     this.isSupremeModeActive = false; // Supreme mode tracking
+     this.currentBoss = null; // Current boss tracking
+   }
+   
+   // Supreme mode tracking for secret difficulty
+   setSupremeMode(active) {
+       this.isSupremeModeActive = active;
+       if (active) {
+           // Show skull briefly when activated
+           const skull = document.getElementById('supremeModeSkull');
+           if (skull) {
+               skull.style.opacity = '0.7';
+               setTimeout(() => {
+                   skull.style.opacity = '0';
+               }, 1500);
+           }
+       }
+   }
+   
+   getDifficultyMultiplier() {
+       const difficulty = this.settings?.difficulty || "medium";
+       if (this.isSupremeModeActive) return 2.0; // Supreme mode override
+       return difficulty === "baby" || difficulty === "easy" ? 0.05 : 
+              difficulty === "medium" ? 1 : 
+              difficulty === "hard" ? 1.5 : 
+              difficulty === "super" ? 1.8 : 1;
+   }
+   
+   getFinalScore() {
+       return Math.floor(this.totalDamageDealt * this.getDifficultyMultiplier());
+   }
     }, 1000);
   }
 
 
-  start() {
-    this.ui.showLoading();
-    requestAnimationFrame(this.loop);
-    window.setTimeout(() => {
+   start() {
+      // Go directly to menu without showing loading screen first
       this.state = State.MENU;
-      this.ui.showMenu(Boolean(this.saveData.currentRun));
+      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
       this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
-    }, 320);
-  }
+      // Start the game loop
+      requestAnimationFrame(this.loop);
+   }
 
   loadSettings() {
     const defaults = {
