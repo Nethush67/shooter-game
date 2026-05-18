@@ -76,7 +76,14 @@ class UI {
   bind(game) {
     const bindClick = (id, handler) => {
       const el = this.el(id);
-      if (el) el.addEventListener("click", handler);
+      if (el) el.addEventListener("click", () => {
+        try {
+          handler();
+        } catch (error) {
+          console.error(`[UI] Button #${id} failed`, error);
+          this.showToast("Action Failed", "The menu recovered. Try again.");
+        }
+      });
       else console.warn(`[UI] Missing element: #${id}`);
     };
 
@@ -148,13 +155,14 @@ class UI {
       const setting = btn.dataset.setting;
       const value = Boolean(settings[setting]);
       btn.setAttribute("aria-pressed", String(value));
-      btn.querySelector(".toggle-label").textContent = value ? "On" : "Off";
+      const label = btn.querySelector(".toggle-label");
+      if (label) label.textContent = value ? "On" : "Off";
     });
     this.settingsOverlay.querySelectorAll("[data-range-setting]").forEach((range) => {
       range.value = Math.round((settings[range.dataset.rangeSetting] || 0) * 100);
     });
     this.settingsOverlay.querySelectorAll("[data-select-setting]").forEach((select) => {
-      select.value = settings[select.dataset.selectSetting] || "normal";
+      select.value = settings[select.dataset.selectSetting] || "medium";
     });
     this.settingsOverlay.querySelectorAll("[data-bind]").forEach((btn) => {
       const key = bindings[btn.dataset.bind];
@@ -212,11 +220,11 @@ class UI {
 
 showMenu(canContinue, game) {
     this.hideAllOverlays();
-    this.menuOverlay.classList.remove("hidden");
+    this.menuOverlay?.classList.remove("hidden");
     const contBtn = this.el("continueButton");
     if (contBtn) contBtn.disabled = !canContinue;
     const best = (game && game.saveData && game.saveData.bestDamage) || 0;
-    this.menuBestScore.textContent = Math.floor(best).toLocaleString();
+    if (this.menuBestScore) this.menuBestScore.textContent = Math.floor(best).toLocaleString();
   }
 
   showTutorial() {
@@ -356,6 +364,7 @@ showMenu(canContinue, game) {
 showAchievements(game) {
     const list = this.el("achievementsList");
     const countText = this.el("achievementCountText");
+    if (!list || !countText) return;
     const unlockedIds = new Set(game.saveData.achievements);
     
     // Calculate how many of the *total* achievements have been unlocked
@@ -397,17 +406,17 @@ showAchievements(game) {
   }
 
 showGameOver(game, victory) {
-    this.summaryEyebrow.textContent = victory ? "Victory" : "Run Ended";
-    this.summaryTitle.textContent = victory ? "Extraction Complete" : "Extraction Failed";
-    this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
-    this.summaryDetails.innerHTML = `
+    if (this.summaryEyebrow) this.summaryEyebrow.textContent = victory ? "Victory" : "Run Ended";
+    if (this.summaryTitle) this.summaryTitle.textContent = victory ? "Extraction Complete" : "Extraction Failed";
+    if (this.finalStats) this.finalStats.textContent = `You survived ${U.secondsToClock(game.elapsed)} and reached level ${game.level} as ${game.player.classDef.name}.`;
+    if (this.summaryDetails) this.summaryDetails.innerHTML = `
       <span><strong>${game.kills}</strong>Kills</span>
       <span><strong>${game.bestClassName}</strong>Final Class</span>
       <span><strong>${game.currentMap.name}</strong>Map</span>
     `;
     const best = game.saveData.bestDamage || 0;
-    this.gameOverBestScore.textContent = Math.floor(best).toLocaleString();
-    this.gameOverOverlay.classList.remove("hidden");
+    if (this.gameOverBestScore) this.gameOverBestScore.textContent = Math.floor(best).toLocaleString();
+    this.gameOverOverlay?.classList.remove("hidden");
   }
 
 showToast(title, body) {
@@ -421,7 +430,7 @@ showToast(title, body) {
     const notification = document.createElement('div');
     notification.className = 'achievement-notification';
     notification.innerHTML = `
-        <strong>Achievement Unlocked!</strong>
+        <strong>${title}</strong>
         <span>${body}</span>
     `;
 

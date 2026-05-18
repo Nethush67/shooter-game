@@ -3,7 +3,7 @@
 import * as U from './utils.js';
 import { Input, DEFAULT_BINDINGS } from './input.js';
 import { Renderer } from './renderer.js';
-import { UI } from './ui.js?v=8';
+import { UI } from './ui.js?v=9';
 import { Player } from './player.js';
 import { Projectiles } from './projectiles.js';
 import { Enemies } from './enemies.js';
@@ -192,7 +192,7 @@ class Game {
     requestAnimationFrame(this.loop);
     window.setTimeout(() => {
       this.state = State.MENU;
-      this.ui.showMenu(Boolean(this.saveData.currentRun));
+      this.ui.showMenu(Boolean(this.saveData.currentRun), this);
       this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
     }, 320);
@@ -212,13 +212,15 @@ class Game {
       resolutionScale: 1,
       mouseSensitivity: 1,
       autoAimAssist: false,
-      difficulty: "normal",
+      difficulty: "medium",
       damageNumbers: true,
       autoPickup: true,
       screenFlash: true,
       debugMode: false
     };
-    return Object.assign(defaults, readJson(SETTINGS_KEY, {}));
+    const settings = Object.assign(defaults, readJson(SETTINGS_KEY, {}));
+    if (settings.difficulty === "normal") settings.difficulty = "medium";
+    return settings;
   }
 
   loadBindings() {
@@ -376,7 +378,7 @@ class Game {
       localStorage.removeItem(SAVE_KEY);
       this.saveData = this.loadSave();
       this.ui.hideConfirm();
-      this.ui.showMenu(false);
+      this.ui.showMenu(false, this);
       this.ui.showToast("Save Reset", "Progression data has been cleared.");
     });
   }
@@ -389,7 +391,7 @@ class Game {
       this.saveData = this.loadSave();
       this.persistSettings();
       this.ui.hideConfirm();
-      this.ui.showMenu(false);
+      this.ui.showMenu(false, this);
       this.ui.showToast("Game Reset", "Local data has been restored to defaults.");
     });
   }
@@ -485,7 +487,7 @@ class Game {
 
   returnToMenu() {
     this.state = State.MENU;
-    this.ui.showMenu(Boolean(this.saveData.currentRun));
+    this.ui.showMenu(Boolean(this.saveData.currentRun), this);
     this.audio.startMusic();
     this.audio.play("close");
   }
@@ -612,7 +614,7 @@ class Game {
       if (U.dist2(enemy, projectile) > radius * radius) return;
       projectile.hits.add(enemy.id);
       const damageDealt = projectile.damage;
-      this.totalDamageDealt += damageDealt;
+      this.totalDamageDealt += damageDealt * this.difficultyScoreMultiplier();
       this.saveData.bestDamage = Math.max(this.saveData.bestDamage || 0, this.totalDamageDealt);
       Enemies.damage(enemy, projectile.damage, projectile.type);
       if (this.settings.damageNumbers) this.floaters.push({ x: enemy.x, y: enemy.y - enemy.radius, value: Math.round(projectile.damage), color: projectile.config.fill, life: 0.65, maxLife: 0.65, el: null });
@@ -753,6 +755,10 @@ class Game {
     this.saveData.achievements.push(id);
     this.persistSave();
     this.ui.showToast("Achievement Unlocked", achievement.name);
+  }
+
+  difficultyScoreMultiplier() {
+    return ({ baby: 0.05, easy: 0.05, medium: 1, hard: 1.5, super: 1.8 })[this.settings.difficulty] || 1;
   }
 
 checkAchievements() {

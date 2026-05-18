@@ -128,12 +128,7 @@ function resetEnemy(enemy, cfg) {
 function spawn(game, type) {
   const elapsed = game.elapsed;
   const map = game.currentMap || Maps.get("standard");
-  const difficulty = game.settings?.difficulty || "normal";
-  const difficultyScale = difficulty === "easy"
-    ? { hp: 0.82, speed: 0.92, damage: 0.75, xp: 1.1 }
-    : difficulty === "hard"
-      ? { hp: 1.22, speed: 1.08, damage: 1.28, xp: 1.18 }
-      : { hp: 1, speed: 1, damage: 1, xp: 1 };
+  const difficultyScale = difficultyConfig(game).enemy;
       
   const phase = Math.min(1, elapsed / 240);
   const hpScale = Math.min(3.4, (1 + Math.pow(elapsed / 95, 1.35) * 0.34) * map.hpScale * difficultyScale.hp);
@@ -196,11 +191,7 @@ function updateDirector(game, dt) {
        spawnBoss(game, bossId);
    }
    
-   const difficulty = game.settings?.difficulty || "medium";
-   const difficultyRate = difficulty === "baby" || difficulty === "easy" ? 0.05 : 
-                        difficulty === "medium" ? 1 : 
-                        difficulty === "hard" ? 1.5 : 
-                        difficulty === "super" ? 1.8 : 1;
+   const difficultyRate = difficultyConfig(game).spawnRate;
    const pressure = 1 + Math.pow(Math.min(1, game.elapsed / 300), 1.2) * 1.2; // Reduced pressure growth
    const interval = Math.max(0.8, (2.5 / pressure) / (map.spawnRate * difficultyRate)); // Increased base interval
    game.spawnTimer = interval;
@@ -214,6 +205,18 @@ function updateDirector(game, dt) {
    for (let i = 0; i < count; i += 1) {
      spawn(game, pickType(game));
    }
+}
+
+function difficultyConfig(game) {
+  const difficulty = game.settings?.difficulty || "medium";
+  const configs = {
+    baby: { spawnRate: 0.18, enemy: { hp: 0.45, speed: 0.72, damage: 0.35, xp: 1.25 } },
+    easy: { spawnRate: 0.55, enemy: { hp: 0.78, speed: 0.9, damage: 0.7, xp: 1.12 } },
+    medium: { spawnRate: 1, enemy: { hp: 1, speed: 1, damage: 1, xp: 1 } },
+    hard: { spawnRate: 1.5, enemy: { hp: 1.22, speed: 1.08, damage: 1.28, xp: 1.18 } },
+    super: { spawnRate: 1.8, enemy: { hp: 1.45, speed: 1.16, damage: 1.55, xp: 1.32 } }
+  };
+  return configs[difficulty] || configs.medium;
 }
 
 function update(game, dt) {
