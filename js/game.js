@@ -3,7 +3,7 @@
 import * as U from './utils.js';
 import { Input, DEFAULT_BINDINGS } from './input.js';
 import { Renderer } from './renderer.js';
-import { UI } from './ui.js?v=11';
+import { UI } from './ui.js?v=12';
 import { Player } from './player.js';
 import { Projectiles } from './projectiles.js';
 import { Enemies } from './enemies.js';

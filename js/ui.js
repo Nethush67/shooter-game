@@ -45,6 +45,7 @@ class UI {
     this.frameCount = 0;
     this.previousOverlay = "menu";
     this._levelUpTimer = null;
+    this.removeLegacyGameModesSection();
     // Wire up the Reset Data Button
     const resetBtn = document.getElementById("resetDataButton");
     if (resetBtn) {
@@ -71,6 +72,14 @@ class UI {
 
   el(id) {
     return document.getElementById(id);
+  }
+
+  removeLegacyGameModesSection() {
+    document.querySelectorAll(".settings-section").forEach((section) => {
+      if (section.textContent && section.textContent.includes("Game Modes")) {
+        section.remove();
+      }
+    });
   }
 
   bind(game) {
