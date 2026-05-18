@@ -687,7 +687,7 @@ h2 {
   background: transparent;
   color: #ff6777;
   cursor: pointer;
-  opacity: 0.12;
+  opacity: 0.02;
   transition: opacity 140ms ease, transform 140ms ease, filter 140ms ease;
 }
 
