@@ -187,16 +187,15 @@ class Game {
   }
 
 
-  start() {
-    this.ui.showLoading();
-    requestAnimationFrame(this.loop);
-    window.setTimeout(() => {
+   start() {
+      // Go directly to menu without showing loading screen first
       this.state = State.MENU;
       this.ui.showMenu(Boolean(this.saveData.currentRun), this);
       this.audio.startMusic();
       if (!this.saveData.seenTutorial) this.ui.showTutorial();
-    }, 320);
-  }
+      // Start the game loop
+      requestAnimationFrame(this.loop);
+   }
 
   loadSettings() {
     const defaults = {
